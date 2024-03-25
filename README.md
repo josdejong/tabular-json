@@ -59,8 +59,36 @@ What we can do is create a superset of JSON which adds a new structure named "ta
   "age": 23,
   "hobbies": ["swimming", "gaming", "biking"],
   "friends": [
-    {"name": "Sarah",  "age": 22, "address": {"city": "New York",   "street": "1st Ave",        "hobbies": ["biking", "shopping"]}},
-    {"name": "Robert", "age": 24, "address": {"city": "Washington", "street": "18th Street NW", "hobbies": ["biking"]}}
+    {
+      "name": "Sarah",  
+      "age": 22, 
+      "address": {
+        "city": "New York",   
+        "street": "1st Ave"
+      },        
+      "hobbies": ["biking", "shopping"]
+    },
+    {
+      "name": "Robert", 
+      "age": 24, 
+      "address": {
+        "city": "Washington", 
+        "street": "18th Street NW"
+      }, 
+      "hobbies": ["biking"]
+    }
+  ]
+}
+```
+Or, when putting the items of the "friends" array on a single line:
+```
+{
+  "name": "Joe",
+  "age": 23,
+  "hobbies": ["swimming", "gaming", "biking"],
+  "friends": [
+    {"name": "Sarah",  "age": 22, "address": {"city": "New York",   "street": "1st Ave"},        "hobbies": ["biking", "shopping"]},
+    {"name": "Robert", "age": 24, "address": {"city": "Washington", "street": "18th Street NW"}, "hobbies": ["biking"]}
   ]
 }
 ```
