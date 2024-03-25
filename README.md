@@ -51,7 +51,21 @@ What we want the new data type to have is:
 
 ## Idea
 
-What we can do is create a superset of JSON which adds a new structure named "table", allowing us to embed CSV like data structures, both nested and at the root level. It can look as follows:
+What we can do is create a superset of JSON which adds a new structure named "table", allowing us to embed CSV like data structures, both nested and at the root level. Given the following JSON data:
+
+```
+{
+  "name": "Joe",
+  "age": 23,
+  "hobbies": ["swimming", "gaming", "biking"],
+  "friends": [
+    {"name": "Sarah",  "age": 22, "address": {"city": "New York",   "street": "1st Ave",        "hobbies": ["biking", "shopping"]}},
+    {"name": "Robert", "age": 24, "address": {"city": "Washington", "street": "18th Street NW", "hobbies": ["biking"]}}
+  ]
+}
+```
+
+It can look as follows:
 
 ### ~~Idea 1~~
 
@@ -62,7 +76,7 @@ What we can do is create a superset of JSON which adds a new structure named "ta
   "hobbies": ["swimming", "gaming", "biking"]
   "friends": ~ "name",  "age", "address": {"city", "street"},               "hobbies"
              ~ "Sarah", 22,               {"New York",   "1st Ave"},        ["biking", "shopping"]
-             ~ "Robert", 22,              {"Washington", "18th Street NW"}, ["biking"]  
+             ~ "Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]  
 }
 ```
 
@@ -75,7 +89,7 @@ What we can do is create a superset of JSON which adds a new structure named "ta
 "hobbies": ["swimming", "gaming", "biking"]
 "friends": ~ {"name",  "age", "address": {"city", "street"},               "hobbies"}
            ~ {"Sarah", 22,               {"New York",   "1st Ave"},        ["biking", "shopping"]}
-           ~ {"Robert", 22,              {"Washington", "18th Street NW"}, ["biking"]}
+           ~ {"Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]}
 }
 ```
 
@@ -88,7 +102,7 @@ What we can do is create a superset of JSON which adds a new structure named "ta
   "hobbies": ["swimming", "gaming", "biking"]
   "friends":  ~~ "name",   "age", ["address", "city"], ["address", "street"], "hobbies"
               ~  "Sarah",  22,    "New York",          "1st Ave",             ["biking", "shopping"]
-              ~  "Robert", 22,    "Washington",        "18th Street NW",      ["biking"]
+              ~  "Robert", 24,    "Washington",        "18th Street NW",      ["biking"]
 }
 ```
 
@@ -101,7 +115,7 @@ What we can do is create a superset of JSON which adds a new structure named "ta
   hobbies: [swimming, gaming, biking]
   friends: ~ name:string, age:number, address.city:string, address.street:string, hobbies
            ~ Sarah,       22,         New York,            1st Ave,               ["biking", "shopping"]
-           ~ Robert,      22,         Washington,          18th Street NW,        ["biking"]
+           ~ Robert,      24,         Washington,          18th Street NW,        ["biking"]
 }
 ```
 
@@ -114,18 +128,19 @@ optional quotes:
   name: Joe,
   age: 23,
   hobbies: [swimming, gaming, biking]
-  friends: ~ name,   age, address.city, address.street, hobbies
-           ~ Sarah,  22,  New York,     "1st Ave",      [biking, shopping]
-           ~ Robert, 22,  Washington,   18th Street NW, [biking]
+  friends: ~ name,   age, address.city, address.street,   hobbies
+           ~ Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
+           ~ Robert, 24,  Washington,   "18th Street NW", [biking]
 }
 ```
+
 
 and at root level:
 
 ```
 ~ name,   age, address.city, address.street, hobbies
 ~ Sarah,  22,  New York,     "1st Ave",      [biking, shopping]
-~ Robert, 22,  Washington,   18th Street NW, [biking]
+~ Robert, 24,  Washington,   18th Street NW, [biking]
 ```
 
 
