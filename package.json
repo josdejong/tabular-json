@@ -1,0 +1,15 @@
+{
+  "name": "json-alternative",
+  "version": "1.0.0",
+  "description": "Idea: a very minimal data format (not for configuration) combining the best of JSON and CSV.",
+  "author": "Jos de Jong",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "go": "node index.js"
+  },
+  "dependencies": {
+    "adm-zip": "0.5.12",
+    "csv42": "5.0.0"
+  }
+}
