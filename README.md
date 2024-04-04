@@ -19,24 +19,27 @@ Inspiration:
 - https://docs.internetobject.org/
 - https://github.com/superminority/jsv
 
-
 ## Requirements
 
 Downsides of JSON:
+
 - Verbose for tabular data
 - No data type for dates
 - The required quotes around strings and keys make it quite verbose
 - No support for streaming data like with logs, since an array must have a start and an end
 
 Downsides of CSV:
+
 - No support for nested data structures
 - No data types (no string/number/boolean/etc like JSON)
 - No way to know whether the first line is a header
 
 Downsides of both JSON and CSV:
+
 - No built-in schema
 
 What we want the new data type to have is:
+
 - White-spacing has no meaning
 - One way to do something. Unambiguous
 - Human-readable (text based)
@@ -47,7 +50,6 @@ What we want the new data type to have is:
 - Easy to parse/stringify
 - The parser must know upfront what’s coming, not after parsing a line or field or so
 - Extra: being a superset of JSON or CSV would be very powerful
-
 
 ## Idea
 
@@ -60,27 +62,29 @@ What we can do is create a superset of JSON which adds a new structure named "ta
   "hobbies": ["swimming", "gaming", "biking"],
   "friends": [
     {
-      "name": "Sarah",  
-      "age": 22, 
+      "name": "Sarah",
+      "age": 22,
       "address": {
-        "city": "New York",   
+        "city": "New York",
         "street": "1st Ave"
-      },        
+      },
       "hobbies": ["biking", "shopping"]
     },
     {
-      "name": "Robert", 
-      "age": 24, 
+      "name": "Robert",
+      "age": 24,
       "address": {
-        "city": "Washington", 
+        "city": "Washington",
         "street": "18th Street NW"
-      }, 
+      },
       "hobbies": ["biking"]
     }
   ]
 }
 ```
+
 Or, when putting the items of the "friends" array on a single line:
+
 ```
 {
   "name": "Joe",
@@ -104,7 +108,7 @@ It can look as follows:
   "hobbies": ["swimming", "gaming", "biking"],
   "friends": ~ "name",  "age", "address": {"city", "street"},               "hobbies"
              ~ "Sarah", 22,               {"New York",   "1st Ave"},        ["biking", "shopping"]
-             ~ "Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]  
+             ~ "Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]
 }
 ```
 
@@ -162,7 +166,6 @@ optional quotes:
 }
 ```
 
-
 and at root level:
 
 ```
@@ -170,7 +173,6 @@ and at root level:
 ~ Sarah,  22,  New York,     "1st Ave",      [biking, shopping]
 ~ Robert, 24,  Washington,   18th Street NW, [biking]
 ```
-
 
 ## Thoughts about these ideas
 
@@ -191,7 +193,7 @@ and at root level:
 - Strings
   - Do we require quotes around text? It is required in JSON, which gives quite some noise compared to CSV. But if we omit them, we lose the ability to distinguish data types (one of the problems with CSV). With optional quotes, when stringifying data, we need to check whether the contents of a string contains a number or boolean, null, or nested object/array, or control characters like a comma, and if so, write it with quotes.
   - Optional quotes are really nice on the eye, and makes the data more compact! Requiring quotes makes stringifying simpler and the data look more consistent.
-  - Whitespace around an unquoted string will not be part of the string, if you want that you have to quote the string.
+  - Whitespace around an unquoted string will not be part of the string. If you want that, you have to quote the string.
 - Data types
   - Can we add a notation for a date? How about the format of BSON? Using a constructor call like: `{ date: ISODate("...") }`. Allowing those function calls could be interesting too for additional data types? Maybe also for an explicit string like `{ text: String(123) }`.
   - Do we want an improved way to store numbers?
@@ -215,8 +217,8 @@ Ideas for names for the new data format:
 - JSON+
 - TabularJSON
 - Tabular-JSON
-- JSONT (“JSON with tables”)   
-- JSV 
+- JSONT (“JSON with tables”)
+- JSV
   - Is an existing data format: JSON Separated Values (also mixed JSON + CSV)
   - https://docs.servicestack.net/jsv-format
   - https://jsv.readthedocs.io/en/stable/
@@ -230,7 +232,7 @@ How much difference is there in data size between JSON (verbose) and CSV (compac
 Some experiments show the following (a rough test, take it with a grain of salt):
 
 1. The difference in size between CSV and JSON depends strongly on how long the keys are
-2. The difference in size between zipped and non-zipped depends strongly on how much repetition there is in the data. 
+2. The difference in size between zipped and non-zipped depends strongly on how much repetition there is in the data.
 3. With or without quotes makes a difference of about 5%, or 2% when zipped.
 4. Non-zipped CSV can be 200% to 1000% as small as non-zipped JSON.
 5. Zipped CSV is about 10-30% smaller than zipped JSON.

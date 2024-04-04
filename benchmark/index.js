@@ -2,11 +2,11 @@
  * Compare the difference in file size of JSON and CSV
  */
 
-import {readFileSync} from 'node:fs'
-import {json2csv} from 'csv42'
+import { readFileSync } from 'node:fs'
+import { json2csv } from 'csv42'
 import AdmZip from 'adm-zip'
-import {example1} from '../data/example1.js'
-import {example2} from '../data/example2.js'
+import { example1 } from '../data/example1.js'
+import { example2 } from '../data/example2.js'
 
 const indentation = 2
 
@@ -21,7 +21,9 @@ index(example2)
 {
   const data = JSON.parse(String(readFileSync('./data/unece_country_overview.json')))
   console.log()
-  console.log('unece_country_overview.json (flat data, very long key names, repetitive country names)')
+  console.log(
+    'unece_country_overview.json (flat data, very long key names, repetitive country names)'
+  )
   index(data)
 }
 
@@ -35,7 +37,7 @@ index(example2)
 function index(data) {
   const jsonFormatted = JSON.stringify(data, null, indentation)
   const jsonCompact = JSON.stringify(data)
-  const csvQuotes = json2csv(data, {formatValue: value => `"${value}"`})
+  const csvQuotes = json2csv(data, { formatValue: (value) => `"${value}"` })
   const csvNoQuotes = json2csv(data)
 
   console.table([
@@ -77,7 +79,7 @@ function gzip(text) {
 }
 
 function percentage(a, b) {
-  return Math.round(100 * a / b) + '%'
+  return Math.round((100 * a) / b) + '%'
 }
 
 function pad(text, length = 32) {
