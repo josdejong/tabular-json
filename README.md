@@ -101,7 +101,7 @@ It can look as follows:
 {
   "name": "Joe",
   "age": 23,
-  "hobbies": ["swimming", "gaming", "biking"]
+  "hobbies": ["swimming", "gaming", "biking"],
   "friends": ~ "name",  "age", "address": {"city", "street"},               "hobbies"
              ~ "Sarah", 22,               {"New York",   "1st Ave"},        ["biking", "shopping"]
              ~ "Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]  
@@ -114,7 +114,7 @@ It can look as follows:
 {
 "name": "Joe",
 "age": 23,
-"hobbies": ["swimming", "gaming", "biking"]
+"hobbies": ["swimming", "gaming", "biking"],
 "friends": ~ {"name",  "age", "address": {"city", "street"},               "hobbies"}
            ~ {"Sarah", 22,               {"New York",   "1st Ave"},        ["biking", "shopping"]}
            ~ {"Robert", 24,              {"Washington", "18th Street NW"}, ["biking"]}
@@ -127,7 +127,7 @@ It can look as follows:
 {
   "name": "Joe",
   "age": 23,
-  "hobbies": ["swimming", "gaming", "biking"]
+  "hobbies": ["swimming", "gaming", "biking"],
   "friends":  ~~ "name",   "age", ["address", "city"], ["address", "street"], "hobbies"
               ~  "Sarah",  22,    "New York",          "1st Ave",             ["biking", "shopping"]
               ~  "Robert", 24,    "Washington",        "18th Street NW",      ["biking"]
@@ -140,7 +140,7 @@ It can look as follows:
 {
   name:string: Joe,
   age:number: 23,
-  hobbies: [swimming, gaming, biking]
+  hobbies: [swimming, gaming, biking],
   friends: ~ name:string, age:number, address.city:string, address.street:string, hobbies
            ~ Sarah,       22,         New York,            1st Ave,               ["biking", "shopping"]
            ~ Robert,      24,         Washington,          18th Street NW,        ["biking"]
@@ -155,7 +155,7 @@ optional quotes:
 {
   name: Joe,
   age: 23,
-  hobbies: [swimming, gaming, biking]
+  hobbies: [swimming, gaming, biking],
   friends: ~ name,   age, address.city, address.street,   hobbies
            ~ Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
            ~ Robert, 24,  Washington,   "18th Street NW", [biking]
