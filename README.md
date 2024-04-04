@@ -160,9 +160,10 @@ optional quotes:
   name: Joe,
   age: 23,
   hobbies: [swimming, gaming, biking],
-  friends: ~ name,   age, address.city, address.street,   hobbies
-           ~ Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
-           ~ Robert, 24,  Washington,   "18th Street NW", [biking]
+  friends:
+    ~ name,   age, address.city, address.street,   hobbies
+    ~ Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
+    ~ Robert, 24,  Washington,   "18th Street NW", [biking]
 }
 ```
 

@@ -81,11 +81,111 @@ test('stringify', function () {
 
 test('stringify a full JSON object', function () {
   const expected = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
-  const json: GenericObject<unknown> = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
+  const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
 
   const stringified = stringify(json)
 
   expect(stringified).toEqual(expected)
+})
+
+test('stringify a table without indentation', function () {
+  const json = [
+    { id: 2, name: 'joe' },
+    { id: 3, name: 'sarah' }
+  ]
+
+  expect(stringify(json)).toEqual('~"id","name"\n~2,"joe"\n~3,"sarah"')
+})
+
+test('stringify a table with indentation', function () {
+  const json = [
+    { id: 2, name: 'joe' },
+    { id: 3, name: 'sarah' }
+  ]
+
+  expect(stringify(json, { indentation: 2 })).toEqual('~ "id", "name"\n~ 2, "joe"\n~ 3, "sarah"')
+})
+
+test('stringify a nested table', function () {
+  const json = {
+    name: 'rob',
+    hobbies: ['swimming', 'biking'],
+    friends: [
+      { id: 2, name: 'joe' },
+      { id: 3, name: 'sarah' }
+    ]
+  }
+
+  expect(stringify(json, { indentation: 2 })).toEqual(`{
+  "name": "rob",
+  "hobbies": [
+    "swimming",
+    "biking"
+  ],
+  "friends": 
+    ~ "id", "name"
+    ~ 2, "joe"
+    ~ 3, "sarah"
+}`)
+})
+
+test('stringify a nested table with nested objects', function () {
+  const json = {
+    name: 'rob',
+    hobbies: ['swimming', 'biking'],
+    friends: [
+      { id: 2, name: 'joe', address: { city: 'New York', street: '1st Ave' } },
+      { id: 3, name: 'sarah', address: { city: 'Washington', street: '18th Street NW' } }
+    ]
+  }
+
+  expect(stringify(json, { indentation: 2 })).toEqual(`{
+  "name": "rob",
+  "hobbies": [
+    "swimming",
+    "biking"
+  ],
+  "friends": 
+    ~ "id", "name", "address"."city", "address"."street"
+    ~ 2, "joe", "New York", "1st Ave"
+    ~ 3, "sarah", "Washington", "18th Street NW"
+}`)
+})
+
+test('stringify a nested table with non-homogeneous content', function () {
+  const json = {
+    name: 'rob',
+    friends: [
+      { id: 2, name: 'joe', details: { city: 'New York' } },
+      { id: 3, name: 'sarah', age: 32, details: {} }
+    ]
+  }
+
+  expect(stringify(json, { indentation: 2 })).toEqual(`{
+  "name": "rob",
+  "friends": 
+    ~ "id", "name", "details"."city", "age"
+    ~ 2, "joe", "New York", 
+    ~ 3, "sarah", , 32
+}`)
+})
+
+test('stringify a nested table with nested arrays', function () {
+  const json = {
+    name: 'rob',
+    friends: [
+      { id: 2, name: 'joe', scores: [7.2, 6.1, 8.1] },
+      { id: 3, name: 'sarah', scores: [7.7] }
+    ]
+  }
+
+  expect(stringify(json, { indentation: 2 })).toEqual(`{
+  "name": "rob",
+  "friends": 
+    ~ "id", "name", "scores"
+    ~ 2, "joe", [7.2,6.1,8.1]
+    ~ 3, "sarah", [7.7]
+}`)
 })
 
 test('stringify Date', function () {
