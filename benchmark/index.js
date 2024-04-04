@@ -1,8 +1,12 @@
+/**
+ * Compare the difference in file size of JSON and CSV
+ */
+
 import {readFileSync} from 'node:fs'
 import {json2csv} from 'csv42'
 import AdmZip from 'adm-zip'
-import {example1} from './data/example1.js'
-import {example2} from './data/example2.js'
+import {example1} from '../data/example1.js'
+import {example2} from '../data/example2.js'
 
 const indentation = 2
 

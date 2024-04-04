@@ -1,4 +1,4 @@
-## An alternative to JSON
+## Tabular-JSON: an extension of JSON adding a compact tabular data structure
 
 Idea: a very minimal data format (not for configuration) combining the best of JSON and CSV.
 
@@ -39,7 +39,7 @@ Downsides of both JSON and CSV:
 What we want the new data type to have is:
 - White-spacing has no meaning
 - One way to do something. Unambiguous
-- Human readable (text based)
+- Human-readable (text based)
 - Very minimal
 - Compact data format (unlike JSON)
 - Supports streaming like CSV and NDJSON
@@ -172,7 +172,7 @@ and at root level:
 ```
 
 
-## Thoughts about the ideas
+## Thoughts about these ideas
 
 - Syntax
   - I do not like Idea 1 and Idea 2 that much, the notation is a bit vague.
@@ -213,11 +213,9 @@ and at root level:
 Ideas for names for the new data format:
 
 - JSON+
-  - Domain already taken
 - TabularJSON
-  - Domain already taken
+- Tabular-JSON
 - JSONT (“JSON with tables”)   
-  - Domain already taken
 - JSV 
   - Is an existing data format: JSON Separated Values (also mixed JSON + CSV)
   - https://docs.servicestack.net/jsv-format

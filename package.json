@@ -1,14 +1,34 @@
 {
-  "name": "json-alternative",
+  "name": "tabular-json",
   "version": "1.0.0",
-  "description": "Idea: a very minimal data format (not for configuration) combining the best of JSON and CSV.",
+  "description": "Tabular-JSON: an extension of JSON adding compact a tabular data structure",
   "author": "Jos de Jong",
   "license": "ISC",
   "type": "module",
+  "main": "lib/esm/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/esm/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "types": "./lib/esm/index.d.ts"
+    }
+  },
   "scripts": {
-    "go": "node index.js"
+    "build": "npm-run-all build:**",
+    "build:clean": "del-cli lib",
+    "build:esm": "tsc",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "benchmark": "node benchmark/index.js"
   },
   "dependencies": {
+  },
+  "devDependencies": {
+    "npm-run-all": "4.1.5",
+    "vitest": "1.4.0",
+    "typescript": "5.4.3",
     "adm-zip": "0.5.12",
     "csv42": "5.0.0"
   }
