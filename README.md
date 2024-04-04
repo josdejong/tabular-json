@@ -175,6 +175,32 @@ and at root level:
 ~ Robert, 24,  Washington,   18th Street NW, [biking]
 ```
 
+### Idea 6
+
+What if we _do_ use the newline for separation of rows in a table, like CSV? In practice, even when serializing data in a compact way, it is very valuable to have newlines anyway: it keeps the data readable.
+
+We probably do need a start character like `~` or `#` to know that a table is starting, without it's a bit mor tricky to parse the document (have to try that out). Also, the white-spacing works different from with CSV. But having a superset of both JSON and CSV would be very valuable!
+
+```
+{
+  name: Joe,
+  age: 23,
+  hobbies: [swimming, gaming, biking],
+  friends:
+    name,   age, address.city, address.street,   hobbies
+    Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
+    Robert, 24,  Washington,   "18th Street NW", [biking]
+}
+```
+
+and at root level:
+
+```
+name,   age, address.city, address.street, hobbies
+Sarah,  22,  New York,     "1st Ave",      [biking, shopping]
+Robert, 24,  Washington,   18th Street NW, [biking]
+```
+
 ## Thoughts about these ideas
 
 - Syntax
