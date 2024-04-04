@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tabular-JSON playground</title>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "csv42": "./node_modules/csv42/lib/esm/index.js"
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        --padding: 10px;
+        --background: #f5f5f5;
+        --border: 1px solid #bfbfbf;
+        --error-color: #e81b1b;
+        --theme-color: #1e90ff;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        font-family: verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-weight: lighter;
+        background: var(--theme-color);
+        color: white;
+        padding: var(--padding);
+        margin: 0;
+      }
+
+      .columns {
+        background: var(--background);
+        flex: 1;
+        display: flex;
+
+        .column {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: calc(0.5 * var(--padding));
+          padding: var(--padding);
+
+          .title {
+            display: flex;
+            gap: calc(0.5 * var(--padding));
+            align-items: center;
+            min-height: 30px;
+
+            .flex {
+              flex: 1;
+            }
+
+            .beautify {
+              flex: 1;
+              text-align: right;
+
+              label,
+              input {
+                cursor: pointer;
+              }
+            }
+
+            button {
+              font-family: inherit;
+              font-size: inherit;
+              cursor: pointer;
+            }
+          }
+
+          label.textarea {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            textarea {
+              flex: 1;
+              border: var(--border);
+              border-radius: 3px;
+              resize: none;
+
+              &.error {
+                color: var(--error-color);
+              }
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tabular-JSON playground</h1>
+    <div class="columns">
+      <div class="column">
+        <div class="title">
+          <div class="flex">JSON</div>
+          <button id="beautify">Beautify</button>
+          <button id="minify">Minify</button>
+        </div>
+        <label class="textarea">
+          <textarea id="input"></textarea>
+        </label>
+        <div id="input-size"></div>
+      </div>
+      <div class="column">
+        <div class="title">
+          <div>Tabular-JSON</div>
+          <div class="beautify">
+            <label>
+              Beautify
+              <input id="beautify-option" type="checkbox" checked />
+            </label>
+          </div>
+        </div>
+        <label class="textarea">
+          <textarea id="output"></textarea>
+        </label>
+        <div id="output-size"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { stringify } from './dist/esm/index.js'
+
+      const input = document.getElementById('input')
+      const inputSize = document.getElementById('input-size')
+      const output = document.getElementById('output')
+      const outputSize = document.getElementById('output-size')
+      const beautifyOption = document.getElementById('beautify-option')
+      const beautify = document.getElementById('beautify')
+      const minify = document.getElementById('minify')
+
+      const json = {
+        name: 'rob',
+        hobbies: ['swimming', 'biking'],
+        friends: [
+          { id: 2, name: 'joe', address: { city: 'New York', street: '1st Ave' } },
+          { id: 3, name: 'sarah', address: { city: 'Washington', street: '18th Street NW' } }
+        ]
+      }
+
+      function percentage(a, b) {
+        return Math.round((a / b) * 100) + '%'
+      }
+
+      function update() {
+        output.classList.remove('error')
+
+        const inputLength = input.value.length
+        const inputLineCount = input.value.split('\n').length
+        inputSize.innerText = `Size: ${inputLength} bytes, ${inputLineCount} lines`
+
+        try {
+          if (input.value.trim() !== '') {
+            const json = JSON.parse(input.value)
+            output.value = stringify(json, beautifyOption.checked ? { indentation: 2 } : undefined)
+
+            const outputLength = output.value.length
+            const outputLineCount = output.value.split('\n').length
+            outputSize.innerText =
+              `Size: ${outputLength} bytes (${percentage(outputLength, inputLength)}), ` +
+              `${outputLineCount} lines (${percentage(outputLineCount, inputLineCount)})`
+          } else {
+            output.value = ''
+            outputSize.innerText = ''
+          }
+        } catch (err) {
+          output.value = err.toString()
+          output.classList.add('error')
+          outputSize.innerText = ''
+        }
+      }
+
+      function beautifyJson() {
+        try {
+          const json = JSON.parse(input.value)
+          input.value = JSON.stringify(json, null, 2)
+        } catch (err) {
+          alert(err.toString())
+        }
+      }
+
+      function minifyJson() {
+        try {
+          const json = JSON.parse(input.value)
+          input.value = JSON.stringify(json)
+        } catch (err) {
+          alert(err.toString())
+        }
+      }
+
+      input.value = JSON.stringify(json, null, 2)
+      input.addEventListener('input', () => update())
+      beautifyOption.addEventListener('change', () => update())
+      update()
+
+      beautify.addEventListener('click', () => {
+        beautifyJson()
+        update()
+      })
+      minify.addEventListener('click', () => {
+        minifyJson()
+        update()
+      })
+    </script>
+  </body>
+</html>
