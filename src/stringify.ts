@@ -18,18 +18,19 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
     indent: string | undefined,
     indentation: string | undefined
   ): string {
-    // boolean, null, number, string, or date
+    // boolean, null, number, or date
     if (
       typeof value === 'boolean' ||
       typeof value === 'number' ||
-      typeof value === 'string' ||
       value === null ||
-      value instanceof Date ||
-      value instanceof Boolean ||
-      value instanceof Number ||
-      value instanceof String
+      value instanceof Date
     ) {
       return JSON.stringify(value)
+    }
+
+    // string
+    if (typeof value === 'string') {
+      return stringifyStringValue(value)
     }
 
     // BigInt
@@ -147,7 +148,7 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
           str += indentation ? ',\n' : ','
         }
 
-        const keyStr = JSON.stringify(key)
+        const keyStr = stringifyStringValue(key)
         str += indentation ? childIndent + keyStr + ': ' : keyStr + ':'
 
         str += stringifyValue(value, childIndent, indentation)
@@ -192,7 +193,7 @@ function isObject(value: unknown): value is GenericObject<unknown> {
 
 function collectFields(records: Array<unknown>): Field<unknown>[] {
   return collectNestedPaths(records, isObject).map((path) => ({
-    name: path.map((key) => JSON.stringify(key)).join('.'),
+    name: path.map((key) => stringifyStringValue(String(key))).join('.'),
     getValue: createGetValue(path)
   }))
 }
@@ -205,3 +206,16 @@ function createGetValue<T>(path: Path): ValueGetter<T> {
 
   return (item) => getIn(item as GenericObject<unknown>, path)
 }
+
+function stringifyStringValue(value: string): string {
+  return NEEDS_QUOTES_REGEX.test(value) ? JSON.stringify(value) : value
+}
+
+/**
+ * We need quotes around a string when:
+ * - it contains delimiters like comma, newline, etc.
+ * - when it starts with a digit (else it would be parsed as a number)
+ * - starts with whitespace (we would lose the whitespace when parsing)
+ * - ends with whitespace (we would lose the whitespace when parsing)
+ */
+const NEEDS_QUOTES_REGEX = /[,.~"\n\r\b\f\t\\\[{}]|^\d|^\s|\s$/
