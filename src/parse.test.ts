@@ -1,20 +1,39 @@
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { test, expect } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import peggy from 'peggy'
+import { parse } from './parse'
 
 test('compile and use the JSON grammer', () => {
   // This test is just to verify that the JSON grammer and Peggy work as expected
   const jsonGrammer = String(
     readFileSync(getAbsolutePath(import.meta.url, './grammers/json.pegjs'))
   )
-  const jsonParser = peggy.generate(jsonGrammer)
+  const { parse } = peggy.generate(jsonGrammer)
 
   const jsonStr = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
   const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
 
-  expect(jsonParser.parse(jsonStr)).toEqual(json)
+  expect(parse(jsonStr)).toEqual(json)
+})
+
+describe('compile and use the Tabular-JSON grammer', () => {
+  const tabularJsonGrammer = String(
+    readFileSync(getAbsolutePath(import.meta.url, './grammers/tabular-json.pegjs'))
+  )
+  const { parse } = peggy.generate(tabularJsonGrammer)
+
+  test('parse JSON', () => {
+    const jsonStr = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
+    const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
+
+    expect(parse(jsonStr)).toEqual(json)
+  })
+})
+
+test('use the generated parser', () => {
+  expect(parse('[1,2,3]')).toEqual([1, 2, 3])
 })
 
 /**

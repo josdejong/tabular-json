@@ -16,11 +16,12 @@
     }
   },
   "scripts": {
+    "generate": "peggy --output ./src/grammers/generated/tabular-json-parser.js --format es ./src/grammers/tabular-json.pegjs --source-map",
     "build": "npm-run-all build:**",
     "build:clean": "del-cli lib",
     "build:esm": "tsc",
-    "test": "vitest",
-    "test:ci": "vitest run",
+    "test": "npm run generate && vitest",
+    "test:ci": "npm run generate && vitest run",
     "lint": "prettier --check .",
     "format": "prettier --write .",
     "benchmark": "node benchmark/index.js"
