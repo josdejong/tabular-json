@@ -57,15 +57,15 @@ Downsides of NDJSON:
 
 What we want the new data type to have is:
 
-- White-spacing has no meaning
-- One way to do something. Unambiguous
 - Human-readable (text based)
-- Very minimal
-- Compact data format (unlike JSON)
-- Supports streaming like CSV and NDJSON
+- Simple (like JSON and CSV)
+- Unambiguous. One way to do something
+- Compact data format (like CSV, unlike JSON)
+- Supports streaming (like CSV and NDJSON)
 - Supports any nested data structure (like JSON)
 - Easy to parse/stringify
-- The parser must know upfront what’s coming, not after parsing a line or field or so
+- Easy to edit manually
+- White-spacing has no meaning
 - Extra: being a superset of JSON or CSV would be very powerful
 
 ## Ideas

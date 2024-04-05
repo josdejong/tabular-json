@@ -29,7 +29,7 @@ test('stringify', function () {
   // validate expected outcome against native JSON.stringify
   expect(JSON.stringify('"\\/\b\f\n\r\t')).toEqual('"\\"\\\\/\\b\\f\\n\\r\\t"')
 
-  expect(stringify(new Date('2016-02-08T14:00:00Z'))).toEqual('"2016-02-08T14:00:00.000Z"')
+  expect(stringify(new Date('2016-02-08T14:00:00Z'))).toEqual('2016-02-08T14:00:00.000Z')
 
   expect(
     stringify([
@@ -201,7 +201,7 @@ test('stringify a nested table with nested arrays', function () {
 })
 
 test('stringify Date', function () {
-  expect(stringify([new Date('2022-08-25T09:39:19.288Z')])).toEqual('["2022-08-25T09:39:19.288Z"]')
+  expect(stringify([new Date('2022-08-25T09:39:19.288Z')])).toEqual('[2022-08-25T09:39:19.288Z]')
 })
 
 test('stringify with numeric space', function () {

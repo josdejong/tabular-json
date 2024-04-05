@@ -14,14 +14,14 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
   return stringifyValue(json, '', globalIndentation)
 
   function stringifyValue(value: unknown, indent: string, indentation: string | undefined): string {
-    // boolean, null, number, or date
-    if (
-      typeof value === 'boolean' ||
-      typeof value === 'number' ||
-      value === null ||
-      value instanceof Date
-    ) {
+    // boolean, null, number
+    if (typeof value === 'boolean' || typeof value === 'number' || value === null) {
       return JSON.stringify(value)
+    }
+
+    // date
+    if (value instanceof Date) {
+      return value.toISOString()
     }
 
     // string
