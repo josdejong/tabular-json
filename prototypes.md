@@ -349,14 +349,23 @@ Ideas for names for the new data format:
 
 - JSON+
 - TabularJSON
-- Tabular-JSON
-- JSONT (“JSON with tables”)
+- **Tabular-JSON**
+- TJS "Tabular JSON". Is not associated with a data format 
+- TJSON "Tabular JSON"
+- JSONT "JSON with tables"
 - JSV
   - Is an existing data format: JSON Separated Values (also mixed JSON + CSV)
   - https://docs.servicestack.net/jsv-format
   - https://jsv.readthedocs.io/en/stable/
 
 TODO: come up with a good name, including a file extension name and a domain for a website.
+
+What I like most so far: 
+
+- name "Tabular-JSON"
+- file extension `.tjson`
+- domain https://tabular-json.org
+
 
 ## Tests
 

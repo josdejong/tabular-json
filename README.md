@@ -1,6 +1,6 @@
-# Tabular-JSON: a lightweight data format combining the best of JSON, CSV, and NDJSON
+# Tabular-JSON: JSON with tables
 
-Tabular-JSON a superset of JSON and CSV which will look familiar to anyone that knows JSON and CSV. Tabular-JSON aims to be just as simple as JSON and CSV, but without the drawbacks.
+Tabular-JSON a superset of JSON and CSV which will look familiar to anyone that knows JSON and CSV. Tabular-JSON aims to be just as simple as JSON and CSV, combining the best of JSON, CSV, and NDJSON, but without the drawbacks.
 
 Tabular-JSON is:
 
