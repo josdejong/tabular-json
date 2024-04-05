@@ -30,6 +30,19 @@ describe('compile and use the Tabular-JSON grammer', () => {
 
     expect(parse(jsonStr)).toEqual(json)
   })
+
+  test('parse unquoted strings', () => {
+    expect(parse('hello')).toEqual('hello')
+    expect(parse('[ hello, world]')).toEqual(['hello', 'world'])
+    expect(parse('[ hello, world ]')).toEqual(['hello', 'world'])
+    expect(parse('[ hello world ]')).toEqual(['hello world'])
+
+    // FIXME: test all special characters
+  })
+
+  test('parse unquoted keys', () => {
+    expect(parse('{id: 1, message: hello world}')).toEqual({ id: 1, message: 'hello world' })
+  })
 })
 
 test('use the generated parser', () => {

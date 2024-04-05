@@ -25,7 +25,8 @@ value
   / object
   / array
   / number
-  / string
+  / quoted_string
+  / unquoted_string
 
 false = "false" { return false; }
 null  = "null"  { return null;  }
@@ -52,7 +53,7 @@ object
     { return members !== null ? members: {}; }
 
 member
-  = name:string name_separator value:value {
+  = name:(quoted_string / unquoted_string) name_separator value:value {
       return { name, value };
     }
 
@@ -102,7 +103,10 @@ zero
 
 // ----- 7. Strings -----
 
-string "string"
+unquoted_string "unquoted string"
+  = chars:unquoted* { return chars.join("").trim(); }
+
+quoted_string "quoted string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
 
 char
@@ -131,6 +135,9 @@ quotation_mark
 
 unescaped
   = [^\0-\x1F\x22\x5C]
+
+unquoted
+  = [^\0-\x1F,.:"\n\r\b\f\t\\\[\]{}] // FIME: refine the allowed characters in uquoted strings
 
 // ----- Core ABNF Rules -----
 

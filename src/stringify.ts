@@ -220,4 +220,4 @@ function stringifyStringValue(value: string): string {
  * - starts with whitespace (we would lose the whitespace when parsing)
  * - ends with whitespace (we would lose the whitespace when parsing)
  */
-const NEEDS_QUOTES_REGEX = /[,.~"\n\r\b\f\t\\\[{}]|^\d|^-\d|^\s|\s$/
+const NEEDS_QUOTES_REGEX = /[,."\n\r\b\f\t\\\[\]{}]|^\d|^-\d|^\s|\s$/
