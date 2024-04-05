@@ -24,6 +24,7 @@ value
   / true
   / object
   / array
+  / date
   / number
   / quoted_string
   / unquoted_string
@@ -101,7 +102,22 @@ plus
 zero
   = "0"
 
-// ----- 7. Strings -----
+// ------ 7. Dates -----
+
+// FIXME: work out the ISO Date definition in detail, see https://en.wikipedia.org/wiki/ISO_8601
+
+date "date"
+  = date:$(year "-" month "-" day "T" hours ":" minutes ":" seconds ("." milliseconds)? "Z") { return new Date(date); }
+
+year         = $(DIGIT DIGIT DIGIT DIGIT)
+month        = $(DIGIT DIGIT)
+day          = $(DIGIT DIGIT)
+hours        = $(DIGIT DIGIT)
+minutes      = $(DIGIT DIGIT)
+seconds      = $(DIGIT DIGIT)
+milliseconds = $(DIGIT DIGIT DIGIT)
+
+// ----- 8. Strings -----
 
 unquoted_string "unquoted string"
   = chars:unquoted* { return chars.join("").trim(); }
