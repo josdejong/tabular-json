@@ -109,6 +109,7 @@
         <div class="title">
           <div class="flex">JSON</div>
           <button id="beautify">Beautify</button>
+          <button id="smart-beautify">Smart Beautify</button>
           <button id="minify">Minify</button>
         </div>
         <label class="textarea">
@@ -142,6 +143,7 @@
       const outputSize = document.getElementById('output-size')
       const beautifyOption = document.getElementById('beautify-option')
       const beautify = document.getElementById('beautify')
+      const smartBeautify = document.getElementById('smart-beautify')
       const minify = document.getElementById('minify')
 
       const json = {
@@ -184,11 +186,39 @@
           outputSize.innerText = ''
         }
       }
+      export async function smartFormat(text, indentation, maxLineLength) {
+        const { Formatter, FracturedJsonOptions, NumberListAlignment } = await import(
+          'https://cdn.jsdelivr.net/npm/fracturedjsonjs@4.0.0/+esm'
+        )
+
+        const options = new FracturedJsonOptions()
+        options.MaxTotalLineLength = maxLineLength
+        options.CommaPadding = true
+        options.OmitTrailingWhitespace = true
+        options.UseTabToIndent = indentation === '\t'
+        options.IndentSpaces =
+          typeof indentation === 'number' ? indentation : indentation?.length || 2
+        options.MaxInlineComplexity = 1
+        options.NumberListAlignment = NumberListAlignment.Decimal // we do not want to alter the formatting of numbers
+
+        const formatter = new Formatter()
+        formatter.Options = options
+
+        return formatter.Reformat(text)
+      }
 
       function beautifyJson() {
         try {
           const json = JSON.parse(input.value)
           input.value = JSON.stringify(json, null, 2)
+        } catch (err) {
+          alert(err.toString())
+        }
+      }
+
+      async function smartBeautifyJson() {
+        try {
+          input.value = await smartFormat(input.value, 2, 80)
         } catch (err) {
           alert(err.toString())
         }
@@ -212,6 +242,12 @@
         beautifyJson()
         update()
       })
+
+      smartBeautify.addEventListener('click', async () => {
+        await smartBeautifyJson()
+        update()
+      })
+
       minify.addEventListener('click', () => {
         minifyJson()
         update()

@@ -13,4 +13,4 @@ You get Tabular-JSON when you:
 - take JSON
 - make quotes around keys and strings optional
 - add a table structure (wrapped in a `---` block, rows separated by a newline, values by a comma)
-- add a new ISO date data-type.
+- add support for ISO dates.
