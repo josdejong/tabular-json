@@ -14,3 +14,5 @@ You get Tabular-JSON when you:
 - make quotes around keys and strings optional
 - add a table structure (wrapped in a `---` block, rows separated by a newline, values by a comma)
 - add support for ISO dates.
+
+Note that JSON is used both for data and for configuration files. The aim of Tabular-JSON though is to be used as a data format, not a configuration format.
