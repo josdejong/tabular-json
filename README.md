@@ -4,9 +4,9 @@ Tabular-JSON a superset of JSON and CSV which will look familiar to anyone that 
 
 Tabular-JSON is:
 
-- a replacement for CSV without its ambiguities
-- a replacement for JSON which is more compact and less noisy
-- a replacement for NDJSON
+- a replacement for CSV without its ambiguities and limitation to tabular data structures
+- a replacement for JSON without its verbosity
+- a replacement for NDJSON without its verbosity
 
 You get Tabular-JSON when you:
 
