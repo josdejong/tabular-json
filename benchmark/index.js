@@ -5,17 +5,17 @@
 import { readFileSync } from 'node:fs'
 import { json2csv } from 'csv42'
 import AdmZip from 'adm-zip'
-import { example1 } from '../data/example1.js'
-import { example2 } from '../data/example2.js'
 
 const indentation = 2
 
 console.log()
 console.log('made up example with a few columns')
+const example1 = JSON.parse(String(readFileSync('./data/example1.json')))
 index(example1)
 
 console.log()
 console.log('made up example with many columns and nesting')
+const example2 = JSON.parse(String(readFileSync('./data/example2.json')))
 index(example2)
 
 {
