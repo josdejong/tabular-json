@@ -137,9 +137,9 @@
           <button id="minify">Minify</button>
         </div>
         <label class="textarea">
-          <textarea id="input"></textarea>
+          <textarea id="json-textarea"></textarea>
         </label>
-        <div id="input-size"></div>
+        <div id="json-size"></div>
       </div>
       <div class="column">
         <div class="title">
@@ -152,19 +152,19 @@
           </div>
         </div>
         <label class="textarea">
-          <textarea id="output"></textarea>
+          <textarea id="tabular-json-textarea"></textarea>
         </label>
-        <div id="output-size"></div>
+        <div id="tabular-json-size"></div>
       </div>
     </div>
 
     <script type="module">
       import { stringify } from './dist/esm/index.js'
 
-      const input = document.getElementById('input')
-      const inputSize = document.getElementById('input-size')
-      const output = document.getElementById('output')
-      const outputSize = document.getElementById('output-size')
+      const jsonTextarea = document.getElementById('json-textarea')
+      const jsonSize = document.getElementById('json-size')
+      const tabularJsonTextarea = document.getElementById('tabular-json-textarea')
+      const tabularJsonSize = document.getElementById('tabular-json-size')
       const beautifyOption = document.getElementById('beautify-option')
       const beautify = document.getElementById('beautify')
       const smartBeautify = document.getElementById('smart-beautify')
@@ -216,31 +216,34 @@
         return Math.round((a / b) * 100) + '%'
       }
 
-      function update() {
-        output.classList.remove('error')
+      function updateJson() {
+        tabularJsonTextarea.classList.remove('error')
 
-        const inputLength = input.value.length
-        const inputLineCount = input.value.split('\n').length
-        inputSize.innerText = `Size: ${inputLength} bytes, ${inputLineCount} lines`
+        const inputLength = jsonTextarea.value.length
+        const inputLineCount = jsonTextarea.value.split('\n').length
+        jsonSize.innerText = `Size: ${inputLength} bytes, ${inputLineCount} lines`
 
         try {
-          if (input.value.trim() !== '') {
-            const json = JSON.parse(input.value)
-            output.value = stringify(json, beautifyOption.checked ? { indentation: 2 } : undefined)
+          if (jsonTextarea.value.trim() !== '') {
+            const json = JSON.parse(jsonTextarea.value)
+            tabularJsonTextarea.value = stringify(
+              json,
+              beautifyOption.checked ? { indentation: 2 } : undefined
+            )
 
-            const outputLength = output.value.length
-            const outputLineCount = output.value.split('\n').length
-            outputSize.innerText =
+            const outputLength = tabularJsonTextarea.value.length
+            const outputLineCount = tabularJsonTextarea.value.split('\n').length
+            tabularJsonSize.innerText =
               `Size: ${outputLength} bytes (${percentage(outputLength, inputLength)}), ` +
               `${outputLineCount} lines (${percentage(outputLineCount, inputLineCount)})`
           } else {
-            output.value = ''
-            outputSize.innerText = ''
+            tabularJsonTextarea.value = ''
+            tabularJsonSize.innerText = ''
           }
         } catch (err) {
-          output.value = err.toString()
-          output.classList.add('error')
-          outputSize.innerText = ''
+          tabularJsonTextarea.value = err.toString()
+          tabularJsonTextarea.classList.add('error')
+          tabularJsonSize.innerText = ''
         }
       }
       export async function smartFormat(text, indentation, maxLineLength) {
@@ -266,8 +269,8 @@
 
       function beautifyJson() {
         try {
-          const json = JSON.parse(input.value)
-          input.value = JSON.stringify(json, null, 2)
+          const json = JSON.parse(jsonTextarea.value)
+          jsonTextarea.value = JSON.stringify(json, null, 2)
         } catch (err) {
           alert(err.toString())
         }
@@ -275,7 +278,7 @@
 
       async function smartBeautifyJson() {
         try {
-          input.value = await smartFormat(input.value, 2, 80)
+          jsonTextarea.value = await smartFormat(jsonTextarea.value, 2, 80)
         } catch (err) {
           alert(err.toString())
         }
@@ -283,49 +286,51 @@
 
       function minifyJson() {
         try {
-          const json = JSON.parse(input.value)
-          input.value = JSON.stringify(json)
+          const json = JSON.parse(jsonTextarea.value)
+          jsonTextarea.value = JSON.stringify(json)
         } catch (err) {
           alert(err.toString())
         }
       }
 
-      input.value = JSON.stringify(example1, null, 2)
-      input.addEventListener('input', () => update())
-      beautifyOption.addEventListener('change', () => update())
-      update()
+      jsonTextarea.value = JSON.stringify(example1, null, 2)
+      updateJson()
+
+      jsonTextarea.addEventListener('input', () => updateJson())
+
+      beautifyOption.addEventListener('change', () => updateJson())
 
       beautify.addEventListener('click', () => {
         beautifyJson()
-        update()
+        updateJson()
       })
 
       smartBeautify.addEventListener('click', async () => {
         await smartBeautifyJson()
-        update()
+        updateJson()
       })
 
       minify.addEventListener('click', () => {
         minifyJson()
-        update()
+        updateJson()
       })
 
       document.getElementById('example1').addEventListener('click', (event) => {
         event.preventDefault()
-        input.value = JSON.stringify(example1, null, 2)
-        update()
+        jsonTextarea.value = JSON.stringify(example1, null, 2)
+        updateJson()
       })
 
       document.getElementById('example2').addEventListener('click', (event) => {
         event.preventDefault()
-        input.value = JSON.stringify(example2, null, 2)
-        update()
+        jsonTextarea.value = JSON.stringify(example2, null, 2)
+        updateJson()
       })
 
       document.getElementById('example3').addEventListener('click', (event) => {
         event.preventDefault()
-        input.value = JSON.stringify(example3, null, 2)
-        update()
+        jsonTextarea.value = JSON.stringify(example3, null, 2)
+        updateJson()
       })
     </script>
   </body>
