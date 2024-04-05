@@ -214,8 +214,8 @@ function stringifyStringValue(value: string): string {
 /**
  * We need quotes around a string when:
  * - it contains delimiters like comma, newline, etc.
- * - when it starts with a digit (else it would be parsed as a number)
+ * - when it starts with a digit or minus followed by a digit (else it would be parsed as a number)
  * - starts with whitespace (we would lose the whitespace when parsing)
  * - ends with whitespace (we would lose the whitespace when parsing)
  */
-const NEEDS_QUOTES_REGEX = /[,.~"\n\r\b\f\t\\\[{}]|^\d|^\s|\s$/
+const NEEDS_QUOTES_REGEX = /[,.~"\n\r\b\f\t\\\[{}]|^\d|^-\d|^\s|\s$/
