@@ -63,18 +63,7 @@ describe('compile and use the Tabular-JSON grammer', () => {
     ])
   })
 
-  test.skip('parse tables with flat properties and whitespace', () => {
-    expect(parse(`---
-      id,name
-      1,joe
-      2,sarah
-      ---`)).toEqual([
-      { id: 1, name: 'joe' },
-      { id: 2, name: 'sarah' }
-    ])
-  })
-
-  test.skip('parse tables with nested properties', () => {
+  test('parse tables with nested properties', () => {
     expect(
       parse(`---
       id,name,address.city,address.street
@@ -82,10 +71,51 @@ describe('compile and use the Tabular-JSON grammer', () => {
       2,Sarah,Washington,"18th Street NW"
       ---`)
     ).toEqual([
-      { id: 1, name: 'joe', address: { city: 'New York', street: '1st Ave' } },
-      { id: 2, name: 'sarah', address: { city: 'Washington', street: '18th Street NW' } }
+      { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
+      { id: 2, name: 'Sarah', address: { city: 'Washington', street: '18th Street NW' } }
     ])
   })
+})
+
+test('parse tables with whitespace', () => {
+  expect(
+    parse(`---
+      id , details . name 
+      1 , joe 
+      2 , sarah 
+      ---`)
+  ).toEqual([
+    { id: 1, details: { name: 'joe' } },
+    { id: 2, details: { name: 'sarah' } }
+  ])
+})
+
+test.skip('parse tables containing nested arrays', () => {
+  // FIXME: the nested ] will also skip the newline
+  expect(
+    parse(`---
+      id, name, score
+      1, joe, [5, 7]
+      2, sarah, [7, 7, 8]
+      ---`)
+  ).toEqual([
+    { id: 1, name: 'joe', score: [5, 7] },
+    { id: 2, name: 'sarah', score: [7, 7, 8] }
+  ])
+})
+
+test.skip('parse tables containing nested objects', () => {
+  // FIXME: the nested } will also skip the newline
+  expect(
+    parse(`---
+      id, name, address
+      1, joe, { city: "New York", street: "1st Ave" }
+      2, sarah, { city: "Washington", street: "18th Street NW" }
+      ---`)
+  ).toEqual([
+    { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
+    { id: 2, name: 'Sarah', address: { city: 'Washington', street: '18th Street NW' } }
+  ])
 })
 
 test('use the generated parser', () => {
