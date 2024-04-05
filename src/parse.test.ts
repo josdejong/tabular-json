@@ -37,7 +37,7 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('[ hello, world ]')).toEqual(['hello', 'world'])
     expect(parse('[ hello world ]')).toEqual(['hello world'])
 
-    // FIXME: test all special characters
+    // FIXME: test all special characters and test error throwing
   })
 
   test('parse unquoted keys', () => {
@@ -47,10 +47,43 @@ describe('compile and use the Tabular-JSON grammer', () => {
   test('parse dates', () => {
     expect(parse('2024-04-05T12:15:21Z')).toEqual(new Date('2024-04-05T12:15:21Z'))
     expect(parse('2024-04-05T12:15:21.262Z')).toEqual(new Date('2024-04-05T12:15:21.262Z'))
-    expect(parse('{ updated: 2024-04-05T12:15:21.262Z }')).toEqual({ updated: new Date('2024-04-05T12:15:21.262Z') })
+    expect(parse('{ updated: 2024-04-05T12:15:21.262Z }')).toEqual({
+      updated: new Date('2024-04-05T12:15:21.262Z')
+    })
     expect(parse('[2024-04-05T12:15:21Z, 2024-04-05T14:15:00Z]')).toEqual([
       new Date('2024-04-05T12:15:21Z'),
-      new Date('2024-04-05T14:15:00Z'),
+      new Date('2024-04-05T14:15:00Z')
+    ])
+  })
+
+  test('parse tables with flat properties', () => {
+    expect(parse('---\nid,name\n1,joe\n2,sarah\n---')).toEqual([
+      { id: 1, name: 'joe' },
+      { id: 2, name: 'sarah' }
+    ])
+  })
+
+  test.skip('parse tables with flat properties and whitespace', () => {
+    expect(parse(`---
+      id,name
+      1,joe
+      2,sarah
+      ---`)).toEqual([
+      { id: 1, name: 'joe' },
+      { id: 2, name: 'sarah' }
+    ])
+  })
+
+  test.skip('parse tables with nested properties', () => {
+    expect(
+      parse(`---
+      id,name,address.city,address.street
+      1,Joe,New York,"1st Ave"
+      2,Sarah,Washington,"18th Street NW"
+      ---`)
+    ).toEqual([
+      { id: 1, name: 'joe', address: { city: 'New York', street: '1st Ave' } },
+      { id: 2, name: 'sarah', address: { city: 'Washington', street: '18th Street NW' } }
     ])
   })
 })

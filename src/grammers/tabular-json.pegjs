@@ -1,22 +1,23 @@
-// Tabular-JSON Grammar
-// ====================
-//
-
-// ----- 2. Tabular-JSON Grammar -----
+// ----- 1. Tabular-JSON Grammar -----
 
 JSON_text
   = ws value:value ws { return value; }
 
+// FIXME: add support for a table without block at the root
+
 begin_array     = ws "[" ws
-begin_object    = ws "{" ws
 end_array       = ws "]" ws
+begin_object    = ws "{" ws
 end_object      = ws "}" ws
+begin_table     = ws "---"
+end_table       = "---" ws
 name_separator  = ws ":" ws
+path_separator  = ws "." ws
 value_separator = ws "," ws
 
 ws "whitespace" = [ \t\n\r]*
 
-// ----- 3. Values -----
+// ----- 2. Values -----
 
 value
   = false
@@ -24,16 +25,16 @@ value
   / true
   / object
   / array
+  / table
   / date
   / number
-  / quoted_string
-  / unquoted_string
+  / string
 
 false = "false" { return false; }
 null  = "null"  { return null;  }
 true  = "true"  { return true;  }
 
-// ----- 4. Objects -----
+// ----- 3. Objects -----
 
 object
   = begin_object
@@ -54,11 +55,11 @@ object
     { return members !== null ? members: {}; }
 
 member
-  = name:(quoted_string / unquoted_string) name_separator value:value {
+  = name:(string) name_separator value:value {
       return { name, value };
     }
 
-// ----- 5. Arrays -----
+// ----- 4. Arrays -----
 
 array
   = begin_array
@@ -69,6 +70,71 @@ array
     )?
     end_array
     { return values !== null ? values : []; }
+
+// ----- 5. Tables -----
+
+table
+  = begin_table newline
+    header:header newline rows:(row:row newline { return row; })+
+    end_table
+    { 
+      console.log('header', header)
+      function setIn(object, path, value) {
+        let current = object
+
+        for (let i = 0; i < path.length - 1; i++) {
+          const key = path[i]
+          if (!current[key]) {
+            current[key] = {}
+          }
+          current = current[key]
+        }
+
+        const lastKey = path[path.length - 1]
+        current[lastKey] = value
+      }
+
+      function createSetters(header) {
+        return header.map((path) => {
+          const first = path[0]
+
+          return path.length === 1
+                ? (record, value) => (record[first] = value)
+                : (record, value) => setIn(record, path, value)
+        })
+      }
+
+      const setters = createSetters(header)
+      
+      // FIXME: instead of first collecting all rows and then mapping them to objects afterwards, do that on the fly:
+      //  - create the setters directly after parsing the header
+      //  - then directly invoke the setter when parsing a value
+      return rows.map(row => {
+        const record = {}
+        
+        for (let i = 0; i < row.length; i++) {
+          const value = row[i]
+          const setter = setters[i]
+          setter(record, value)
+        }
+
+        return record
+      });
+    }
+
+header
+  = head:path tail:(value_separator path:path { return path; })*
+  { return [head].concat(tail); }
+
+row
+  = head:value tail:(value_separator value:value { return value; })*
+  { return [head].concat(tail); }
+
+path "path"
+  = head:string tail:(path_separator value:string { return value; })* 
+    { return [head].concat(tail); }
+
+newline = "\n"
 
 // ----- 6. Numbers -----
 
@@ -118,6 +184,8 @@ seconds      = $(DIGIT DIGIT)
 milliseconds = $(DIGIT DIGIT DIGIT)
 
 // ----- 8. Strings -----
+
+string = quoted_string / unquoted_string
 
 unquoted_string "unquoted string"
   = chars:unquoted* { return chars.join("").trim(); }
