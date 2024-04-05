@@ -89,7 +89,18 @@ test('stringify a table without indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json)).toEqual('~id,name\n~2,joe\n~3,sarah')
+  expect(stringify(json)).toEqual('id,name\n2,joe\n3,sarah\n')
+})
+
+test('stringify a nested table without indentation', function () {
+  const json = {
+    data: [
+      { id: 2, name: 'joe' },
+      { id: 3, name: 'sarah' }
+    ]
+  }
+
+  expect(stringify(json)).toEqual('{data:---\nid,name\n2,joe\n3,sarah\n---}')
 })
 
 test('stringify a table with indentation', function () {
@@ -98,7 +109,7 @@ test('stringify a table with indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json, { indentation: 2 })).toEqual('~ id, name\n~ 2, joe\n~ 3, sarah')
+  expect(stringify(json, { indentation: 2 })).toEqual('id, name\n2, joe\n3, sarah\n')
 })
 
 test('stringify a nested table', function () {
@@ -108,20 +119,22 @@ test('stringify a nested table', function () {
     friends: [
       { id: 2, name: 'joe' },
       { id: 3, name: 'sarah' }
-    ]
+    ],
+    id: 4
   }
 
-  // FIXME: should not insert a space after friends:
   expect(stringify(json, { indentation: 2 })).toEqual(`{
   name: rob,
   hobbies: [
     swimming,
     biking
   ],
-  friends: 
-    ~ id, name
-    ~ 2, joe
-    ~ 3, sarah
+  friends: ---
+    id, name
+    2, joe
+    3, sarah
+  ---,
+  id: 4
 }`)
 })
 
@@ -141,10 +154,11 @@ test('stringify a nested table with nested objects', function () {
     swimming,
     biking
   ],
-  friends: 
-    ~ id, name, address.city, address.street
-    ~ 2, joe, New York, "1st Ave"
-    ~ 3, sarah, Washington, "18th Street NW"
+  friends: ---
+    id, name, address.city, address.street
+    2, joe, New York, "1st Ave"
+    3, sarah, Washington, "18th Street NW"
+  ---
 }`)
 })
 
@@ -159,10 +173,11 @@ test('stringify a nested table with non-homogeneous content', function () {
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
   name: rob,
-  friends: 
-    ~ id, name, details.city, age
-    ~ 2, joe, New York, 
-    ~ 3, sarah, , 32
+  friends: ---
+    id, name, details.city, age
+    2, joe, New York, 
+    3, sarah, , 32
+  ---
 }`)
 })
 
@@ -177,10 +192,11 @@ test('stringify a nested table with nested arrays', function () {
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
   name: rob,
-  friends: 
-    ~ id, name, scores
-    ~ 2, joe, [7.2,6.1,8.1]
-    ~ 3, sarah, [7.7]
+  friends: ---
+    id, name, scores
+    2, joe, [7.2,6.1,8.1]
+    3, sarah, [7.7]
+  ---
 }`)
 })
 

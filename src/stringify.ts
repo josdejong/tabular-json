@@ -13,11 +13,7 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
 
   return stringifyValue(json, '', globalIndentation)
 
-  function stringifyValue(
-    value: unknown,
-    indent: string | undefined,
-    indentation: string | undefined
-  ): string {
+  function stringifyValue(value: unknown, indent: string, indentation: string | undefined): string {
     // boolean, null, number, or date
     if (
       typeof value === 'boolean' ||
@@ -58,14 +54,14 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
 
   function stringifyArray(
     array: Array<unknown>,
-    indent: string | undefined,
+    indent: string,
     indentation: string | undefined
   ): string {
     if (array.length === 0) {
       return '[]'
     }
 
-    const childIndent = indentation ? indent + indentation : undefined
+    const childIndent = indentation ? indent + indentation : indent
     let str = indentation ? '[\n' : '['
 
     for (let i = 0; i < array.length; i++) {
@@ -92,36 +88,42 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
 
   function stringifyTable(
     array: Array<unknown>,
-    indent: string | undefined,
+    indent: string,
     indentation: string | undefined
   ): string {
-    const childIndent = indentation && indent ? indent + indentation : ''
-    const rowIndent = indentation ? childIndent + '~ ' : '~'
+    const isRoot = array === json
+    const childIndent = indentation && indent ? indent + indentation : indent
     const colSeparator = indentation ? ', ' : ','
 
     let str = ''
 
     const fields = collectFields(array)
 
-    str += (indent ? '\n' : '') + rowIndent + fields.map((field) => field.name).join(colSeparator)
+    str +=
+      (isRoot ? '' : '---\n') +
+      childIndent +
+      fields.map((field) => field.name).join(colSeparator) +
+      '\n'
 
     for (let i = 0; i < array.length; i++) {
       const item = array[i] as GenericObject<unknown>
 
       str +=
-        '\n' +
-        rowIndent +
+        childIndent +
         fields
           .map((field) => stringifyValue(field.getValue(item), childIndent, undefined))
-          .join(colSeparator)
+          .join(colSeparator) +
+        '\n'
     }
+
+    str += isRoot ? '' : indent + '---'
 
     return str
   }
 
   function stringifyObject(
     object: GenericObject<unknown>,
-    indent: string | undefined,
+    indent: string,
     indentation: string | undefined
   ): string {
     if (typeof object.toJSON === 'function') {
@@ -134,7 +136,7 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
       return '{}'
     }
 
-    const childIndent = indentation ? indent + indentation : undefined
+    const childIndent = indentation ? indent + indentation : indent
     let first = true
     let str = indentation ? '{\n' : '{'
 
