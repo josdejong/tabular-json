@@ -17,10 +17,11 @@
         --padding: 10px;
         --background: #f5f5f5;
         --border: 1px solid #bfbfbf;
-        --error-color: #e81b1b;
-        --link-color: #e81b1b;
+        --error-color: #e4402a;
+        --link-color: #e4402a;
         --link-color-highlight: #c10e0e;
         --theme-color: #1e90ff;
+        --border-radius: 5px;
       }
 
       html,
@@ -101,6 +102,19 @@
             }
           }
 
+          .error {
+            background: var(--error-color);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: calc(0.5 * var(--padding));
+
+            display: none;
+
+            &.visible {
+              display: block;
+            }
+          }
+
           label.textarea {
             flex: 1;
             display: flex;
@@ -111,10 +125,6 @@
               border: var(--border);
               border-radius: 3px;
               resize: none;
-
-              &.error {
-                color: var(--error-color);
-              }
             }
           }
         }
@@ -139,6 +149,7 @@
         <label class="textarea">
           <textarea id="json-textarea"></textarea>
         </label>
+        <div id="json-error" class="error"></div>
         <div id="json-size"></div>
       </div>
       <div class="column">
@@ -154,21 +165,13 @@
         <label class="textarea">
           <textarea id="tabular-json-textarea"></textarea>
         </label>
+        <div id="tabular-json-error" class="error"></div>
         <div id="tabular-json-size"></div>
       </div>
     </div>
 
     <script type="module">
-      import { stringify } from './dist/esm/index.js'
-
-      const jsonTextarea = document.getElementById('json-textarea')
-      const jsonSize = document.getElementById('json-size')
-      const tabularJsonTextarea = document.getElementById('tabular-json-textarea')
-      const tabularJsonSize = document.getElementById('tabular-json-size')
-      const beautifyOption = document.getElementById('beautify-option')
-      const beautify = document.getElementById('beautify')
-      const smartBeautify = document.getElementById('smart-beautify')
-      const minify = document.getElementById('minify')
+      import { stringify, parse } from './dist/esm/index.js'
 
       const example1 = {
         name: 'rob',
@@ -212,16 +215,26 @@
         { name: 'Christina', age: 22, city: 'Denver' }
       ]
 
+      const jsonTextarea = document.getElementById('json-textarea')
+      const jsonError = document.getElementById('json-error')
+      const jsonSize = document.getElementById('json-size')
+      const tabularJsonTextarea = document.getElementById('tabular-json-textarea')
+      const tabularJsonError = document.getElementById('tabular-json-error')
+      const tabularJsonSize = document.getElementById('tabular-json-size')
+      const beautifyOption = document.getElementById('beautify-option')
+      const beautify = document.getElementById('beautify')
+      const smartBeautify = document.getElementById('smart-beautify')
+      const minify = document.getElementById('minify')
+
       function percentage(a, b) {
         return Math.round((a / b) * 100) + '%'
       }
 
       function updateJson() {
-        tabularJsonTextarea.classList.remove('error')
-
-        const inputLength = jsonTextarea.value.length
-        const inputLineCount = jsonTextarea.value.split('\n').length
-        jsonSize.innerText = `Size: ${inputLength} bytes, ${inputLineCount} lines`
+        jsonError.innerText = ''
+        tabularJsonError.innerText = ''
+        jsonError.classList.remove('visible')
+        tabularJsonError.classList.remove('visible')
 
         try {
           if (jsonTextarea.value.trim() !== '') {
@@ -230,22 +243,70 @@
               json,
               beautifyOption.checked ? { indentation: 2 } : undefined
             )
-
-            const outputLength = tabularJsonTextarea.value.length
-            const outputLineCount = tabularJsonTextarea.value.split('\n').length
-            tabularJsonSize.innerText =
-              `Size: ${outputLength} bytes (${percentage(outputLength, inputLength)}), ` +
-              `${outputLineCount} lines (${percentage(outputLineCount, inputLineCount)})`
           } else {
             tabularJsonTextarea.value = ''
             tabularJsonSize.innerText = ''
           }
         } catch (err) {
-          tabularJsonTextarea.value = err.toString()
-          tabularJsonTextarea.classList.add('error')
+          jsonError.innerText = err.toString()
+          jsonError.classList.add('visible')
           tabularJsonSize.innerText = ''
         }
+
+        updateSize()
       }
+
+      function updateTabularJson() {
+        jsonError.innerText = ''
+        tabularJsonError.innerText = ''
+        jsonError.classList.remove('visible')
+        tabularJsonError.classList.remove('visible')
+
+        try {
+          if (tabularJsonTextarea.value.trim() !== '') {
+            const json = parse(tabularJsonTextarea.value)
+            jsonTextarea.value = JSON.stringify(json, null, 2)
+
+            const tabularJsonLength = tabularJsonTextarea.value.length
+            const tabularJsonLineCount = tabularJsonTextarea.value.split('\n').length
+            tabularJsonSize.innerText = `Size: ${tabularJsonLength} bytes, ${tabularJsonLineCount} lines`
+          } else {
+            jsonTextarea.value = ''
+            jsonSize.innerText = ''
+          }
+        } catch (err) {
+          tabularJsonError.innerText = err.toString()
+          tabularJsonError.classList.add('visible')
+          jsonSize.innerText = ''
+        }
+
+        updateSize()
+      }
+
+      function updateSize() {
+        const jsonLength = jsonTextarea.value.length
+        const jsonLineCount = jsonTextarea.value.split('\n').length
+
+        const tabularJsonLength = tabularJsonTextarea.value.length
+        const tabularJsonLineCount = tabularJsonTextarea.value.split('\n').length
+
+        if (
+          jsonLength === 0 ||
+          tabularJsonLength === 0 ||
+          jsonError.innerText !== '' ||
+          tabularJsonError.innerText !== ''
+        ) {
+          jsonSize.innerText = ''
+          tabularJsonSize.innerText = ''
+          return
+        }
+
+        jsonSize.innerText = `Size: ${jsonLength} bytes, ${jsonLineCount} lines`
+        tabularJsonSize.innerText =
+          `Size: ${tabularJsonLength} bytes (${percentage(tabularJsonLength, jsonLength)}), ` +
+          `${tabularJsonLineCount} lines (${percentage(tabularJsonLineCount, jsonLineCount)})`
+      }
+
       export async function smartFormat(text, indentation, maxLineLength) {
         const { Formatter, FracturedJsonOptions, NumberListAlignment } = await import(
           'https://cdn.jsdelivr.net/npm/fracturedjsonjs@4.0.0/+esm'
@@ -297,6 +358,7 @@
       updateJson()
 
       jsonTextarea.addEventListener('input', () => updateJson())
+      tabularJsonTextarea.addEventListener('input', () => updateTabularJson())
 
       beautifyOption.addEventListener('change', () => updateJson())
 
