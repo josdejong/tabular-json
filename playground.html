@@ -69,11 +69,12 @@
 
           .title {
             display: flex;
+            flex-wrap: wrap;
             gap: calc(0.5 * var(--padding));
             align-items: center;
             min-height: 30px;
 
-            .json-title {
+            .left {
               flex: 1;
 
               a {
@@ -143,15 +144,15 @@
     <div class="columns">
       <div id="json-column" class="column">
         <div class="title">
-          <div class="json-title">
+          <div class="left">
             <h2>JSON</h2>
             <a href="#" id="example1">example1</a>
             <a href="#" id="example2">example2</a>
             <a href="#" id="example3">example3</a>
           </div>
-          <button id="beautify">Beautify</button>
-          <button id="smart-beautify">Smart Beautify</button>
-          <button id="minify">Minify</button>
+          <button id="json-beautify">Beautify</button>
+          <button id="json-smart-beautify">Smart Beautify</button>
+          <button id="json-minify">Minify</button>
         </div>
         <label class="textarea">
           <textarea id="json-textarea"></textarea>
@@ -161,13 +162,11 @@
       </div>
       <div id="tabular-json-column" class="column">
         <div class="title">
-          <h2>Tabular-JSON</h2>
-          <div class="beautify">
-            <label>
-              Beautify
-              <input id="beautify-option" type="checkbox" checked />
-            </label>
+          <div class="left">
+            <h2>Tabular-JSON</h2>
           </div>
+          <button id="tabular-json-beautify">Beautify</button>
+          <button id="tabular-json-minify">Minify</button>
         </div>
         <label class="textarea">
           <textarea id="tabular-json-textarea"></textarea>
@@ -226,14 +225,15 @@
       const jsonTextarea = document.getElementById('json-textarea')
       const jsonError = document.getElementById('json-error')
       const jsonSize = document.getElementById('json-size')
+      const jsonBeautify = document.getElementById('json-beautify')
+      const jsonSmartBeautify = document.getElementById('json-smart-beautify')
+      const jsonMinify = document.getElementById('json-minify')
       const tabularJsonColumn = document.getElementById('tabular-json-column')
       const tabularJsonTextarea = document.getElementById('tabular-json-textarea')
       const tabularJsonError = document.getElementById('tabular-json-error')
       const tabularJsonSize = document.getElementById('tabular-json-size')
-      const beautifyOption = document.getElementById('beautify-option')
-      const beautify = document.getElementById('beautify')
-      const smartBeautify = document.getElementById('smart-beautify')
-      const minify = document.getElementById('minify')
+      const tabularJsonBeautify = document.getElementById('tabular-json-beautify')
+      const tabularJsonMinify = document.getElementById('tabular-json-minify')
 
       function percentage(a, b) {
         return Math.round((a / b) * 100) + '%'
@@ -248,10 +248,7 @@
         try {
           if (jsonTextarea.value.trim() !== '') {
             const json = JSON.parse(jsonTextarea.value)
-            tabularJsonTextarea.value = stringify(
-              json,
-              beautifyOption.checked ? { indentation: 2 } : undefined
-            )
+            tabularJsonTextarea.value = stringify(json, { indentation: 2 })
           } else {
             tabularJsonTextarea.value = ''
             tabularJsonSize.innerText = ''
@@ -363,28 +360,29 @@
         }
       }
 
+      function beautifyTabularJson() {
+        try {
+          const json = parse(tabularJsonTextarea.value)
+          tabularJsonTextarea.value = stringify(json, { indentation: 2 })
+        } catch (err) {
+          alert(err.toString())
+        }
+      }
+
+      function minifyTabularJson() {
+        try {
+          const json = parse(tabularJsonTextarea.value)
+          tabularJsonTextarea.value = stringify(json)
+        } catch (err) {
+          alert(err.toString())
+        }
+      }
+
       jsonTextarea.value = JSON.stringify(example1, null, 2)
       updateJson()
 
       jsonTextarea.addEventListener('input', () => updateJson())
       tabularJsonTextarea.addEventListener('input', () => updateTabularJson())
-
-      beautifyOption.addEventListener('change', () => updateJson())
-
-      beautify.addEventListener('click', () => {
-        beautifyJson()
-        updateJson()
-      })
-
-      smartBeautify.addEventListener('click', async () => {
-        await smartBeautifyJson()
-        updateJson()
-      })
-
-      minify.addEventListener('click', () => {
-        minifyJson()
-        updateJson()
-      })
 
       document.getElementById('example1').addEventListener('click', (event) => {
         event.preventDefault()
@@ -402,6 +400,31 @@
         event.preventDefault()
         jsonTextarea.value = JSON.stringify(example3, null, 2)
         updateJson()
+      })
+
+      jsonBeautify.addEventListener('click', () => {
+        beautifyJson()
+        updateJson()
+      })
+
+      jsonSmartBeautify.addEventListener('click', async () => {
+        await smartBeautifyJson()
+        updateJson()
+      })
+
+      jsonMinify.addEventListener('click', () => {
+        minifyJson()
+        updateJson()
+      })
+
+      tabularJsonBeautify.addEventListener('click', () => {
+        beautifyTabularJson()
+        updateTabularJson()
+      })
+
+      tabularJsonMinify.addEventListener('click', () => {
+        minifyTabularJson()
+        updateTabularJson()
       })
     </script>
   </body>
