@@ -102,17 +102,12 @@
             }
           }
 
-          .error {
+          .error-message {
+            display: none;
             background: var(--error-color);
             color: white;
             border-radius: var(--border-radius);
             padding: calc(0.5 * var(--padding));
-
-            display: none;
-
-            &.visible {
-              display: block;
-            }
           }
 
           label.textarea {
@@ -127,6 +122,18 @@
               resize: none;
             }
           }
+
+          &.error {
+            label.textarea {
+              textarea {
+                outline: 2px solid var(--error-color);
+              }
+            }
+
+            .error-message {
+              display: block;
+            }
+          }
         }
       }
     </style>
@@ -134,7 +141,7 @@
   <body>
     <h1>Tabular-JSON playground</h1>
     <div class="columns">
-      <div class="column">
+      <div id="json-column" class="column">
         <div class="title">
           <div class="json-title">
             <h2>JSON</h2>
@@ -149,10 +156,10 @@
         <label class="textarea">
           <textarea id="json-textarea"></textarea>
         </label>
-        <div id="json-error" class="error"></div>
+        <div id="json-error" class="error-message"></div>
         <div id="json-size"></div>
       </div>
-      <div class="column">
+      <div id="tabular-json-column" class="column">
         <div class="title">
           <h2>Tabular-JSON</h2>
           <div class="beautify">
@@ -165,7 +172,7 @@
         <label class="textarea">
           <textarea id="tabular-json-textarea"></textarea>
         </label>
-        <div id="tabular-json-error" class="error"></div>
+        <div id="tabular-json-error" class="error-message"></div>
         <div id="tabular-json-size"></div>
       </div>
     </div>
@@ -215,9 +222,11 @@
         { name: 'Christina', age: 22, city: 'Denver' }
       ]
 
+      const jsonColumn = document.getElementById('json-column')
       const jsonTextarea = document.getElementById('json-textarea')
       const jsonError = document.getElementById('json-error')
       const jsonSize = document.getElementById('json-size')
+      const tabularJsonColumn = document.getElementById('tabular-json-column')
       const tabularJsonTextarea = document.getElementById('tabular-json-textarea')
       const tabularJsonError = document.getElementById('tabular-json-error')
       const tabularJsonSize = document.getElementById('tabular-json-size')
@@ -233,8 +242,8 @@
       function updateJson() {
         jsonError.innerText = ''
         tabularJsonError.innerText = ''
-        jsonError.classList.remove('visible')
-        tabularJsonError.classList.remove('visible')
+        jsonColumn.classList.remove('error')
+        tabularJsonColumn.classList.remove('error')
 
         try {
           if (jsonTextarea.value.trim() !== '') {
@@ -249,7 +258,7 @@
           }
         } catch (err) {
           jsonError.innerText = err.toString()
-          jsonError.classList.add('visible')
+          jsonColumn.classList.add('error')
           tabularJsonSize.innerText = ''
         }
 
@@ -259,8 +268,8 @@
       function updateTabularJson() {
         jsonError.innerText = ''
         tabularJsonError.innerText = ''
-        jsonError.classList.remove('visible')
-        tabularJsonError.classList.remove('visible')
+        jsonColumn.classList.remove('error')
+        tabularJsonColumn.classList.remove('error')
 
         try {
           if (tabularJsonTextarea.value.trim() !== '') {
@@ -276,7 +285,7 @@
           }
         } catch (err) {
           tabularJsonError.innerText = err.toString()
-          tabularJsonError.classList.add('visible')
+          tabularJsonColumn.classList.add('error')
           jsonSize.innerText = ''
         }
 
