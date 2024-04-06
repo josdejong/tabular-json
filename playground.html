@@ -18,6 +18,7 @@
         --background: #f5f5f5;
         --border: 1px solid #bfbfbf;
         --error-color: #e4402a;
+        --examples-background: #e3e3e3;
         --link-color: #e4402a;
         --link-color-highlight: #c10e0e;
         --theme-color: #1e90ff;
@@ -44,6 +45,19 @@
         color: white;
         padding: var(--padding);
         margin: 0;
+      }
+
+      .examples {
+        background: var(--examples-background);
+        padding: var(--padding);
+
+        a {
+          color: var(--link-color);
+
+          &:hover {
+            color: var(--link-color-highlight);
+          }
+        }
       }
 
       h2 {
@@ -76,14 +90,6 @@
 
             .left {
               flex: 1;
-
-              a {
-                color: var(--link-color);
-
-                &:hover {
-                  color: var(--link-color-highlight);
-                }
-              }
             }
 
             .beautify {
@@ -141,14 +147,17 @@
   </head>
   <body>
     <h1>Tabular-JSON playground</h1>
+    <div class="examples">
+      Select an example:
+      <a href="#" id="example1">example1</a>
+      <a href="#" id="example2">example2</a>
+      <a href="#" id="example3">example3</a>
+    </div>
     <div class="columns">
       <div id="json-column" class="column">
         <div class="title">
           <div class="left">
             <h2>JSON</h2>
-            <a href="#" id="example1">example1</a>
-            <a href="#" id="example2">example2</a>
-            <a href="#" id="example3">example3</a>
           </div>
           <button id="json-beautify">Beautify</button>
           <button id="json-smart-beautify">Smart Beautify</button>
