@@ -90,6 +90,22 @@ test('parse tables with whitespace', () => {
   ])
 })
 
+test('parse a nested table', () => {
+  expect(
+    parse(`{
+    data: ---
+    id,name
+    1,Joe
+    2,Sarah
+    ---}`)
+  ).toEqual({
+    data: [
+      { id: 1, name: 'Joe' },
+      { id: 2, name: 'Sarah' }
+    ]
+  })
+})
+
 test.skip('parse tables containing nested arrays', () => {
   // FIXME: the nested ] will also skip the newline
   expect(

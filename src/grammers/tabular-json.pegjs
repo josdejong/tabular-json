@@ -15,10 +15,10 @@ name_separator  = ws ":" ws
 path_separator  = wst "." wst
 value_separator = ws "," ws
 field_separator = wst "," wst
-row_separator   = wst "\n" wst
+row_separator   = wst "\r"? "\n" wst
 
 ws "whitespace" = [ \t\n\r]*
-wst "whitespace in tables" = [ \t\r]*
+wst "table-whitespace" = [ \t]*
 
 // ----- 2. Values -----
 
@@ -78,7 +78,8 @@ array
 
 table
   = begin_table row_separator
-    header:header row_separator rows:(row:row row_separator { return row; })+
+    header:header row_separator 
+    rows:(row:row row_separator { return row; })+
     end_table
     {
       function setIn(object, path, value) {
@@ -129,7 +130,7 @@ header
   { return [head].concat(tail); }
 
 row
-  = head:value tail:(field_separator value:value { return value; })*
+  = !end_table head:value tail:(field_separator value:value { return value; })*
   { return [head].concat(tail); }
 
 path
