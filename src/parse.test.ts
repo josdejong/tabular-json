@@ -97,7 +97,8 @@ test('parse a nested table', () => {
     id,name
     1,Joe
     2,Sarah
-    ---}`)
+    ---
+  }`)
   ).toEqual({
     data: [
       { id: 1, name: 'Joe' },

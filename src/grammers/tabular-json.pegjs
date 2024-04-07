@@ -79,7 +79,7 @@ array
 table
   = begin_table row_separator
     header:header row_separator 
-    rows:(row:row row_separator { return row; })+
+    rows:(!end_table row:row row_separator { return row; })+
     end_table
     {
       function setIn(object, path, value) {
@@ -130,7 +130,7 @@ header
   { return [head].concat(tail); }
 
 row
-  = !end_table head:value tail:(field_separator value:value { return value; })*
+  = head:value tail:(field_separator value:value { return value; })*
   { return [head].concat(tail); }
 
 path
