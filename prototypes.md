@@ -313,6 +313,18 @@ For example:
 }
 ```
 
+### Idea 10: same as Idea 7, but with a CSV compatible way to encode paths
+
+When we have an array with objects and serialize it, this results in a CSV table. However, if we encode a path like `"address"."city"` and put that in a single field, this means that CSV parsers cannot read the field. Therefore, I think it's better to encode it like `"address.city"`, even though that is a bit harder to parse/stringify because the dot needs to be escaped.
+
+```
+name,   age, "details.description with a comma , in it"
+Sarah,  22,  Sarah Church
+Robert, 24,  Robert Langdon
+```
+
+We only need to add quotes though when the string contains a comma or newline, so I think that hardly ever happens to need to put the column name in quotes.
+
 ## Thoughts
 
 - Syntax
