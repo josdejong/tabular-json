@@ -5,17 +5,17 @@ JSON_text
 
 // FIXME: add support for a table without block at the root
 
-begin_array     = ws "[" ws
-end_array       = ws "]" ws
-begin_object    = ws "{" ws
-end_object      = ws "}" ws
-begin_table     = ws "---"
-end_table       = "---" ws
-name_separator  = ws ":" ws
-path_separator  = wst "." wst
-value_separator = ws "," ws
-field_separator = wst "," wst
-row_separator   = wst "\r"? "\n" wst
+begin_array     = "["
+end_array       = "]"
+begin_object    = "{"
+end_object      = "}"
+begin_table     = "---"
+end_table       = "---"
+name_separator  = ":"
+path_separator  = "."
+value_separator = ","
+field_separator = ","
+row_separator   = "\r"? "\n"
 
 ws "whitespace" = [ \t\n\r]*
 wst "table-whitespace" = [ \t]*
@@ -40,10 +40,10 @@ true  = "true"  { return true;  }
 // ----- 3. Objects -----
 
 object
-  = begin_object
+  = begin_object ws
     members:(
       head:member
-      tail:(value_separator m:member { return m; })*
+      tail:(ws value_separator ws m:member { return m; })*
       {
         var result = {};
 
@@ -54,32 +54,32 @@ object
         return result;
       }
     )?
-    end_object
+    ws end_object
     { return members !== null ? members: {}; }
 
 member
-  = name:(string) name_separator value:value {
+  = name:(string) ws name_separator ws value:value {
       return { name, value };
     }
 
 // ----- 4. Arrays -----
 
 array
-  = begin_array
+  = begin_array ws
     values:(
       head:value
-      tail:(value_separator v:value { return v; })*
+      tail:(!end_array ws value_separator ws v:value { return v; })*
       { return [head].concat(tail); }
     )?
     end_array
-    { return values !== null ? values : []; }
+    { return values ?? []; }
 
 // ----- 5. Tables -----
 
 table
-  = begin_table row_separator
-    header:header row_separator 
-    rows:(!end_table row:row row_separator { return row; })+
+  = begin_table wst row_separator wst
+    header:header wst row_separator wst
+    rows:(!end_table row:row wst row_separator wst { return row; })+
     end_table
     {
       function setIn(object, path, value) {
@@ -126,15 +126,15 @@ table
     }
 
 header
-  = head:path tail:(field_separator path:path { return path; })*
+  = head:path tail:(wst field_separator wst path:path { return path; })*
   { return [head].concat(tail); }
 
 row
-  = head:value tail:(field_separator value:value { return value; })*
+  = head:value tail:(wst field_separator wst value:value { return value; })*
   { return [head].concat(tail); }
 
 path
-  = head:string tail:(path_separator value:string { return value; })* 
+  = head:string tail:(wst path_separator wst value:string { return value; })* 
     { return [head].concat(tail); }
 
 // ----- 6. Numbers -----

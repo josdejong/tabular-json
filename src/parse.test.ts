@@ -107,7 +107,20 @@ test('parse a nested table', () => {
   })
 })
 
-test.skip('parse tables containing nested arrays', () => {
+test.skip('parse a root table', () => {
+  expect(
+    parse(`id,name
+    1,Joe
+    2,Sarah`)
+  ).toEqual({
+    data: [
+      { id: 1, name: 'Joe' },
+      { id: 2, name: 'Sarah' }
+    ]
+  })
+})
+
+test('parse tables containing nested arrays', () => {
   // FIXME: the nested ] will also skip the newline
   expect(
     parse(`---
@@ -121,18 +134,26 @@ test.skip('parse tables containing nested arrays', () => {
   ])
 })
 
-test.skip('parse tables containing nested objects', () => {
+test('parse tables containing nested objects', () => {
   // FIXME: the nested } will also skip the newline
   expect(
     parse(`---
       id, name, address
-      1, joe, { city: "New York", street: "1st Ave" }
-      2, sarah, { city: "Washington", street: "18th Street NW" }
+      1, Joe, { city: "New York", street: "1st Ave" }
+      2, Sarah, { city: "Washington", street: "18th Street NW" }
       ---`)
   ).toEqual([
     { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
     { id: 2, name: 'Sarah', address: { city: 'Washington', street: '18th Street NW' } }
   ])
+})
+
+test.skip('parse an empty table', () => {
+  expect(parse('[]')).toEqual([])
+})
+
+test('parse an empty object', () => {
+  expect(parse('{}')).toEqual({})
 })
 
 test('use the generated parser', () => {
