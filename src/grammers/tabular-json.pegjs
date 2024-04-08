@@ -5,7 +5,7 @@
   function setIn(object, path, value) {
     const iLast = path.length - 1
     let child = object
-    
+
     for (let i = 0; i < iLast; i++) {
       child = child[path[i]] ??= {}
     }
@@ -120,7 +120,7 @@ row
   { return [head].concat(tail) }
 
 path
-  = head:string tail:(wst path_separator wst value:string { return value })* 
+  = head:string tail:(wst path_separator wst value:string { return value })*
     { return [head].concat(tail) }
 
 // ----- 7. Numbers -----
