@@ -17,7 +17,7 @@
 // ----- 2. Tabular-JSON Grammar -----
 
 JSON_text
-  = ws value:(table_root / value) ws { return value }
+  = ws value:(table_contents / value) ws { return value }
 
 begin_array     = "["
 end_array       = "]"
@@ -89,9 +89,6 @@ array
 
 // ----- 6. Tables -----
 
-table_root
-  = table / table_contents
-
 table
   = begin_table wst row_separator wst
     contents:table_contents
@@ -99,7 +96,7 @@ table
     { return contents }
 
 table_contents
-  = header:header
+  = !begin_table header:header
     rows:(wst row_separator wst !end_table row:row { return row })+
     {
       return rows.map(row => {
