@@ -25,6 +25,14 @@ describe('compile and use the Tabular-JSON grammer', () => {
   const { parse } = peggy.generate(tabularJsonGrammer)
 
   test('parse JSON', () => {
+    // FIXME: add extensive JSON unit tests
+
+    expect(parse('"success"')).toEqual('success')
+    expect(parse('23.4')).toEqual(23.4)
+    expect(parse('true')).toEqual(true)
+    expect(parse('false')).toEqual(false)
+    expect(parse('null')).toEqual(null)
+
     const jsonStr = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
     const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
 
@@ -107,17 +115,27 @@ test('parse a nested table', () => {
   })
 })
 
-test.skip('parse a root table', () => {
+test('parse a root table', () => {
+  expect(
+    parse(`id,name
+    1,Joe
+    2,Sarah
+    `)
+  ).toEqual([
+    { id: 1, name: 'Joe' },
+    { id: 2, name: 'Sarah' }
+  ])
+})
+
+test.skip('parse a root table without return at the end', () => {
   expect(
     parse(`id,name
     1,Joe
     2,Sarah`)
-  ).toEqual({
-    data: [
-      { id: 1, name: 'Joe' },
-      { id: 2, name: 'Sarah' }
-    ]
-  })
+  ).toEqual([
+    { id: 1, name: 'Joe' },
+    { id: 2, name: 'Sarah' }
+  ])
 })
 
 test('parse tables containing nested arrays', () => {

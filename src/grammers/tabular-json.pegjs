@@ -1,7 +1,8 @@
 // ----- 1. Tabular-JSON Grammar -----
 
 JSON_text
-  = ws value:value ws { return value; }
+  = wst contents:table_root ws { return contents }
+  / ws value:value ws { return value; }
 
 // FIXME: add support for a table without block at the root
 
@@ -14,7 +15,6 @@ end_table       = "---"
 name_separator  = ":"
 path_separator  = "."
 value_separator = ","
-field_separator = ","
 row_separator   = "\r"? "\n"
 
 ws "whitespace" = [ \t\n\r]*
@@ -76,11 +76,18 @@ array
 
 // ----- 5. Tables -----
 
+table_root
+  = table / table_contents
+
 table
   = begin_table wst row_separator wst
-    header:header wst row_separator wst
-    rows:(!end_table row:row wst row_separator wst { return row; })+
+    contents:table_contents
     end_table
+    { return contents }
+
+table_contents
+  = header:header wst row_separator wst
+    rows:(!end_table row:row wst row_separator wst { return row; })+
     {
       function setIn(object, path, value) {
         let current = object
@@ -126,11 +133,11 @@ table
     }
 
 header
-  = head:path tail:(wst field_separator wst path:path { return path; })*
+  = head:path tail:(wst value_separator wst path:path { return path; })*
   { return [head].concat(tail); }
 
 row
-  = head:value tail:(wst field_separator wst value:value { return value; })*
+  = head:value tail:(wst value_separator wst value:value { return value; })*
   { return [head].concat(tail); }
 
 path
