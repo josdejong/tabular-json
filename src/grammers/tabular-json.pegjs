@@ -1,30 +1,16 @@
 // ----- 1. JavaScript functions -----
 
 {{
+  // helper function to set a value in a nested object
   function setIn(object, path, value) {
-    let current = object
+    const iLast = path.length - 1
+    let child = object
     
-
-    for (let i = 0; i < path.length - 1; i++) {
-      const key = path[i]
-      if (!current[key]) {
-        current[key] = {}
-      }
-      current = current[key]
+    for (let i = 0; i < iLast; i++) {
+      child = child[path[i]] ??= {}
     }
 
-    const lastKey = path[path.length - 1]
-    current[lastKey] = value
-  }
-
-  function createSetters(header) {
-    return header.map((path) => {
-      const first = path[0]
-
-      return path.length === 1
-        ? (record, value) => (record[first] = value) // fast implementation
-        : (record, value) => setIn(record, path, value) // generic implementation
-    })
+    child[path[iLast]] = value
   }
 }}
 
@@ -51,8 +37,8 @@ wst "table-whitespace" = [ \t]*
 
 value
   = false
-  / null
   / true
+  / null
   / object
   / array
   / table
@@ -116,12 +102,10 @@ table_contents
   = header:header
     rows:(wst row_separator wst !end_table row:row { return row })+
     {
-      const setters = createSetters(header)
-      
       return rows.map(row => {
         const record = {}
-        
-        row.forEach((value, index) => setters[index](record, value))
+
+        row.forEach((value, index) => setIn(record, header[index], value))
 
         return record
       })
