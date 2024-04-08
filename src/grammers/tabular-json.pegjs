@@ -1,10 +1,7 @@
 // ----- 1. Tabular-JSON Grammar -----
 
 JSON_text
-  = wst contents:table_root ws { return contents }
-  / ws value:value ws { return value; }
-
-// FIXME: add support for a table without block at the root
+  = ws value:(table_root / value) ws { return value }
 
 begin_array     = "["
 end_array       = "]"
@@ -33,9 +30,9 @@ value
   / number
   / string
 
-false = "false" { return false; }
-null  = "null"  { return null;  }
-true  = "true"  { return true;  }
+false = "false" { return false }
+null  = "null"  { return null  }
+true  = "true"  { return true  }
 
 // ----- 3. Objects -----
 
@@ -43,23 +40,23 @@ object
   = begin_object ws
     members:(
       head:member
-      tail:(ws value_separator ws m:member { return m; })*
+      tail:(ws value_separator ws m:member { return m })*
       {
-        var result = {};
+        const result = {
+          [head.name]: head.value
+        }
 
-        [head].concat(tail).forEach(function(element) {
-          result[element.name] = element.value;
-        });
+        tail.forEach(({ name, value}) => result[name] = value)
 
-        return result;
+        return result
       }
     )?
     ws end_object
-    { return members !== null ? members: {}; }
+    { return members !== null ? members: {} }
 
 member
   = name:(string) ws name_separator ws value:value {
-      return { name, value };
+      return { name, value }
     }
 
 // ----- 4. Arrays -----
@@ -68,11 +65,11 @@ array
   = begin_array ws
     values:(
       head:value
-      tail:(!end_array ws value_separator ws v:value { return v; })*
-      { return [head].concat(tail); }
+      tail:(!end_array ws value_separator ws v:value { return v })*
+      { return [head].concat(tail) }
     )?
     end_array
-    { return values ?? []; }
+    { return values ?? [] }
 
 // ----- 5. Tables -----
 
@@ -87,7 +84,7 @@ table
 
 table_contents
   = header:header
-    rows:(wst row_separator wst !end_table row:row { return row; })+
+    rows:(wst row_separator wst !end_table row:row { return row })+
     {
       function setIn(object, path, value) {
         let current = object
@@ -129,25 +126,25 @@ table_contents
         }
 
         return record
-      });
+      })
     }
 
 header
-  = head:path tail:(wst value_separator wst path:path { return path; })*
-  { return [head].concat(tail); }
+  = head:path tail:(wst value_separator wst path:path { return path })*
+  { return [head].concat(tail) }
 
 row
-  = head:value tail:(wst value_separator wst value:value { return value; })*
-  { return [head].concat(tail); }
+  = head:value tail:(wst value_separator wst value:value { return value })*
+  { return [head].concat(tail) }
 
 path
-  = head:string tail:(wst path_separator wst value:string { return value; })* 
-    { return [head].concat(tail); }
+  = head:string tail:(wst path_separator wst value:string { return value })* 
+    { return [head].concat(tail) }
 
 // ----- 6. Numbers -----
 
 number "number"
-  = minus? int frac? exp? { return parseFloat(text()); }
+  = minus? int frac? exp? { return parseFloat(text()) }
 
 decimal_point
   = "."
@@ -181,7 +178,7 @@ zero
 // FIXME: work out the ISO Date definition in detail, see https://en.wikipedia.org/wiki/ISO_8601
 
 date "date"
-  = date:$(year "-" month "-" day "T" hours ":" minutes ":" seconds ("." milliseconds)? "Z") { return new Date(date); }
+  = date:$(year "-" month "-" day "T" hours ":" minutes ":" seconds ("." milliseconds)? "Z") { return new Date(date) }
 
 year         = $(DIGIT DIGIT DIGIT DIGIT)
 month        = $(DIGIT DIGIT)
@@ -196,10 +193,10 @@ milliseconds = $(DIGIT DIGIT DIGIT)
 string = quoted_string / unquoted_string
 
 unquoted_string "unquoted string"
-  = chars:unquoted+ { return chars.join("").trim(); }
+  = chars:unquoted+ { return chars.join("").trim() }
 
 quoted_string "quoted string"
-  = quotation_mark chars:char* quotation_mark { return chars.join(""); }
+  = quotation_mark chars:char* quotation_mark { return chars.join("") }
 
 char
   = unescaped
@@ -208,16 +205,16 @@ char
         '"'
       / "\\"
       / "/"
-      / "b" { return "\b"; }
-      / "f" { return "\f"; }
-      / "n" { return "\n"; }
-      / "r" { return "\r"; }
-      / "t" { return "\t"; }
+      / "b" { return "\b" }
+      / "f" { return "\f" }
+      / "n" { return "\n" }
+      / "r" { return "\r" }
+      / "t" { return "\t" }
       / "u" digits:$(HEXDIG HEXDIG HEXDIG HEXDIG) {
-          return String.fromCharCode(parseInt(digits, 16));
+          return String.fromCharCode(parseInt(digits, 16))
         }
     )
-    { return sequence; }
+    { return sequence }
 
 escape
   = "\\"

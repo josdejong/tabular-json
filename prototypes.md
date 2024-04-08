@@ -359,14 +359,13 @@ Robert, 24,  Washington,   18th Street NW, [biking]
 
 After trying out this idea:
 
-- This is technically possible, but leads to a complicated parser, correctly detecting both the start and the end of a (nested) table
+- This is technically possible, but leads to a complicated parser, correctly detecting both the start and the end of a (nested) table. Where the grammer of nested tables with `---` blocks is straightforward, omitting them requires jumping through some hoops (which is an important sign that we shouldn't do that).
 - It makes it visually harder to recognize tables vs arrays vs objects
 - It is necessary to disallow nested tables in arrays, since you cannot distinguish a nested table having only one column from an array.
 - It is necessary to disallow nested tables in tables, since you cannot distinguish the nested table.
 - These special rules about where a nested table is allowed or not makes things more complicated to understand.
 
 Conclusion: it is best to keep the explicit table blocks `---`
-
 
 ## Thoughts
 
