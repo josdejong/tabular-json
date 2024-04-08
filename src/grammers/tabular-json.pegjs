@@ -82,12 +82,12 @@ table_root
 table
   = begin_table wst row_separator wst
     contents:table_contents
-    end_table
+    wst row_separator wst end_table
     { return contents }
 
 table_contents
-  = header:header wst row_separator wst
-    rows:(!end_table row:row wst row_separator wst { return row; })+
+  = header:header
+    rows:(wst row_separator wst !end_table row:row { return row; })+
     {
       function setIn(object, path, value) {
         let current = object

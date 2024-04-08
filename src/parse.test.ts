@@ -127,7 +127,7 @@ test('parse a root table', () => {
   ])
 })
 
-test.skip('parse a root table without return at the end', () => {
+test('parse a root table without newline at the end', () => {
   expect(
     parse(`id,name
     1,Joe
