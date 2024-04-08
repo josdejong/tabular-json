@@ -24,19 +24,105 @@ describe('compile and use the Tabular-JSON grammer', () => {
   )
   const { parse } = peggy.generate(tabularJsonGrammer)
 
-  test('parse JSON', () => {
-    // FIXME: add extensive JSON unit tests
+  test('full JSON object', function () {
+    const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'
+    const expected = {
+      a: 2.3e100,
+      b: 'str',
+      c: null,
+      d: false,
+      e: [1, 2, 3]
+    }
+    const parsed = parse(text)
 
-    expect(parse('"success"')).toEqual('success')
-    expect(parse('23.4')).toEqual(23.4)
+    expect(parse(text)).toEqual(expected)
+  })
+
+  test('object', function () {
+    expect(parse('{}')).toEqual({})
+    expect(parse('  { \n } \t ')).toEqual({})
+    expect(parse('{"a": {}}')).toEqual({ a: {} })
+    expect(parse('{"a": "b"}')).toEqual({ a: 'b' })
+    expect(parse('{"a": 2}')).toEqual({ a: 2 })
+  })
+
+  test('array', function () {
+    expect(parse('[]')).toEqual([])
+    expect(parse('[{}]')).toEqual([{}])
+    expect(parse('{"a":[]}')).toEqual({ a: [] })
+    expect(parse('[1, "hi", true, false, null, {}, []]')).toEqual([
+      1,
+      'hi',
+      true,
+      false,
+      null,
+      {},
+      []
+    ])
+  })
+
+  test('number', function () {
+    expect(parse('23')).toEqual(23)
+    expect(parse('0')).toEqual(0)
+    expect(parse('0e+2')).toEqual(0)
+    expect(parse('0.0')).toEqual(0)
+    expect(parse('-0')).toEqual(-0)
+    expect(parse('2.3')).toEqual(2.3)
+    expect(parse('2300e3')).toEqual(2300e3)
+    expect(parse('2300e+3')).toEqual(2300e3)
+    expect(parse('-2')).toEqual(-2)
+    expect(parse('2e-3')).toEqual(2e-3)
+    expect(parse('2.3e-3')).toEqual(2.3e-3)
+  })
+
+  test('string', function () {
+    expect(parse('"str"')).toEqual('str')
+    expect(JSON.parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
+    expect(parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
+    expect(JSON.parse('"\\u260E"')).toEqual('\u260E')
+    expect(parse('"\\u260E"')).toEqual('\u260E')
+  })
+
+  test('keywords', function () {
     expect(parse('true')).toEqual(true)
     expect(parse('false')).toEqual(false)
     expect(parse('null')).toEqual(null)
+  })
 
-    const jsonStr = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
-    const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
+  test('correctly handle strings equaling a JSON delimiter', function () {
+    expect(parse('""')).toEqual('')
+    expect(parse('"["')).toEqual('[')
+    expect(parse('"]"')).toEqual(']')
+    expect(parse('"{"')).toEqual('{')
+    expect(parse('"}"')).toEqual('}')
+    expect(parse('":"')).toEqual(':')
+    expect(parse('","')).toEqual(',')
+  })
 
-    expect(parse(jsonStr)).toEqual(json)
+  test('supports unicode characters in a string', () => {
+    expect(parse('"★"')).toBe('★')
+    expect(parse('"😀"')).toBe('😀')
+    expect(parse('"\ud83d\ude00"')).toBe('\ud83d\ude00')
+    expect(parse('"йнформация"')).toBe('йнформация')
+  })
+
+  test('supports escaped unicode characters in a string', () => {
+    expect(parse('"\\u2605"')).toBe('\u2605')
+    expect(parse('"\\ud83d\\ude00"')).toBe('\ud83d\ude00')
+    expect(parse('"\\u0439\\u043d\\u0444\\u043e\\u0440\\u043c\\u0430\\u0446\\u0438\\u044f"')).toBe(
+      '\u0439\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f'
+    )
+  })
+
+  test('supports unicode characters in a key', () => {
+    expect(parse('{"★":true}')).toStrictEqual({ '★': true })
+    expect(parse('{"\u2605":true}')).toStrictEqual({ '\u2605': true })
+    expect(parse('{"😀":true}')).toStrictEqual({ '😀': true })
+    expect(parse('{"\ud83d\ude00":true}')).toStrictEqual({ '\ud83d\ude00': true })
+  })
+
+  test('parse a formatted array', () => {
+    expect(parse('[\n  1,\n  2,\n  3\n]')).toEqual([1, 2, 3])
   })
 
   test('parse unquoted strings', () => {

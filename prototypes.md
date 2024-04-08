@@ -360,12 +360,12 @@ Robert, 24,  Washington,   18th Street NW, [biking]
 After trying out this idea:
 
 - This is technically possible, but leads to a complicated parser, correctly detecting both the start and the end of a (nested) table. Where the grammer of nested tables with `---` blocks is straightforward, omitting them requires jumping through some hoops (which is an important sign that we shouldn't do that).
-- It makes it visually harder to recognize tables vs arrays vs objects
+- How to serialize a JSON structure like `[[{"id":1},{"id":2}]]`? The outer array contains a valid table as first item, but when serializing it like that the outcome would become `[\nid,\n1,\n2\n]`, which would be parsed into `["id",1,2]`, which is not the same as the original! So, special logic is needed to recognize this case and not serialize the array item as a table.
 - It is necessary to disallow nested tables in arrays, since you cannot distinguish a nested table having only one column from an array.
 - It is necessary to disallow nested tables in tables, since you cannot distinguish the nested table.
-- These special rules about where a nested table is allowed or not makes things more complicated to understand.
+- It makes it visually harder to recognize tables vs arrays vs objects, and these special rules about where a nested table is allowed or not makes things more complicated to understand.
 
-Conclusion: it is best to keep the explicit table blocks `---`
+Conclusion: it is best to keep the explicit table blocks `---`.
 
 ## Thoughts
 

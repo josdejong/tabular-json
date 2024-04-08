@@ -65,10 +65,10 @@ array
   = begin_array ws
     values:(
       head:value
-      tail:(!end_array ws value_separator ws v:value { return v })*
+      tail:(ws value_separator ws v:value { return v })*
       { return [head].concat(tail) }
     )?
-    end_array
+    ws end_array
     { return values ?? [] }
 
 // ----- 5. Tables -----
