@@ -121,7 +121,6 @@ test.skip('parse a root table', () => {
 })
 
 test('parse tables containing nested arrays', () => {
-  // FIXME: the nested ] will also skip the newline
   expect(
     parse(`---
       id, name, score
@@ -135,7 +134,6 @@ test('parse tables containing nested arrays', () => {
 })
 
 test('parse tables containing nested objects', () => {
-  // FIXME: the nested } will also skip the newline
   expect(
     parse(`---
       id, name, address
@@ -148,7 +146,7 @@ test('parse tables containing nested objects', () => {
   ])
 })
 
-test.skip('parse an empty table', () => {
+test('parse an empty array', () => {
   expect(parse('[]')).toEqual([])
 })
 

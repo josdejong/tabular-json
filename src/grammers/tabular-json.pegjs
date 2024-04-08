@@ -189,7 +189,7 @@ milliseconds = $(DIGIT DIGIT DIGIT)
 string = quoted_string / unquoted_string
 
 unquoted_string "unquoted string"
-  = chars:unquoted* { return chars.join("").trim(); }
+  = chars:unquoted+ { return chars.join("").trim(); }
 
 quoted_string "quoted string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
