@@ -355,6 +355,7 @@ We only need to add quotes though when the string contains a comma or newline, s
   - Comments are only useful for data formats used for configuration, not for data. When using comments in data, it makes the data format hard to use: when loading data into a data model, there is no place to keep the comments. So when parsing/stringifying, you’ll lose the comments, which makes them unreliable. So, for our data format, we will not support comments.
   - Other metadata like what InternetObject puts in the header is not strictly necessary to be part of the data format, since you can choose a data model where you include these metadata fields as regular data, like: `{"page": 2, "recordCount": 100, "data": [...]}`.
 - What would be the best separator for a path like `address.city`? A dot `.`? Or a colon `:`, so you get `address:city`? That would be sort of consistent with the `:` that is a separator between keys and values in an object.
+- If we allow for a table at root level without block separators `---`, we probably do not need them at all: we need the logic to recognize the table without these blocks anyway, so why not when nested?
 
 ## Name
 
