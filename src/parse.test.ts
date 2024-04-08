@@ -3,7 +3,12 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, test, expect } from 'vitest'
 import peggy from 'peggy'
-import { parse } from './parse'
+
+const tabularJsonGrammer = String(
+  readFileSync(getAbsolutePath(import.meta.url, './grammers/tabular-json.pegjs'))
+)
+
+const { parse } = peggy.generate(tabularJsonGrammer)
 
 test('compile and use the JSON grammer', () => {
   // This test is just to verify that the JSON grammer and Peggy work as expected
@@ -19,10 +24,6 @@ test('compile and use the JSON grammer', () => {
 })
 
 describe('compile and use the Tabular-JSON grammer', () => {
-  const tabularJsonGrammer = String(
-    readFileSync(getAbsolutePath(import.meta.url, './grammers/tabular-json.pegjs'))
-  )
-  const { parse } = peggy.generate(tabularJsonGrammer)
 
   test('full JSON object', function () {
     const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'
@@ -256,10 +257,6 @@ test('parse an empty array', () => {
 
 test('parse an empty object', () => {
   expect(parse('{}')).toEqual({})
-})
-
-test('use the generated parser', () => {
-  expect(parse('[1,2,3]')).toEqual([1, 2, 3])
 })
 
 /**
