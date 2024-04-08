@@ -325,6 +325,49 @@ Robert, 24,  Robert Langdon
 
 We only need to add quotes though when the string contains a comma or newline, so I think that hardly ever happens to need to put the column name in quotes.
 
+### Idea 11: same as Idea 7, but without `---` blocks at all
+
+If we do not need `---` blocks around a table at root level, we probably also don't need it for nested tables. This may be more tricky to parse, I'm not sure.
+
+Requirement for a nested table is that it must start after a newline I think.
+
+Also, we should not allow nested tables in a table or array, since we cannot distinguish it and get a lot of recursive tables rather than a list with items or rows.
+
+```
+{
+  name: Joe,
+  age: 23,
+  hobbies: [swimming, gaming, biking],
+  friends:
+    name,   age, address.city, address.street,   hobbies
+    Sarah,  22,  New York,     "1st Ave",        [biking, shopping]
+    Robert, 24,  Washington,   "18th Street NW", [biking],
+  address: {
+    city: New York,
+    street: "1st Ave"
+  }
+}
+```
+
+At root level:
+
+```
+name,   age, address.city, address.street, hobbies
+Sarah,  22,  New York,     "1st Ave",      [biking, shopping]
+Robert, 24,  Washington,   18th Street NW, [biking]
+```
+
+After trying out this idea:
+
+- This is technically possible, but leads to a complicated parser, correctly detecting both the start and the end of a (nested) table
+- It makes it visually harder to recognize tables vs arrays vs objects
+- It is necessary to disallow nested tables in arrays, since you cannot distinguish a nested table having only one column from an array.
+- It is necessary to disallow nested tables in tables, since you cannot distinguish the nested table.
+- These special rules about where a nested table is allowed or not makes things more complicated to understand.
+
+Conclusion: it is best to keep the explicit table blocks `---`
+
+
 ## Thoughts
 
 - Syntax
@@ -355,7 +398,6 @@ We only need to add quotes though when the string contains a comma or newline, s
   - Comments are only useful for data formats used for configuration, not for data. When using comments in data, it makes the data format hard to use: when loading data into a data model, there is no place to keep the comments. So when parsing/stringifying, you’ll lose the comments, which makes them unreliable. So, for our data format, we will not support comments.
   - Other metadata like what InternetObject puts in the header is not strictly necessary to be part of the data format, since you can choose a data model where you include these metadata fields as regular data, like: `{"page": 2, "recordCount": 100, "data": [...]}`.
 - What would be the best separator for a path like `address.city`? A dot `.`? Or a colon `:`, so you get `address:city`? That would be sort of consistent with the `:` that is a separator between keys and values in an object.
-- If we allow for a table at root level without block separators `---`, we probably do not need them at all: we need the logic to recognize the table without these blocks anyway, so why not when nested?
 
 ## Name
 
