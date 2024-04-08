@@ -1,4 +1,34 @@
-// ----- 1. Tabular-JSON Grammar -----
+// ----- 1. JavaScript functions -----
+
+{{
+  function setIn(object, path, value) {
+    let current = object
+    
+
+    for (let i = 0; i < path.length - 1; i++) {
+      const key = path[i]
+      if (!current[key]) {
+        current[key] = {}
+      }
+      current = current[key]
+    }
+
+    const lastKey = path[path.length - 1]
+    current[lastKey] = value
+  }
+
+  function createSetters(header) {
+    return header.map((path) => {
+      const first = path[0]
+
+      return path.length === 1
+        ? (record, value) => (record[first] = value) // fast implementation
+        : (record, value) => setIn(record, path, value) // generic implementation
+    })
+  }
+}}
+
+// ----- 2. Tabular-JSON Grammar -----
 
 JSON_text
   = ws value:(table_root / value) ws { return value }
@@ -17,7 +47,7 @@ row_separator   = "\r"? "\n"
 ws "whitespace" = [ \t\n\r]*
 wst "table-whitespace" = [ \t]*
 
-// ----- 2. Values -----
+// ----- 3. Values -----
 
 value
   = false
@@ -34,7 +64,7 @@ false = "false" { return false }
 null  = "null"  { return null  }
 true  = "true"  { return true  }
 
-// ----- 3. Objects -----
+// ----- 4. Objects -----
 
 object
   = begin_object ws
@@ -59,7 +89,7 @@ member
       return { name, value }
     }
 
-// ----- 4. Arrays -----
+// ----- 5. Arrays -----
 
 array
   = begin_array ws
@@ -71,7 +101,7 @@ array
     ws end_array
     { return values ?? [] }
 
-// ----- 5. Tables -----
+// ----- 6. Tables -----
 
 table_root
   = table / table_contents
@@ -86,44 +116,12 @@ table_contents
   = header:header
     rows:(wst row_separator wst !end_table row:row { return row })+
     {
-      function setIn(object, path, value) {
-        let current = object
-
-        for (let i = 0; i < path.length - 1; i++) {
-          const key = path[i]
-          if (!current[key]) {
-            current[key] = {}
-          }
-          current = current[key]
-        }
-
-        const lastKey = path[path.length - 1]
-        current[lastKey] = value
-      }
-
-      function createSetters(header) {
-        return header.map((path) => {
-          const first = path[0]
-
-          return path.length === 1
-            ? (record, value) => (record[first] = value)
-            : (record, value) => setIn(record, path, value)
-        })
-      }
-
       const setters = createSetters(header)
       
-      // FIXME: instead of first collecting all rows and then mapping them to objects afterwards, do that on the fly:
-      //  - create the setters directly after parsing the header
-      //  - then directly invoke the setter when parsing a value
       return rows.map(row => {
         const record = {}
         
-        for (let i = 0; i < row.length; i++) {
-          const value = row[i]
-          const setter = setters[i]
-          setter(record, value)
-        }
+        row.forEach((value, index) => setters[index](record, value))
 
         return record
       })
@@ -141,7 +139,7 @@ path
   = head:string tail:(wst path_separator wst value:string { return value })* 
     { return [head].concat(tail) }
 
-// ----- 6. Numbers -----
+// ----- 7. Numbers -----
 
 number "number"
   = minus? int frac? exp? { return parseFloat(text()) }
@@ -173,7 +171,7 @@ plus
 zero
   = "0"
 
-// ------ 7. Dates -----
+// ------ 8. Dates -----
 
 // FIXME: work out the ISO Date definition in detail, see https://en.wikipedia.org/wiki/ISO_8601
 
@@ -188,7 +186,7 @@ minutes      = $(DIGIT DIGIT)
 seconds      = $(DIGIT DIGIT)
 milliseconds = $(DIGIT DIGIT DIGIT)
 
-// ----- 8. Strings -----
+// ----- 9. Strings -----
 
 string = quoted_string / unquoted_string
 
