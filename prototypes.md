@@ -17,6 +17,11 @@ JSON is typically used for two very different purposes: for data and for configu
   - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-data/
   - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-configuration-files/
   - https://jsoneditoronline.org/indepth/compare/json-vs-csv/
+- Standards:
+  - JSON: https://www.json.org/
+  - CSV: https://www.rfc-editor.org/rfc/rfc4180
+  - NDJSON: https://github.com/ndjson/ndjson-spec
+  - JSONPointer: https://www.rfc-editor.org/rfc/rfc6901
 
 ## Requirements
 
@@ -369,7 +374,7 @@ After trying out this idea:
 - BUT: the parser has to do more work because it has to lookahead with every property value to see whether it is a string or an array. This makes it considerably slower (runs in say 2.4s instead of 1.8s). 
 - So, the performance is not good out of the box, and requires expertise. The performance is most likely solvable but requires some smartness.
 
-Conclusion: I think it is best to keep the explicit table blocks `---`. It's better readable and easier to parse.
+Conclusion: I think it is best to keep the explicit table blocks `---`. It's better readable and looks more explicit, and it is easier to parse.
 
 ## Thoughts
 
@@ -401,6 +406,29 @@ Conclusion: I think it is best to keep the explicit table blocks `---`. It's bet
   - Comments are only useful for data formats used for configuration, not for data. When using comments in data, it makes the data format hard to use: when loading data into a data model, there is no place to keep the comments. So when parsing/stringifying, you’ll lose the comments, which makes them unreliable. So, for our data format, we will not support comments.
   - Other metadata like what InternetObject puts in the header is not strictly necessary to be part of the data format, since you can choose a data model where you include these metadata fields as regular data, like: `{"page": 2, "recordCount": 100, "data": [...]}`.
 - What would be the best separator for a path like `address.city`? A dot `.`? Or a colon `:`, so you get `address:city`? That would be sort of consistent with the `:` that is a separator between keys and values in an object.
+
+## Paths
+
+How to serialize nested paths in the table headers?
+
+Requirements:
+
+- Must be compatible with CSV parsers. So, no `"address"."city"` but rather something like `"address.city"`.
+- Must be human-readable, with as little escaping as needed.
+- Ideally, must use the same rules and logic as regular fields.
+- Ideally, it does not require a 2 stage serialization and deserialization. 
+
+Ideas:
+
+1. Multiple strings `"address"."full,name"` where each part is serialized according to a regular `JSON.stringify`. But this is a no-go, because this is not parseable by a regular CSV parser. It would be the easiest way though.
+2. compile as a JSONPointer, like `/address/city`, and add logic to escape comma's and newlines. This is not that human-readable though, and requires two different types of escaping (that of JSONPointer and the extra comma and newline escaping).
+3. Most natural would be a JSON-like escaping solution. So: put the whole path in a single string
+    - This string must be escaped with quotes when needed: at least when it contains a comma or newline.
+    - To keep things consistent, we have to use `\` as escape character.
+    - We can escape the same characters as regular JSON values. 
+    - Additionally, we have to escape the dot `.` somehow, _before_ the path parts are concatenated with a dot.
+4. In CSV, double quotes need to be escaped with an extra double quote. We can use that?
+
 
 ## Name
 

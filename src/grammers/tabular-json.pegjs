@@ -117,8 +117,12 @@ row
   { return [head].concat(tail) }
 
 path
-  = head:string tail:(wst path_separator wst value:string { return value })*
-    { return [head].concat(tail) }
+  = path:string
+    {
+      // FIXME: choose a better/easier way to escape the separator in a path, this is tricky,
+      //  and/or implement a more robust solution for it
+      return [...path.matchAll(/([^.]|\.\.)+/g)].map(part => part[0].trim().replace(/\.\./g, '.'))
+    }
 
 // ----- 7. Numbers -----
 
@@ -205,7 +209,7 @@ unescaped
   = [^\0-\x1F\x22\x5C]
 
 unquoted
-  = [^\0-\x1F,.:"\n\r\b\f\t\\\[\]{}] // FIME: refine the allowed characters in uquoted strings
+  = [^\0-\x1F,:"\n\r\b\f\t\\\[\]{}] // FIXME: refine the allowed characters in unquoted strings
 
 // ----- Core ABNF Rules -----
 

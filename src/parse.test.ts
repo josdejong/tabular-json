@@ -251,6 +251,34 @@ test('parse tables containing nested objects', () => {
   ])
 })
 
+test('parse a table with field names that are escaped', function () {
+  const text = String.raw`id, first..name, address.current..city, "address.main,street", "address.with\nreturn"
+2, joe, New York, "1st Ave", true
+3, sarah, Washington, "18th Street NW", false
+`
+
+  expect(parse(text)).toEqual([
+    {
+      id: 2,
+      'first.name': 'joe',
+      address: {
+        'current.city': 'New York',
+        'main,street': '1st Ave',
+        'with\nreturn': true
+      }
+    },
+    {
+      id: 3,
+      'first.name': 'sarah',
+      address: {
+        'current.city': 'Washington',
+        'main,street': '18th Street NW',
+        'with\nreturn': false
+      }
+    }
+  ])
+})
+
 test('parse an empty array', () => {
   expect(parse('[]')).toEqual([])
 })

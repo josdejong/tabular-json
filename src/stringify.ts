@@ -195,7 +195,7 @@ function isObject(value: unknown): value is GenericObject<unknown> {
 
 function collectFields(records: Array<unknown>): Field<unknown>[] {
   return collectNestedPaths(records, isObject).map((path) => ({
-    name: path.map((key) => stringifyStringValue(String(key))).join('.'),
+    name: stringifyField(path),
     getValue: createGetValue(path)
   }))
 }
@@ -213,6 +213,12 @@ function stringifyStringValue(value: string): string {
   return NEEDS_QUOTES_REGEX.test(value) ? JSON.stringify(value) : value
 }
 
+function stringifyField(path: Path): string {
+  const joinedPath = path.map((key) => String(key).replace(/\./g, '..')).join('.')
+
+  return stringifyStringValue(joinedPath)
+}
+
 /**
  * We need quotes around a string when:
  * - it contains delimiters like comma, newline, etc.
@@ -220,4 +226,4 @@ function stringifyStringValue(value: string): string {
  * - starts with whitespace (we would lose the whitespace when parsing)
  * - ends with whitespace (we would lose the whitespace when parsing)
  */
-const NEEDS_QUOTES_REGEX = /[,."\n\r\b\f\t\\\[\]{}]|^\d|^-\d|^\s|\s$/
+const NEEDS_QUOTES_REGEX = /[,"\n\r\b\f\t\\[\]{}]|^\d|^-\d|^\s|\s$/
