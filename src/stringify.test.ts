@@ -185,7 +185,7 @@ test('stringify a table with field names that need escaping', function () {
   ]
 
   expect(stringify(json, { indentation: 2 }))
-    .toEqual(String.raw`id, first..name, address.current..city, "address.main,street", "address.with\nreturn"
+    .toEqual(`id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
 2, joe, New York, "1st Ave", true
 3, sarah, Washington, "18th Street NW", false
 `)

@@ -24,7 +24,6 @@ test('compile and use the JSON grammer', () => {
 })
 
 describe('compile and use the Tabular-JSON grammer', () => {
-
   test('full JSON object', function () {
     const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'
     const expected = {
@@ -252,7 +251,7 @@ test('parse tables containing nested objects', () => {
 })
 
 test('parse a table with field names that are escaped', function () {
-  const text = String.raw`id, first..name, address.current..city, "address.main,street", "address.with\nreturn"
+  const text = `id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
 2, joe, New York, "1st Ave", true
 3, sarah, Washington, "18th Street NW", false
 `

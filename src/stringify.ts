@@ -214,9 +214,7 @@ function stringifyStringValue(value: string): string {
 }
 
 function stringifyField(path: Path): string {
-  const joinedPath = path.map((key) => String(key).replace(/\./g, '..')).join('.')
-
-  return stringifyStringValue(joinedPath)
+  return path.map((key) => stringifyStringValue(String(key))).join('.')
 }
 
 /**
@@ -226,4 +224,4 @@ function stringifyField(path: Path): string {
  * - starts with whitespace (we would lose the whitespace when parsing)
  * - ends with whitespace (we would lose the whitespace when parsing)
  */
-const NEEDS_QUOTES_REGEX = /[,"\n\r\b\f\t\\[\]{}]|^\d|^-\d|^\s|\s$/
+const NEEDS_QUOTES_REGEX = /[,."\n\r\b\f\t\\[\]{}]|^\d|^-\d|^\s|\s$/
