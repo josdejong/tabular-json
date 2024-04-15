@@ -228,7 +228,7 @@ Robert, 24,  Washington,   18th Street NW, [biking]
 
 Problem here is how to detect the end of the table. The trailing comma looks odd
 
-### Idea 7: table start and end with `---` (optional at root level), use `\n` to separate rows, flaten nested objects
+### Idea 7: table start and end with `---` (optional at root level), use `\n` to separate rows, flatten nested objects
 
 To make the data format easy to parse, we should have a start and end character for tables. Otherwise, how can you distinguish the last item from the array, and the start of a new property in the parent object, or the end of the item when the table is inside an array?
 
@@ -371,10 +371,19 @@ After trying out this idea:
   - not two different table cases, just one
   - we need the rule that you can only use a table at root and as object value
   - we need the rule that a table requires a header and at least one row
-- BUT: the parser has to do more work because it has to lookahead with every property value to see whether it is a string or an array. This makes it considerably slower (runs in say 2.4s instead of 1.8s). 
+- BUT: the parser has to do more work because it has to lookahead with every property value to see whether it is a string or an array. This makes it considerably slower (runs in say 2.4s instead of 1.8s).
 - So, the performance is not good out of the box, and requires expertise. The performance is most likely solvable but requires some smartness.
 
 Conclusion: I think it is best to keep the explicit table blocks `---`. It's better readable and looks more explicit, and it is easier to parse.
+
+### Idea 12: simplify the rules of idea 7
+
+In the ideas 7, there are two rules that make the format relatively complex:
+
+1. Optional table block `---` at root level. The idea for this was to make the format compatible with CSV. But that is not possible due to differences in escaping, so it may actually be a downside if the data looks like CSV.
+2. Optional double quotes around keys and strings:
+   - pro: less bytes, better readable
+   - con: a relatively complex rule
 
 ## Thoughts
 
@@ -416,19 +425,18 @@ Requirements:
 - Must be compatible with CSV parsers. So, no `"address"."city"` but rather something like `"address.city"`.
 - Must be human-readable, with as little escaping as needed.
 - Ideally, must use the same rules and logic as regular fields.
-- Ideally, it does not require a 2 stage serialization and deserialization. 
+- Ideally, it does not require a 2 stage serialization and deserialization.
 
 Ideas:
 
 1. Multiple strings `"address"."full,name"` where each part is serialized according to a regular `JSON.stringify`. But this is a no-go, because this is not parseable by a regular CSV parser. It would be the easiest way though.
 2. compile as a JSONPointer, like `/address/city`, and add logic to escape comma's and newlines. This is not that human-readable though, and requires two different types of escaping (that of JSONPointer and the extra comma and newline escaping).
 3. Most natural would be a JSON-like escaping solution. So: put the whole path in a single string
-    - This string must be escaped with quotes when needed: at least when it contains a comma or newline.
-    - To keep things consistent, we have to use `\` as escape character.
-    - We can escape the same characters as regular JSON values. 
-    - Additionally, we have to escape the dot `.` somehow, _before_ the path parts are concatenated with a dot.
+   - This string must be escaped with quotes when needed: at least when it contains a comma or newline.
+   - To keep things consistent, we have to use `\` as escape character.
+   - We can escape the same characters as regular JSON values.
+   - Additionally, we have to escape the dot `.` somehow, _before_ the path parts are concatenated with a dot.
 4. In CSV, double quotes need to be escaped with an extra double quote. We can use that?
-
 
 ## Name
 

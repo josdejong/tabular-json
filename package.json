@@ -1,7 +1,14 @@
 {
   "name": "tabular-json",
   "version": "1.0.0",
-  "description": "Tabular-JSON: an extension of JSON adding compact a tabular data structure",
+  "description": "Tabular-JSON: a superset of JSON adding a support for CSV-like tables",
+  "keywords": [
+    "Tabular-JSON",
+    "JSON",
+    "CSV",
+    "NDJSON",
+    "data format"
+  ],
   "author": "Jos de Jong",
   "license": "ISC",
   "type": "module",
