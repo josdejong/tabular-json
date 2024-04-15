@@ -68,9 +68,9 @@ Remarks:
 - All JSON is valid Tabular-JSON.
 - Tabular-JSON is valid JSON when tables and optional double quotes are disabled.
 - In Tabular-JSON, double quotes around keys and strings are required when the string:
-  - contains a dot comma, or control character (`\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`).
+  - contains a delimiter: `"`, `,`, `.`, `:`, `-`, [`, `]`, `{`, `}`, `\n`.
   - starts or ends with whitespace.
-  - starts with a digit or minus.
+  - starts with a digit
 
 ## Differences between CSV and Tabular-JSON
 

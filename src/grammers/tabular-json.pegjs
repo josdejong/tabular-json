@@ -201,7 +201,7 @@ unescaped
   = [^\0-\x1F\x22\x5C]
 
 unquoted
-  = [^\0-\x1F,.:"\n\r\b\f\t\\\[\]{}] // FIXME: refine the allowed characters in unquoted strings
+  = [^\0-\x1F",.:\-[\]{}\n\r\b\f\t]
 
 // ----- Core ABNF Rules -----
 

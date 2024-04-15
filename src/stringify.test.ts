@@ -18,16 +18,31 @@ test('stringify', function () {
 
   expect(stringify('str')).toEqual('str')
   expect(stringify('"')).toEqual('"\\""')
-  expect(stringify('\\')).toEqual('"\\\\"')
+  expect(stringify('\\')).toEqual('\\')
   expect(stringify('\b')).toEqual('"\\b"')
   expect(stringify('\f')).toEqual('"\\f"')
   expect(stringify('\n')).toEqual('"\\n"')
   expect(stringify('\r')).toEqual('"\\r"')
   expect(stringify('\t')).toEqual('"\\t"')
   expect(stringify('"\\/\b\f\n\r\t')).toEqual('"\\"\\\\/\\b\\f\\n\\r\\t"')
-
-  // validate expected outcome against native JSON.stringify
-  expect(JSON.stringify('"\\/\b\f\n\r\t')).toEqual('"\\"\\\\/\\b\\f\\n\\r\\t"')
+  expect(stringify('∛')).toEqual('∛')
+  expect(stringify('a " character')).toEqual('"a \\" character"')
+  expect(stringify('a , character')).toEqual('"a , character"')
+  expect(stringify('a . character')).toEqual('"a . character"')
+  expect(stringify('a : character')).toEqual('"a : character"')
+  expect(stringify('a - character')).toEqual('"a - character"')
+  expect(stringify('a [ character')).toEqual('"a [ character"')
+  expect(stringify('a ] character')).toEqual('"a ] character"')
+  expect(stringify('a { character')).toEqual('"a { character"')
+  expect(stringify('a } character')).toEqual('"a } character"')
+  expect(stringify('a \n character')).toEqual('"a \\n character"')
+  expect(stringify(' start space')).toEqual('" start space"')
+  expect(stringify('\tstart space')).toEqual('"\\tstart space"')
+  expect(stringify('end space ')).toEqual('"end space "')
+  expect(stringify('end space\t')).toEqual('"end space\\t"')
+  expect(stringify('8 digits')).toEqual('"8 digits"')
+  expect(stringify('-8 digits')).toEqual('"-8 digits"')
+  expect(stringify('with spaces in the middle')).toEqual('with spaces in the middle')
 
   expect(stringify(new Date('2016-02-08T14:00:00Z'))).toEqual('2016-02-08T14:00:00.000Z')
 
@@ -56,10 +71,7 @@ test('stringify', function () {
     })
   ).toEqual('{a:2,b:str,c:null}')
 
-  expect(stringify({ '\\\\d': 1 })).toEqual('{"\\\\\\\\d":1}')
-
-  // validate exepected outcome against native JSON.stringify
-  expect(JSON.stringify({ '\\\\d': 1 })).toEqual('{"\\\\\\\\d":1}')
+  expect(stringify({ '\\\\d': 1 })).toEqual('{\\\\d:1}')
 
   expect(
     stringify({

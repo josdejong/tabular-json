@@ -417,10 +417,10 @@ In the ideas 7, there are two rules that make the format relatively complex:
 - What would be the best separator for a path like `address.city`? A dot `.`? Or a colon `:`, so you get `address:city`? That would be sort of consistent with the `:` that is a separator between keys and values in an object.
 - How to handle a table with inhomogeneous data?
   - Each item in an array must be an object to handle it as a table
-  - Each object can contain nested objects. 
+  - Each object can contain nested objects.
   - The nested values can not be a mix of primitive values, nested objects, or arrays. They must consistently be one of the three.
   - The nested values can be optional, in that case they will be serialized as `null`
-- In some programming languages, it will be most logic to parse the data into a special data format like `JSONTable`, alongside a `JSONArray` and `JSONObject`. In other languages, it will make more sense to parse a table into an array with nested objects. And in strict languages, you will directly parse the data into a specific data model like `User` and `Product` etc.  
+- In some programming languages, it will be most logic to parse the data into a special data format like `JSONTable`, alongside a `JSONArray` and `JSONObject`. In other languages, it will make more sense to parse a table into an array with nested objects. And in strict languages, you will directly parse the data into a specific data model like `User` and `Product` etc.
 
 ## Fields
 

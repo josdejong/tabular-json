@@ -80,6 +80,16 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
     expect(JSON.parse('"\\u260E"')).toEqual('\u260E')
     expect(parse('"\\u260E"')).toEqual('\u260E')
+    expect(parse('∛')).toEqual('∛')
+    expect(parse('"a \\" character"')).toEqual('a " character')
+    expect(parse('"a \\n character"')).toEqual('a \n character')
+    expect(parse('a \\ character')).toEqual('a \\ character')
+    expect(parse('" start space"')).toEqual(' start space')
+    expect(parse('"\\tstart space"')).toEqual('\tstart space')
+    expect(parse(' ignore start space')).toEqual('ignore start space')
+    expect(parse('"end space "')).toEqual('end space ')
+    expect(parse('"end space\\t"')).toEqual('end space\t')
+    expect(parse('ignore end space ')).toEqual('ignore end space')
   })
 
   test('keywords', function () {

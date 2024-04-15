@@ -40,7 +40,7 @@ element
     ws value ws
 
 table
-    '---' wst '\n' header '\n' rows '\n' wst '---'
+    '---' wst newline header newline rows newline wst '---'
 
 header
     field
@@ -48,7 +48,7 @@ header
 
 rows
     row
-    row '\n' rows
+    row newline rows
 
 field
     wst string wst
@@ -73,33 +73,6 @@ character
     '0020' . '10FFFF' - '"' - '\'
     '\' escape
 
-unquoted_string
-    unquoted_start_characters unquoted_inner_character unquoted_end_characters
-
-unquoted_start_characters
-    ""
-    unquoted_start_character
-    unquoted_start_character unquoted_start_characters
-
-unquoted_inner_character
-    ""
-    unquoted_character
-    unquoted_character unquoted_inner_character
-
-unquoted_end_characters
-    ""
-    unquoted_end_character
-    unquoted_end_character unquoted_end_characters
-
-unquoted_start_character
-    unquoted_character - wst - digit - '-'
-
-unquoted_end_character
-    unquoted_character - wst
-
-unquoted_character
-    character - escape
-
 escape
     '"'
     '\'
@@ -110,6 +83,36 @@ escape
     'r'
     't'
     'u' hex hex hex hex
+
+unquoted_string
+    unquoted_start
+    unquoted_start unquoted_end
+    unquoted_start unquoted_chars unquoted_end
+
+unquoted_start
+    unquoted_char - wst - '"' - '-' - digit
+
+unquoted_chars
+    unquoted_char
+    unquoted_char unquoted_chars
+
+unquoted_end
+    unquoted_char - wst
+
+unquoted_char
+    '0020' . '10FFFF' - delimiter
+
+delimiter
+    '"'
+    ','
+    '.'
+    ':'
+    '-'
+    '['
+    ']'
+    '{'
+    '}'
+    newline
 
 hex
     digit
@@ -165,13 +168,25 @@ milliseconds
 
 ws
     ""
-    '0020' ws
-    '000A' ws
-    '000D' ws
-    '0009' ws
+    space ws
+    tab ws
+    newline ws
+    carriagereturn ws
 
 wst
     ""
-    '0020' ws
-    '000D' ws
+    space ws
+    tab ws
+
+space
+    '0020'
+
+tab
+    '0009'
+
+newline
+    '000A'
+
+carriagereturn
+    '000D'
 ```
