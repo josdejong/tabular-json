@@ -105,14 +105,14 @@ table
     }
 
 header
-  = head:path tail:(wst value_separator wst path:path { return path })*
+  = head:field tail:(wst value_separator wst field:field { return field })*
   { return [head].concat(tail) }
 
 row
   = head:value tail:(wst value_separator wst value:value { return value })*
   { return [head].concat(tail) }
 
-path
+field
   = head:string tail:(wst path_separator wst value:string { return value })*
   { return [head].concat(tail) }
 

@@ -38,6 +38,8 @@ So what are the ingredients of Tabular-JSON?
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
+The grammer of `Tabular-JSON` can be found in the folder [`./specification`](/specification), alongside the grammer of JSON for comparison.
+
 ## Data types
 
 Tabular-JSON supports the following data types:
