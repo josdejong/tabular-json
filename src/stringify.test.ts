@@ -89,7 +89,7 @@ test('stringify a table without indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json)).toEqual('id,name\n2,joe\n3,sarah\n')
+  expect(stringify(json)).toEqual('---\nid,name\n2,joe\n3,sarah\n---')
 })
 
 test('stringify a nested table without indentation', function () {
@@ -109,7 +109,7 @@ test('stringify a table with indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json, { indentation: 2 })).toEqual('id, name\n2, joe\n3, sarah\n')
+  expect(stringify(json, { indentation: 2 })).toEqual('---\nid, name\n2, joe\n3, sarah\n---')
 })
 
 test('stringify a nested table', function () {
@@ -184,11 +184,11 @@ test('stringify a table with field names that need escaping', function () {
     }
   ]
 
-  expect(stringify(json, { indentation: 2 }))
-    .toEqual(`id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
+  expect(stringify(json, { indentation: 2 })).toEqual(`---
+id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
 2, joe, New York, "1st Ave", true
 3, sarah, Washington, "18th Street NW", false
-`)
+---`)
 })
 
 test('stringify a nested table with non-homogeneous content', function () {
