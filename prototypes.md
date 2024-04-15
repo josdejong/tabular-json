@@ -13,6 +13,8 @@ JSON is typically used for two very different purposes: for data and for configu
 - Data formats
   - https://docs.internetobject.org/
   - https://github.com/superminority/jsv
+- Libraries
+  - https://github.com/mfsnow/tabular-json (JSON based helper library)
 - Articles:
   - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-data/
   - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-configuration-files/
@@ -454,6 +456,7 @@ Ideas for names for the new data format:
 - TJS "Tabular JSON". Is not associated with a data format
 - TJSON "Tabular JSON"
 - JSONT "JSON with tables"
+- TSON (is associated with "Typed JSON")
 - JSV
   - Is an existing data format: JSON Separated Values (also mixed JSON + CSV)
   - https://docs.servicestack.net/jsv-format
