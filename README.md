@@ -38,6 +38,21 @@ So what are the ingredients of Tabular-JSON?
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
+## Data types
+
+Tabular-JSON supports the following data types:
+
+| Data type | Example                                                                    | Detection                                                                           |
+| --------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| object    | `{ name: Joe, age: 24 }`                                                   | Starts with `{`                                                                     |
+| array     | `[7.4, 5.2, 8.1]`                                                          | Starts with `[`                                                                     |
+| table     | <pre><code>---<br>id,name<br/>1018,Joe<br/>1078,Sarah<br/>---</code></pre> | Starts with `---`                                                                   |
+| boolean   | `true`                                                                     | Equals `true` or `false`                                                            |
+| null      | `null`                                                                     | Equals `null`                                                                       |
+| date      | `2024-04-05T07:49:41.501Z`                                                 | Matches the regex pattern `\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z`          |
+| number    | `-2.3e5`                                                                   | Starts with a digit or a minus followed by a digit                                  |
+| string    | `hello world`<br>`"hello world"`                                           | Not matching any of the other data types. Can be either a quoted or unquoted string |
+
 ## Differences between JSON and Tabular-JSON
 
 | Feature                               | JSON                                         | Tabular-JSON                                              |
