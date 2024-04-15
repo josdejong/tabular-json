@@ -420,6 +420,7 @@ In the ideas 7, there are two rules that make the format relatively complex:
   - Each object can contain nested objects. 
   - The nested values can not be a mix of primitive values, nested objects, or arrays. They must consistently be one of the three.
   - The nested values can be optional, in that case they will be serialized as `null`
+- In some programming languages, it will be most logic to parse the data into a special data format like `JSONTable`, alongside a `JSONArray` and `JSONObject`. In other languages, it will make more sense to parse a table into an array with nested objects. And in strict languages, you will directly parse the data into a specific data model like `User` and `Product` etc.  
 
 ## Fields
 

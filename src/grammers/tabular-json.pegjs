@@ -1,3 +1,9 @@
+// Tabular-JSON
+//
+// An extension of the JSON grammar as provided by Peggy [1].
+//
+// [1] https://github.com/peggyjs/peggy/blob/main/examples/json.pegjs
+
 // ----- 1. JavaScript functions -----
 
 {{
@@ -150,18 +156,12 @@ zero
 
 // ------ 8. Dates -----
 
-// FIXME: work out the ISO Date definition in detail, see https://en.wikipedia.org/wiki/ISO_8601
-
 date "date"
-  = date:$(year "-" month "-" day "T" hours ":" minutes ":" seconds ("." milliseconds)? "Z") { return new Date(date) }
+  = date:$(date_part "T" time_part ("." milliseconds_part)? "Z") { return new Date(date) }
 
-year         = $(DIGIT DIGIT DIGIT DIGIT)
-month        = $(DIGIT DIGIT)
-day          = $(DIGIT DIGIT)
-hours        = $(DIGIT DIGIT)
-minutes      = $(DIGIT DIGIT)
-seconds      = $(DIGIT DIGIT)
-milliseconds = $(DIGIT DIGIT DIGIT)
+date_part         = $(DIGIT DIGIT DIGIT DIGIT "-" DIGIT DIGIT "-" DIGIT DIGIT)
+time_part         = $(DIGIT DIGIT ":" DIGIT DIGIT ":" DIGIT DIGIT)
+milliseconds_part = $(DIGIT DIGIT DIGIT)
 
 // ----- 9. Strings -----
 
