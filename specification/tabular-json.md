@@ -90,14 +90,14 @@ unquoted_string
     unquoted_start unquoted_chars unquoted_end
 
 unquoted_start
-    unquoted_char - wst - '"' - '-' - digit
+    unquoted_char - wst - digit
+
+unquoted_end
+    unquoted_char - wst
 
 unquoted_chars
     unquoted_char
     unquoted_char unquoted_chars
-
-unquoted_end
-    unquoted_char - wst
 
 unquoted_char
     '0020' . '10FFFF' - delimiter

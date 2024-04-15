@@ -100,8 +100,20 @@ sign
 
 ws
     ""
-    '0020' ws
-    '000A' ws
-    '000D' ws
-    '0009' ws
+    space ws
+    tab ws
+    newline ws
+    carriagereturn ws
+
+space
+    '0020'
+
+tab
+    '0009'
+
+newline
+    '000A'
+
+carriagereturn
+    '000D'
 ```
