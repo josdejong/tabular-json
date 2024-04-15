@@ -33,7 +33,6 @@ describe('compile and use the Tabular-JSON grammer', () => {
       d: false,
       e: [1, 2, 3]
     }
-    const parsed = parse(text)
 
     expect(parse(text)).toEqual(expected)
   })
