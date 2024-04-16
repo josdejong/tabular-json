@@ -214,7 +214,7 @@
         <button type="button" on:click={() => minifyJson()}>Minify</button>
       </div>
       <label class="textarea">
-        <textarea bind:value={json} on:input={() => updateJson()}></textarea>
+        <textarea bind:value={json} on:input={() => updateJson()} spellcheck="false"></textarea>
       </label>
       <div class="error-message">{jsonError}</div>
       <div>{size.jsonSize}</div>
@@ -228,7 +228,8 @@
         <button type="button" on:click={() => minifyTabularJson()}>Minify</button>
       </div>
       <label class="textarea">
-        <textarea bind:value={tabularJson} on:input={() => updateTabularJson()}></textarea>
+        <textarea bind:value={tabularJson} on:input={() => updateTabularJson()} spellcheck="false"
+        ></textarea>
       </label>
       <div class="error-message">{tabularJsonError}</div>
       <div>{size.tabularJsonSize}</div>

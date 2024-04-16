@@ -46,6 +46,7 @@ const { title, description, url, className } = Astro.props
     --header-color: #717171;
     --sub-menu-background: #e3e3e3;
     --code-background: #f5f5f5;
+    --warning-color: #ffdb77;
     --margin: 10px;
     --main-width: 960px;
   }
@@ -129,6 +130,12 @@ const { title, description, url, className } = Astro.props
     &:hover {
       background: var(--theme-color-highlight);
     }
+  }
+
+  :global(p.warning) {
+    background: var(--warning-color);
+    border-radius: 3px;
+    padding: 1em;
   }
 
   :global(pre) {
