@@ -1,0 +1,301 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { readFileSync } from 'node:fs'
+import gitDiff from 'git-diff'
+
+const jsonGrammer = String(readFileSync('./specification/json.txt'))
+const tabularJsonGrammer = String(readFileSync('./specification/tabular-json.txt'))
+
+const diff = gitDiff(jsonGrammer, tabularJsonGrammer).split('\n')
+
+let indexLeft = 0
+let indexRight = 0
+const lines = []
+for (let line of diff) {
+  const change = line[0]
+  const text = line.slice(1)
+
+  switch (change) {
+    case '+': {
+      lines.push({
+        change,
+        left: { index: indexLeft, text: '' },
+        right: { index: indexRight, text }
+      })
+      indexRight++
+      break
+    }
+
+    case '-': {
+      lines.push({
+        change,
+        left: { index: indexLeft, text },
+        right: { index: indexRight, text: ' ' }
+      })
+      indexLeft++
+      break
+    }
+
+    default: {
+      lines.push({
+        change,
+        left: { index: indexLeft, text },
+        right: { index: indexRight, text }
+      })
+      indexLeft++
+      indexRight++
+    }
+  }
+}
+---
+
+<Layout
+  title="Tabular-JSON specification"
+  description="Tabular-JSON grammer specification"
+  url="/specification"
+>
+  <h1>Tabular-JSON specification</h1>
+
+  <p>
+    Tabular-JSON is a superset of JSON. Below, the grammer for Tabular-JSON is displayed and
+    compared with JSON. The JSON grammer comes from the official website <a
+      href="https://www.json.org/"
+      target="_blank">https://www.json.org/</a
+    >. The grammers use <a href="https://www.crockford.com/mckeeman.html" target="_blank"
+      >McKeeman Form</a
+    >.
+  </p>
+
+  <div class="diff side-by-side">
+    <div class="column">
+      <div class="label">JSON grammer</div>
+      <div class="editor">
+        {
+          lines.map(({ change, left: { index, text } }) => {
+            if (change === '+') {
+              return (
+                <div class="line nothing">
+                  <div class="gutter">&nbsp;</div>
+                  <div class="code" />
+                </div>
+              )
+            }
+
+            if (change === '-') {
+              return (
+                <div class="line removed">
+                  <div class="gutter">{index + 1}</div>
+                  <div class="code">{text}</div>
+                </div>
+              )
+            }
+
+            return (
+              <div class="line">
+                <div class="gutter">{index + 1}</div>
+                <div>{text}</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+    <div class="column">
+      <div class="label">Tabular-JSON grammer</div>
+      <div class="editor">
+        {
+          lines.map(({ change, right: { index, text } }) => {
+            if (change === '+') {
+              return (
+                <div class="line added">
+                  <div class="gutter">{index + 1}</div>
+                  <div class="code">{text}</div>
+                </div>
+              )
+            }
+
+            if (change === '-') {
+              return (
+                <div class="line nothing">
+                  <div class="gutter">&nbsp;</div>
+                  <div />
+                </div>
+              )
+            }
+
+            return (
+              <div class="line">
+                <div class="gutter">{index + 1}</div>
+                <div class="code">{text}</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+  <!-- 
+  <div class="diff side-by-side">
+    <div class="column">
+      <div class="label">JSON grammer</div>
+      <div class="editor">{
+          diff.split('\n').map((line, index) => {
+            const change = line[0]
+            const contents = line.slice(1)
+  
+            if (change === '+') {
+              return (<div class="line nothing"><div class="gutter">&nbsp;</div><div></div></div>)
+            }
+            if (change === '-') {
+              return (<div class="line removed"><div class="gutter">{index}</div><div class="code">{contents}</div></div>)
+            }
+  
+            return (<div class="line"><div class="gutter">{index}</div><div>{contents}</div></div>)
+          })
+        }</div>
+    </div>
+    <div class="column">
+      <div class="label">Tabular-JSON grammer</div>
+      <div class="editor">{
+          diff.split('\n').map((line, index) => {
+            const change = line[0]
+            const contents = line.slice(1)
+  
+            if (change === '+' ) {
+              return (<div class="line added"><div class="gutter">{index}</div><div class="code">{contents}</div></div>)
+            }
+            if (change === '-') {
+              return (<div class="line nothing"><div class="gutter">&nbsp;</div><div></div></div>)
+            }
+  
+            return (<div class="line"><div class="gutter">{index}</div><div class="code">{contents}</div></div>)
+          })
+        }</div>
+    </div>
+  </div> -->
+
+  <div class="diff unified">
+    <div class="column">
+      <div class="label">Tabular-JSON grammer, compared with JSON</div>
+      <div class="editor">
+        {
+          diff.map((line, index) => {
+            const change = line[0]
+            const contents = line.slice(1)
+
+            if (change === '+') {
+              return (
+                <div class="line added">
+                  <div class="gutter">{index}</div>
+                  <div class="code">{contents}</div>
+                </div>
+              )
+            }
+
+            if (change === '-') {
+              return (
+                <div class="line removed">
+                  <div class="gutter">{index}</div>
+                  <div class="code">{contents}</div>
+                </div>
+              )
+            }
+
+            return (
+              <div class="line">
+                <div class="gutter">{index}</div>
+                <div class="code">{contents}</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  .diff {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+
+      overflow: auto;
+
+      .label {
+        font-weight: bold;
+        padding: 0.5em 0;
+      }
+
+      .editor {
+        flex: 1;
+        font-family: monospace;
+        line-height: 1.3em;
+        border: 1px solid var(--border-color);
+        background: white;
+        border-radius: 2px;
+
+        div.line {
+          white-space: pre;
+          padding-right: 4px;
+          display: flex;
+
+          .gutter {
+            display: inline-block;
+            width: 3em;
+            color: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid var(--border-color);
+            padding-left: 4px;
+            margin-right: 4px;
+          }
+
+          &.added {
+            background: rgb(211, 252, 196);
+
+            .gutter {
+              border-right-color: rgb(180, 223, 164);
+            }
+          }
+
+          &.removed {
+            background: rgb(255, 213, 220);
+
+            .gutter {
+              border-right-color: rgb(241, 171, 183);
+            }
+          }
+
+          &.nothing {
+            background: #f5f5f5;
+
+            .gutter {
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+
+    &.unified {
+      display: none;
+    }
+
+    @media only screen and (max-width: 800px) {
+      &.unified {
+        display: flex;
+      }
+
+      &.side-by-side {
+        display: none;
+      }
+
+      .editor {
+        min-width: 500px;
+      }
+    }
+  }
+</style>

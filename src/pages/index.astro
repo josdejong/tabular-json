@@ -1,0 +1,15 @@
+---
+import { getEntry } from 'astro:content'
+import Layout from '../layouts/Layout.astro'
+
+const entry = await getEntry('pages', 'index')
+const { Content } = await entry.render()
+---
+
+<Layout
+  title={entry.data.title}
+  description="Tabular-JSON introduction and getting started"
+  url="/"
+>
+  <Content />
+</Layout>

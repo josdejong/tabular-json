@@ -307,12 +307,8 @@ test('parse an empty object', () => {
  *   getAbsolutePath(import.meta.url, '..' , 'package.json')
  *
  * Source: https://github.com/ivangabriele/esm-path
- *
- * @param {string} importMetaUrl
- * @param {string} [relativePaths]
- * @returns {string}
  */
-export function getAbsolutePath(importMetaUrl: string, ...relativePaths: string[]) {
+export function getAbsolutePath(importMetaUrl: string, ...relativePaths: string[]): string {
   const importMetaPath = fileURLToPath(importMetaUrl)
   const importMetaDirectoryPath = dirname(importMetaPath)
   return join(importMetaDirectoryPath, ...relativePaths)

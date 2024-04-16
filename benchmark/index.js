@@ -81,7 +81,3 @@ function gzip(text) {
 function percentage(a, b) {
   return Math.round((100 * a) / b) + '%'
 }
-
-function pad(text, length = 32) {
-  return text + ' '.repeat(length - text.length)
-}

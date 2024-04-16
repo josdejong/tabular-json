@@ -1,16 +1,13 @@
-## JSON Grammer
-
-Source: https://www.json.org/ ([McKeeman Form](https://www.crockford.com/mckeeman.html))
-
-```
-json
+tabular-json
    element
 
 value
    object
    array
+   table
    string
    number
+   date
    "true"
    "false"
    "null"
@@ -37,7 +34,30 @@ elements
 element
     ws value ws
 
+table
+    '---' wst newline header newline rows newline wst '---'
+
+header
+    field
+    field ',' header
+
+rows
+    row
+    row newline rows
+
+field
+    wst string wst
+    wst string wst '.' field
+
+row
+    wst value wst
+    wst value wst ',' row
+
 string
+    quoted_string
+    unquoted_string
+
+quoted_string
     '"' characters '"'
 
 characters
@@ -58,6 +78,36 @@ escape
     'r'
     't'
     'u' hex hex hex hex
+
+unquoted_string
+    unquoted_start
+    unquoted_start unquoted_end
+    unquoted_start unquoted_chars unquoted_end
+
+unquoted_start
+    unquoted_char - wst - digit
+
+unquoted_end
+    unquoted_char - wst
+
+unquoted_chars
+    unquoted_char
+    unquoted_char unquoted_chars
+
+unquoted_char
+    '0020' . '10FFFF' - delimiter
+
+delimiter
+    '"'
+    ','
+    '.'
+    ':'
+    '-'
+    '['
+    ']'
+    '{'
+    '}'
+    newline
 
 hex
     digit
@@ -98,12 +148,30 @@ sign
     '+'
     '-'
 
+date
+    date 'T' time 'Z'
+    date 'T' time '.' milliseconds 'Z'
+
+date
+    digit digit digit digit '-' digit digit '-' digit digit
+
+time
+    digit digit '-' digit digit '-' digit digit
+
+milliseconds
+    digit digit digit
+
 ws
     ""
     space ws
     tab ws
     newline ws
     carriagereturn ws
+
+wst
+    ""
+    space ws
+    tab ws
 
 space
     '0020'
@@ -116,4 +184,3 @@ newline
 
 carriagereturn
     '000D'
-```

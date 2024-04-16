@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro'
+import PlaygroundComponent from '../components/Playground.svelte'
+---
+
+<Layout
+  title={'Tabular-JSON playground'}
+  description="Tabular-JSON online playground"
+  url="/playground"
+  className="playground"
+>
+  <PlaygroundComponent client:load />
+</Layout>

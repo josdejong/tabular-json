@@ -1,8 +1,8 @@
 // The code of stringify is largely copied from:
 // - https://github.com/josdejong/lossless-json
 // - https://github.com/josdejong/csv42
-import { Field, GenericObject, ValueGetter } from './types'
-import { collectNestedPaths, getIn, Path } from 'csv42'
+import type { Field, GenericObject, ValueGetter } from './types'
+import { collectNestedPaths, getIn, type Path } from 'csv42'
 
 export interface StringifyOptions {
   indentation?: number | string

@@ -1,0 +1,109 @@
+---
+interface Props {
+  currentUrl: string
+  className?: string
+}
+
+const items = [
+  { text: 'Home', url: '/' },
+  { text: 'Playground', url: '/playground' },
+  { text: 'Specification', url: '/specification' }
+]
+
+const { currentUrl, className } = Astro.props
+---
+
+<nav class={'menu ' + (className || '')}>
+  <h1>
+    <a href="/">
+      <span>Tabular-JSON</span>
+      <span class="sub-title">JSON with tables</span>
+    </a>
+  </h1>
+  <ul>
+    {
+      items.map(({ text, url }) => {
+        return (
+          <li>
+            <a href={url} class={currentUrl === url ? 'selected' : undefined}>
+              <span>{text}</span>
+            </a>
+          </li>
+        )
+      })
+    }
+  </ul>
+</nav>
+
+<style>
+  .menu {
+    width: 100%;
+    background: var(--theme-color);
+    color: white;
+    display: flex;
+    justify-content: stretch;
+    flex-wrap: wrap;
+
+    h1 {
+      display: flex;
+      font-size: 20pt;
+      padding: var(--margin);
+      padding-right: calc(4 * var(--margin));
+      margin: 0;
+
+      a {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        text-decoration: none;
+
+        .sub-title {
+          font-size: 10pt;
+          font-weight: normal;
+          letter-spacing: 2px;
+          text-align: right;
+        }
+      }
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: stretch;
+      gap: 1em;
+      overflow: auto;
+
+      li {
+        padding: 0;
+        margin: 0;
+        display: flex;
+
+        a {
+          padding: var(--margin);
+          color: white;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+
+          &.selected {
+            background: white;
+            color: var(--color);
+          }
+        }
+      }
+    }
+
+    &.playground {
+      ul li a.selected {
+        background: var(--sub-menu-background);
+      }
+    }
+  }
+</style>
