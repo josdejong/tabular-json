@@ -312,6 +312,8 @@
             border: var(--border);
             border-radius: 3px;
             resize: none;
+            font-family: var(--mono-font-family);
+            font-size: var(--mono-font-size);
           }
         }
 
