@@ -121,4 +121,3 @@ Remarks:
   - JSON: https://www.json.org/
   - CSV: https://www.rfc-editor.org/rfc/rfc4180
   - NDJSON: https://github.com/ndjson/ndjson-spec
-  - JSONPointer: https://www.rfc-editor.org/rfc/rfc6901
