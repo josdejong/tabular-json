@@ -199,7 +199,7 @@ for (let line of diff) {
         flex: 1;
         font-family: var(--mono-font-family);
         font-size: var(--mono-font-size);
-        line-height: 1.3em;
+        line-height: var(--mono-line-height);
         border: 1px solid var(--border-color);
         background: white;
         border-radius: 2px;
@@ -250,7 +250,7 @@ for (let line of diff) {
       display: none;
     }
 
-    @media only screen and (max-width: 800px) {
+    @media only screen and (max-width: 960px) {
       &.unified {
         display: flex;
       }
