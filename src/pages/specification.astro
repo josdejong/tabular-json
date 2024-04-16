@@ -6,7 +6,10 @@ import gitDiff from 'git-diff'
 const jsonGrammer = String(readFileSync('./specification/json.txt'))
 const tabularJsonGrammer = String(readFileSync('./specification/tabular-json.txt'))
 
-const diff = gitDiff(jsonGrammer, tabularJsonGrammer).split('\n')
+const diff = gitDiff(jsonGrammer, tabularJsonGrammer, {
+  forceFake: true,
+  noHeaders: true
+}).split('\n')
 
 let indexLeft = 0
 let indexRight = 0
