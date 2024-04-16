@@ -1,17 +1,16 @@
----
-interface Props {
-  currentUrl: string
-  className?: string
-}
+<script lang="ts">
+  import { faGithub } from '@fortawesome/free-brands-svg-icons'
+  import Icon from 'svelte-awesome'
 
-const items = [
-  { text: 'Home', url: '/' },
-  { text: 'Playground', url: '/playground' },
-  { text: 'Specification', url: '/specification' }
-]
+  export let currentUrl: string
+  export let className: string | undefined
 
-const { currentUrl, className } = Astro.props
----
+  const items = [
+    { text: 'Home', url: '/' },
+    { text: 'Playground', url: '/playground' },
+    { text: 'Specification', url: '/specification' }
+  ]
+</script>
 
 <nav class={'menu ' + (className || '')}>
   <h1>
@@ -21,21 +20,21 @@ const { currentUrl, className } = Astro.props
     </a>
   </h1>
   <ul>
-    {
-      items.map(({ text, url }) => {
-        return (
-          <li>
-            <a href={url} class={currentUrl === url ? 'selected' : undefined}>
-              <span>{text}</span>
-            </a>
-          </li>
-        )
-      })
-    }
+    {#each items as item}
+      <li>
+        <a href={item.url} class={currentUrl === item.url ? 'selected' : undefined}>
+          <span>{item.text}</span>
+        </a>
+      </li>
+    {/each}
   </ul>
+  <div class="space"></div>
+  <a class="github" href="https://github.com/josdejong/tabular-json/" title="Source code on Github">
+    <Icon data={faGithub} scale={2} />
+  </a>
 </nav>
 
-<style>
+<style lang="scss">
   .menu {
     width: 100%;
     background: var(--theme-color);
@@ -98,6 +97,18 @@ const { currentUrl, className } = Astro.props
           }
         }
       }
+    }
+
+    .space {
+      flex: 1;
+    }
+
+    .github {
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
     }
 
     &.playground {

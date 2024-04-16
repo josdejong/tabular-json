@@ -328,8 +328,7 @@
         }
       }
     }
-    
-      
+
     @media only screen and (max-width: 700px) {
       .columns {
         flex-direction: column;
