@@ -91,14 +91,19 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
     indent: string,
     indentation: string | undefined
   ): string {
+    const isRoot = array === json
     const childIndent = indentation && indent ? indent + indentation : indent
     const colSeparator = indentation ? ', ' : ','
 
-    let str = '---\n'
+    let str = ''
 
     const fields = collectFields(array)
 
-    str += childIndent + fields.map((field) => field.name).join(colSeparator) + '\n'
+    str +=
+      (isRoot ? '' : '---\n') +
+      childIndent +
+      fields.map((field) => field.name).join(colSeparator) +
+      '\n'
 
     for (let i = 0; i < array.length; i++) {
       const item = array[i] as GenericObject<unknown>
@@ -111,7 +116,7 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
         '\n'
     }
 
-    str += indent + '---'
+    str += isRoot ? '' : indent + '---'
 
     return str
   }

@@ -1,4 +1,5 @@
 tabular-json
+   table_contents
    element
 
 value
@@ -35,7 +36,10 @@ element
     ws value ws
 
 table
-    '---' wst newline header newline rows newline wst '---'
+    '---' wst newline table_contents newline wst '---'
+
+table_contents
+    header newline rows
 
 header
     field

@@ -212,11 +212,10 @@ test('parse a nested table', () => {
 
 test('parse a root table', () => {
   expect(
-    parse(`---
-    id,name
+    parse(`id,name
     1,Joe
     2,Sarah
-    ---`)
+    `)
   ).toEqual([
     { id: 1, name: 'Joe' },
     { id: 2, name: 'Sarah' }
@@ -225,11 +224,9 @@ test('parse a root table', () => {
 
 test('parse a root table without newline at the end', () => {
   expect(
-    parse(`---
-    id,name
+    parse(`id,name
     1,Joe
-    2,Sarah
-    ---`)
+    2,Sarah`)
   ).toEqual([
     { id: 1, name: 'Joe' },
     { id: 2, name: 'Sarah' }
@@ -263,11 +260,10 @@ test('parse tables containing nested objects', () => {
 })
 
 test('parse a table with field names that are escaped', function () {
-  const text = `---
-id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
+  const text = `id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
 2, joe, New York, "1st Ave", true
 3, sarah, Washington, "18th Street NW", false
----`
+`
 
   expect(parse(text)).toEqual([
     {

@@ -4,12 +4,12 @@ description: 'The data format Tabular-JSON is a superset of JSON, adding support
 ---
 
 <p class="warning">
-  The data format Tabular-JSON is a work in progress. Details of the specification and possibly the name may change.
+  The data format Tabular-JSON is a work in progress. Details of the specification and the name may change.
 </p>
 
 ## What is Tabular-JSON?
 
-Tabular-JSON is a data format. It is a superset of JSON, adding support for CSV-like tables. Tabular-JSON is:
+Tabular-JSON is a data format. It is a superset of JSON, adding support for CSV-like tables. It is:
 
 - a replacement for CSV without its ambiguities and limitation to tabular data structures
 - a replacement for JSON without its verbosity
