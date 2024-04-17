@@ -382,7 +382,7 @@ Conclusion: I think it is best to keep the explicit table blocks `---`. It's bet
 
 In the ideas 7, there are two rules that make the format relatively complex:
 
-1. Optional table block `---` at root level. The idea for this was to make the format compatible with CSV. But that is not possible due to differences in escaping, so it may actually be a downside if the data looks like CSV.
+1. Optional table block `---` at root level. The idea for this was to make the format compatible with CSV. But that is not possible due to differences in escaping, so it may actually be a downside if the data looks like CSV. However, the optional table block is necessary to support streaming data: that requires not having an end character and not having separator (like a comma) that needs to be omitted for the last item.
 2. Optional double quotes around keys and strings:
    - pro: less bytes, better readable
    - con: a relatively complex rule
