@@ -145,3 +145,6 @@ Remarks:
   - JSON: https://www.json.org/
   - CSV: https://www.rfc-editor.org/rfc/rfc4180
   - NDJSON: https://github.com/ndjson/ndjson-spec
+- Alternatives:
+  - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-data/
+  - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-configuration-files/
