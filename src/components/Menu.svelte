@@ -29,7 +29,12 @@
     {/each}
   </ul>
   <div class="space"></div>
-  <a class="github" href="https://github.com/josdejong/tabular-json/" title="Source code on Github">
+  <a
+    class="github"
+    href="https://github.com/josdejong/tabular-json/"
+    target="_blank"
+    title="Source code on Github"
+  >
     <Icon data={faGithub} scale={2} />
   </a>
 </nav>
@@ -109,6 +114,10 @@
       display: flex;
       align-items: center;
       text-decoration: none;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
     }
 
     &.playground {

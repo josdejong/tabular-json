@@ -4,7 +4,7 @@ description: 'The data format Tabular-JSON is a superset of JSON, adding support
 ---
 
 <p class="warning">
-  Tabular-JSON is a work in progress. Details of the specification and the name may change.
+  Tabular-JSON is a work in progress. The name and details of the specification may change.
 </p>
 
 ## What is Tabular-JSON?
@@ -29,7 +29,7 @@ Play around with Tabular-JSON in the interactive playground:
 
 ## Example
 
-Here an example of Tabular-JSON:
+Here an example of Tabular-JSON data:
 
 <pre><code>{
   name: rob,
@@ -73,11 +73,11 @@ The grammer of `Tabular-JSON` can be found in the folder [`./specification`](/sp
 
 - Human-readable (text based)
 - Simple (like JSON and CSV)
-- Unambiguous (no configuration needed like with CSV)
+- Unambiguous (unlike CSV)
 - Rich nested data structures (like JSON)
 - Compact (like CSV, unlike JSON which is quite verbose)
 - Streaming (like CSV and NDJSON)
-- Easy to parse/stringify
+- Easy to parse and stringify
 - Easy to edit manually
 - A superset of JSON
 - Beautifiable

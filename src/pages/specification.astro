@@ -151,7 +151,14 @@ for (let line of diff) {
 
   <div class="diff unified">
     <div class="column">
-      <div class="label">Tabular-JSON grammer, compared with JSON</div>
+      <div class="label">
+        <span class="text">Tabular-JSON grammer, compared with JSON</span>
+        <CopyButton
+          client:load
+          data={tabularJsonGrammer}
+          title="Copy the Tabular-JSON grammer to the clipboard"
+        />
+      </div>
       <div class="editor">
         {
           diff.map((line, index) => {
