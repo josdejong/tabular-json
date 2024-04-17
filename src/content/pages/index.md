@@ -4,7 +4,7 @@ description: 'The data format Tabular-JSON is a superset of JSON, adding support
 ---
 
 <p class="warning">
-  The data format Tabular-JSON is a work in progress. Details of the specification and the name may change.
+  Tabular-JSON is a work in progress. Details of the specification and the name may change.
 </p>
 
 ## What is Tabular-JSON?
