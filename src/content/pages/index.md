@@ -11,7 +11,7 @@ description: 'The data format Tabular-JSON is a superset of JSON, adding support
 
 Tabular-JSON is a data format. It is a superset of JSON, adding support for CSV-like tables. It is:
 
-- a replacement for CSV without its ambiguities and limitation to tabular data structures
+- a replacement for CSV without its ambiguities and limitation of tabular data structures
 - a replacement for JSON without its verbosity
 - a replacement for NDJSON without its verbosity
 
@@ -38,15 +38,22 @@ Here an example of Tabular-JSON:
     biking
   ],
   friends: ---
-    id, name, address.city, address.street
-    2, joe, New York, "1st Ave"
-    3, sarah, Washington, "18th Street NW"
+    id, name,  address.city, address.street
+    2,  joe,   New York,     "1st Ave"
+    3,  sarah, Washington,   "18th Street NW"
   ---,
   address: {
     city: New York,
     street: "1st Ave"
   }
 }
+</code></pre>
+
+And here a table at root level:
+
+<pre><code>id, name,  address.city, address.street
+2,  joe,   New York,     "1st Ave"
+3,  sarah, Washington,   "18th Street NW"
 </code></pre>
 
 ## Ingredients
@@ -61,6 +68,19 @@ So what are the ingredients of Tabular-JSON?
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
 The grammer of `Tabular-JSON` can be found in the folder [`./specification`](/specification), alongside the grammer of JSON for comparison.
+
+## Features
+
+- Human-readable (text based)
+- Simple (like JSON and CSV)
+- Unambiguous (no configuration needed like with CSV)
+- Rich nested data structures (like JSON)
+- Compact (like CSV, unlike JSON which is quite verbose)
+- Streaming (like CSV and NDJSON)
+- Easy to parse/stringify
+- Easy to edit manually
+- A superset of JSON
+- Beautifiable
 
 ## Data types
 

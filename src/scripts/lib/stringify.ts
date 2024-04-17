@@ -99,26 +99,32 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
 
     const fields = collectFields(array)
 
-    str +=
-      (isRoot ? '' : '---\n') +
-      childIndent +
-      fields.map((field) => field.name).join(colSeparator) +
-      '\n'
+    str += isRoot ? '' : '---\n'
 
-    for (let i = 0; i < array.length; i++) {
-      const item = array[i] as GenericObject<unknown>
+    const header = fields.map((field) => field.name)
+    const rows = array.map((item) =>
+      fields.map((field) => stringifyValue(field.getValue(item), childIndent, undefined))
+    )
 
-      str +=
-        childIndent +
-        fields
-          .map((field) => stringifyValue(field.getValue(item), childIndent, undefined))
-          .join(colSeparator) +
-        '\n'
+    if (indentation) {
+      const widths = calculateColumnWidths(header, rows)
+
+      str += childIndent + formatRow(header, widths)
+      rows.forEach((row) => (str += childIndent + formatRow(row, widths)))
+    } else {
+      str += childIndent + header.join(colSeparator) + '\n'
+      rows.forEach((row) => (str += childIndent + row.join(colSeparator) + '\n'))
     }
 
     str += isRoot ? '' : indent + '---'
 
     return str
+  }
+
+  function formatRow(row: string[], widths: number[]) {
+    return row
+      .map((field, f) => (f < widths.length - 1 ? (field + ',').padEnd(widths[f]) : field + '\n'))
+      .join('')
   }
 
   function stringifyObject(
@@ -215,6 +221,19 @@ function stringifyStringValue(value: string): string {
 
 function stringifyField(path: Path): string {
   return path.map((key) => stringifyStringValue(String(key))).join('.')
+}
+
+function calculateColumnWidths(header: string[], rows: string[][]): number[] {
+  return rows
+    .reduce(
+      (widths, row) => {
+        return row.map((field, i) => Math.max(widths[i], field.length))
+      },
+      header.map((field) => field.length)
+    )
+    .map((width) => width + 2)
+  // Note: we add 1 space to account for the comma,
+  // and another to ensure there is at least 1 space between the columns
 }
 
 /**

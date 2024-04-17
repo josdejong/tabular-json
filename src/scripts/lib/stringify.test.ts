@@ -121,7 +121,7 @@ test('stringify a table with indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json, { indentation: 2 })).toEqual('id, name\n2, joe\n3, sarah\n')
+  expect(stringify(json, { indentation: 2 })).toEqual('id, name\n2,  joe\n3,  sarah\n')
 })
 
 test('stringify a nested table', function () {
@@ -143,8 +143,8 @@ test('stringify a nested table', function () {
   ],
   friends: ---
     id, name
-    2, joe
-    3, sarah
+    2,  joe
+    3,  sarah
   ---,
   id: 4
 }`)
@@ -167,9 +167,9 @@ test('stringify a nested table with nested objects', function () {
     biking
   ],
   friends: ---
-    id, name, address.city, address.street
-    2, joe, New York, "1st Ave"
-    3, sarah, Washington, "18th Street NW"
+    id, name,  address.city, address.street
+    2,  joe,   New York,     "1st Ave"
+    3,  sarah, Washington,   "18th Street NW"
   ---
 }`)
 })
@@ -198,8 +198,8 @@ test('stringify a table with field names that need escaping', function () {
 
   expect(stringify(json, { indentation: 2 }))
     .toEqual(`id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
-2, joe, New York, "1st Ave", true
-3, sarah, Washington, "18th Street NW", false
+2,  joe,          New York,               "1st Ave",             true
+3,  sarah,        Washington,             "18th Street NW",      false
 `)
 })
 
@@ -215,9 +215,9 @@ test('stringify a nested table with non-homogeneous content', function () {
   expect(stringify(json, { indentation: 2 })).toEqual(`{
   name: rob,
   friends: ---
-    id, name, details.city, age
-    2, joe, New York, 
-    3, sarah, , 32
+    id, name,  details.city, age
+    2,  joe,   New York,     
+    3,  sarah, ,             32
   ---
 }`)
 })
@@ -226,17 +226,17 @@ test('stringify a nested table with nested arrays', function () {
   const json = {
     name: 'rob',
     friends: [
-      { id: 2, name: 'joe', scores: [7.2, 6.1, 8.1] },
-      { id: 3, name: 'sarah', scores: [7.7] }
+      { id: 2, name: 'joe', scores: [7.2, 6.1, 8.1], done: false },
+      { id: 3, name: 'sarah', scores: [7.7], done: true }
     ]
   }
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
   name: rob,
   friends: ---
-    id, name, scores
-    2, joe, [7.2,6.1,8.1]
-    3, sarah, [7.7]
+    id, name,  scores,        done
+    2,  joe,   [7.2,6.1,8.1], false
+    3,  sarah, [7.7],         true
   ---
 }`)
 })

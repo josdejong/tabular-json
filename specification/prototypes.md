@@ -66,7 +66,7 @@ What we want the new data type to have is:
 
 - Human-readable (text based)
 - Simple (like JSON and CSV)
-- Unambiguous. One way to do something
+- Unambiguous (no configuration like with CSV needed)
 - Compact data format (like CSV, unlike JSON)
 - Supports streaming (like CSV and NDJSON)
 - Supports any nested data structure (like JSON)
