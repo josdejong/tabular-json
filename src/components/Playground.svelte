@@ -265,21 +265,6 @@
       padding: 0;
     }
 
-    button {
-      font-family: inherit;
-      font-size: inherit;
-      cursor: pointer;
-      background: #6a6a6a;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      padding: 2px 6px;
-
-      &:hover {
-        background: #959595;
-      }
-    }
-
     .columns {
       background: var(--background);
       flex: 1;

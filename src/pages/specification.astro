@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import { readFileSync } from 'node:fs'
 import gitDiff from 'git-diff'
+import CopyButton from '../components/CopyButton.svelte'
 
 const jsonGrammer = String(readFileSync('./specification/json.txt'))
 const tabularJsonGrammer = String(readFileSync('./specification/tabular-json.txt'))
@@ -71,7 +72,10 @@ for (let line of diff) {
 
   <div class="diff side-by-side">
     <div class="column">
-      <div class="label">JSON grammer</div>
+      <div class="label">
+        <span class="text">JSON grammer</span>
+        <CopyButton client:load data={jsonGrammer} title="Copy the JSON grammer to the clipboard" />
+      </div>
       <div class="editor">
         {
           lines.map(({ change, left: { index, text } }) => {
@@ -104,7 +108,14 @@ for (let line of diff) {
       </div>
     </div>
     <div class="column">
-      <div class="label">Tabular-JSON grammer</div>
+      <div class="label">
+        <span class="text">Tabular-JSON grammer</span>
+        <CopyButton
+          client:load
+          data={tabularJsonGrammer}
+          title="Copy the Tabular-JSON grammer to the clipboard"
+        />
+      </div>
       <div class="editor">
         {
           lines.map(({ change, right: { index, text } }) => {
@@ -193,6 +204,11 @@ for (let line of diff) {
       .label {
         font-weight: bold;
         padding: 0.5em 0;
+        display: flex;
+
+        span.text {
+          flex: 1;
+        }
       }
 
       .editor {
