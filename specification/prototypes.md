@@ -45,7 +45,6 @@ Downsides of JSON:
 Upsides of CSV:
 
 - Simple
-- Unambiguous
 - Ubiquitous
 - Compact
 
