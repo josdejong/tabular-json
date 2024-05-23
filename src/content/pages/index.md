@@ -62,10 +62,10 @@ And here a table at root level (the rows are streamable):
 
 So what are the ingredients of Tabular-JSON?
 
-- Take JSON
-- Make quotes around keys and string values optional
-- Add support for CSV-like tables wrapped in a `---` block, supporting nested fields
-- Add support for ISO dates
+- Take JSON.
+- Make quotes around keys and string values optional.
+- Add support for CSV-like tables wrapped in a `---` block. Tables supports nested fields.
+- Add support for ISO dates.
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
