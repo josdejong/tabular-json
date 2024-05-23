@@ -8,26 +8,75 @@ export const example1 = {
   address: { city: 'New York', street: '1st Ave' }
 }
 
-export const example2 = {
+export const example2 = [
+  { name: 'Chris', age: 23, city: 'New York' },
+  { name: 'Emily', age: 19, city: 'Atlanta' },
+  { name: 'Joe', age: 32, city: 'San Diego' },
+  { name: 'Kevin', age: 19, city: 'Indianapolis' },
+  { name: 'Michelle', age: 27, city: 'Los Angeles' },
+  { name: 'Robert', age: 45, city: 'Manhattan' }
+]
+
+export const example3 = {
   name: 'Richard',
   age: 33,
   hobbies: ['Biking', 'Gaming', 'Squash'],
-  city: 'Port Land',
   friends: [
-    { name: 'Chris', age: 23, city: 'New York' },
-    { name: 'Emily', age: 19, city: 'Atlanta' },
-    { name: 'Joe', age: 32, city: 'San Diego' },
-    { name: 'Kevin', age: 19, city: 'Indianapolis' },
-    { name: 'Michelle', age: 27, city: 'Los Angeles' },
-    { name: 'Robert', age: 45, city: 'Manhattan' },
-    { name: 'Sarah', age: 31, city: 'Chicago' },
-    { name: 'Brandon', age: 42, city: 'Houston' },
-    { name: 'Rachel', age: 55, city: 'Philadelphia' },
-    { name: 'Christina', age: 22, city: 'Denver' }
-  ]
+    {
+      name: 'Chris',
+      age: 23,
+      address: { street: '1745 T Street Southeast', city: 'Washington' }
+    },
+    {
+      name: 'Emily',
+      age: 19,
+      address: { street: '6007 Applegate Lane', city: 'Louisville' }
+    },
+    {
+      name: 'Joe',
+      age: 32,
+      address: { street: '560 Penstock Drive', city: 'Grass Valley' }
+    },
+    {
+      name: 'Kevin',
+      age: 19,
+      address: { street: '150 Carter Street', city: 'Manchester' }
+    },
+    {
+      name: 'Michelle',
+      age: 27,
+      address: { street: '2721 Lindsay Avenue', city: 'Louisville' }
+    },
+    {
+      name: 'Robert',
+      age: 45,
+      address: { street: '18 Densmore Drive', city: 'Essex' }
+    },
+    {
+      name: 'Sarah',
+      age: 31,
+      address: { street: '637 Britannia Drive', city: 'Vallejo' }
+    },
+    {
+      name: 'Brandon',
+      age: 42,
+      address: { street: '5601 West Crocus Drive', city: 'Glendale' }
+    },
+    {
+      name: 'Rachel',
+      age: 55,
+      address: { street: '5403 Illinois Avenue', city: 'Nashville' }
+    },
+    {
+      name: 'Christina',
+      age: 22,
+      address: { street: '8821 West Myrtle Avenue', city: 'Glendale' }
+    }
+  ],
+  address: { street: '5114 Greentree Drive', city: 'Nashville' }
 }
 
-export const example3 = [
+export const example4 = [
   {
     id: 1,
     firstName: 'Terry',

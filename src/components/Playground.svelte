@@ -1,6 +1,6 @@
 <script lang="ts">
   import { stringify, parse } from '../scripts/lib'
-  import { example1, example2, example3 } from './examples.ts'
+  import { example1, example2, example3, example4 } from './examples.ts'
 
   const indentation = 2
   let json = ''
@@ -161,6 +161,7 @@
     <button type="button" on:click={() => initialize(example1)}>example1</button>
     <button type="button" on:click={() => initialize(example2)}>example2</button>
     <button type="button" on:click={() => initialize(example3)}>example3</button>
+    <button type="button" on:click={() => initialize(example4)}>example4</button>
   </div>
   <div class="columns">
     <div class="column" class:error={!!jsonError}>
