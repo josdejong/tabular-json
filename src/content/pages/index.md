@@ -1,21 +1,23 @@
 ---
 title: 'Tabular-JSON: JSON with tables'
-description: 'The data format Tabular-JSON is a superset of JSON, adding support for CSV-like tables'
+description: 'The data format Tabular-JSON is a superset of JSON, adding CSV-like tables'
 ---
 
 <p class="warning">
-  Tabular-JSON is a work in progress. The name and details of the specification may change.
+  Tabular-JSON is a <a href="#status">work in progress</a>. The details of the specification may change.
 </p>
 
 ## What is Tabular-JSON?
 
-Tabular-JSON is a data format. It is a superset of JSON, adding support for CSV-like tables. It is:
+Tabular-JSON is a data format. It is a superset of JSON, adding CSV-like tables and optional quotes. It is:
 
-- a replacement for CSV without its ambiguities and limitation of tabular data structures
-- a replacement for JSON without its verbosity
-- a replacement for NDJSON without its verbosity
+- A replacement for CSV without its ambiguities and limitation of tabular data structures
+- A replacement for JSON without its verbosity
+- A replacement for NDJSON without its verbosity
 
-Tabular-JSON aims to be just as simple as JSON and CSV. It combines the best of JSON, CSV, and NDJSON, but without their drawbacks. The aim of Tabular-JSON is to be a data format, not a configuration format.
+Real world JSON data often consists of an array with nested objects like a list of products, a list of messages, or a list of clients. This is verbose to write in JSON because all field names are repeated for every item in the array. This common data structure can be written much more compact in a tabular way, like CSV. Adding support for tables in a superset of JSON gives the best of both worlds.
+
+Tabular-JSON aims to be just as simple as JSON and CSV. It combines the best of JSON, CSV, and NDJSON, but without their drawbacks. It is human-readable, compact, and supports rich data structures and streaming. The aim of Tabular-JSON is to be a data format, not a configuration format.
 
 ## Playground
 
@@ -49,7 +51,7 @@ Here an example of Tabular-JSON data:
 }
 </code></pre>
 
-And here a table at root level:
+And here a table at root level (the rows are streamable):
 
 <pre><code>id, name,  address.city, address.street
 2,  joe,   New York,     "1st Ave"
@@ -61,13 +63,13 @@ And here a table at root level:
 So what are the ingredients of Tabular-JSON?
 
 - Take JSON
-- Make quotes around keys and strings optional
-- Add support for CSV-like tables wrapped in a `---` block
+- Make quotes around keys and string values optional
+- Add support for CSV-like tables wrapped in a `---` block, supporting nested fields
 - Add support for ISO dates
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
-The grammer of `Tabular-JSON` can be found in the folder [`./specification`](/specification), alongside the grammer of JSON for comparison.
+The grammer of `Tabular-JSON` can be found on the [`Specification`](/specification) page, alongside the grammer of JSON for comparison.
 
 ## Features
 
@@ -126,7 +128,7 @@ Remarks:
 | Data types                               | No data types                                                              | object, array, table, string, number, date, boolean, null |
 | Control character                        | No need to escape                                                          | Escape with a backslash                                   |
 | Unicode characters                       | Not officially supported (only ASCII characters are supported officially)  | Supported                                                 |
-| Escaped unicode characters like `\u....` | Not supported                                                              | Supported                                                 |
+| Escaped unicode characters like `\u263A` | Not supported                                                              | Supported                                                 |
 
 Remarks:
 
@@ -138,6 +140,17 @@ Remarks:
 
 1. You can safely use a Tabular-JSON parser to read both JSON and Tabular-JSON data. When writing data, the output will all become Tabular-JSON though, except when the parser supports disabling optional quotes and tables. Typically, you can use this feature to smoothly migrate from JSON to Tabular-JSON.
 2. Always use a CSV parser to parse CSV data. Do not use a Tabular-JSON parser to parse CSV data, even when the data looks like valid Tabular-JSON or the other way around. There are tricky edge cases around escaping (see the differences section).
+
+## Status
+
+There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to join the discussion.
+
+- Support for comments (or not)
+- Support for dates (or not)
+- Support for fractions (or not), which can be written either as `1/7` or `0.(142857)`
+- Support for special numeric values (or not): `Infinity`, `NaN`
+
+Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
 
 ## References
 

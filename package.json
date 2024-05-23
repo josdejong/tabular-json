@@ -1,12 +1,15 @@
 {
   "name": "tabular-json",
   "version": "1.0.0",
-  "description": "Tabular-JSON: a superset of JSON adding a support for CSV-like tables",
+  "description": "Tabular-JSON: a superset of JSON with tables and optional quotes",
   "keywords": [
     "Tabular-JSON",
     "JSON",
     "CSV",
     "NDJSON",
+    "Table",
+    "Extended",
+    "Compact",
     "data format"
   ],
   "author": "Jos de Jong",
@@ -39,6 +42,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.5.10",
+    "@astrojs/markdown-remark": "5.1.0",
     "@astrojs/svelte": "5.4.0",
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-brands-svg-icons": "6.5.2",
@@ -56,6 +60,7 @@
     "prettier": "3.2.5",
     "prettier-plugin-astro": "0.13.0",
     "prettier-plugin-svelte": "3.2.3",
+    "rehype-autolink-headings": "7.1.0",
     "sass": "1.75.0",
     "svelte": "4.2.14",
     "svelte-awesome": "3.3.1",

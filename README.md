@@ -21,9 +21,9 @@ Here an example of Tabular-JSON:
     biking
   ],
   friends: ---
-    id, name, address.city, address.street
-    2, joe, New York, "1st Ave"
-    3, sarah, Washington, "18th Street NW"
+    id, name,  address.city, address.street
+    2,  joe,   New York,     "1st Ave"
+    3,  sarah, Washington,   "18th Street NW"
   ---,
   address: {
     city: New York,

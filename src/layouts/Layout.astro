@@ -45,9 +45,11 @@ const { title, description, url, className } = Astro.props
     --border-color: #dcdcdc;
     --header-background-color: #f5f5f5;
     --header-color: #717171;
+    --link-color: #ff4343;
+    --link-color-highlight: #cf3939;
     --sub-menu-background: #e3e3e3;
     --code-background: #f5f5f5;
-    --warning-color: #ffdb77;
+    --warning-color: #ffe08a;
     --margin: 10px;
     --main-width: 960px;
   }
@@ -76,6 +78,7 @@ const { title, description, url, className } = Astro.props
       overflow: auto;
       align-items: center;
       box-sizing: border-box;
+      scroll-behavior: smooth;
 
       main {
         width: 100%;
@@ -145,6 +148,36 @@ const { title, description, url, className } = Astro.props
 
     &:hover {
       background: var(--theme-color-highlight);
+      color: white;
+    }
+  }
+
+  :global(a) {
+    color: var(--link-color);
+
+    &:hover {
+      color: var(--link-color-highlight);
+    }
+  }
+
+  :global(h2) {
+    margin: 2em 0 0.5em 0;
+  }
+
+  :global(h1 a, h2 a, h3 a, h4 a) {
+    color: inherit;
+    text-decoration: inherit;
+    position: relative;
+
+    &:hover {
+      color: var(--link-color);
+
+      &:before {
+        position: absolute;
+        bottom: 4px;
+        left: -1em;
+        content: '# ';
+      }
     }
   }
 

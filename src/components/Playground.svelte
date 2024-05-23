@@ -1,47 +1,6 @@
 <script lang="ts">
   import { stringify, parse } from '../scripts/lib'
-
-  const example1 = {
-    name: 'rob',
-    hobbies: ['swimming', 'biking'],
-    friends: [
-      { id: 2, name: 'joe', address: { city: 'New York', street: '1st Ave' } },
-      { id: 3, name: 'sarah', address: { city: 'Washington', street: '18th Street NW' } }
-    ],
-    address: { city: 'New York', street: '1st Ave' }
-  }
-
-  const example2 = {
-    name: 'Richard',
-    age: 33,
-    hobbies: ['Biking', 'Gaming', 'Squash'],
-    city: 'Port Land',
-    friends: [
-      { name: 'Chris', age: 23, city: 'New York' },
-      { name: 'Emily', age: 19, city: 'Atlanta' },
-      { name: 'Joe', age: 32, city: 'San Diego' },
-      { name: 'Kevin', age: 19, city: 'Indianapolis' },
-      { name: 'Michelle', age: 27, city: 'Los Angeles' },
-      { name: 'Robert', age: 45, city: 'Manhattan' },
-      { name: 'Sarah', age: 31, city: 'Chicago' },
-      { name: 'Brandon', age: 42, city: 'Houston' },
-      { name: 'Rachel', age: 55, city: 'Philadelphia' },
-      { name: 'Christina', age: 22, city: 'Denver' }
-    ]
-  }
-
-  const example3 = [
-    { name: 'Chris', age: 23, city: 'New York' },
-    { name: 'Emily', age: 19, city: 'Atlanta' },
-    { name: 'Joe', age: 32, city: 'San Diego' },
-    { name: 'Kevin', age: 19, city: 'Indianapolis' },
-    { name: 'Michelle', age: 27, city: 'Los Angeles' },
-    { name: 'Robert', age: 45, city: 'Manhattan' },
-    { name: 'Sarah', age: 31, city: 'Chicago' },
-    { name: 'Brandon', age: 42, city: 'Houston' },
-    { name: 'Rachel', age: 55, city: 'Philadelphia' },
-    { name: 'Christina', age: 22, city: 'Denver' }
-  ]
+  import { example1, example2, example3 } from './examples.ts'
 
   const indentation = 2
   let json = ''
@@ -228,7 +187,11 @@
         <button type="button" on:click={() => minifyTabularJson()}>Minify</button>
       </div>
       <label class="textarea">
-        <textarea bind:value={tabularJson} on:input={() => updateTabularJson()} spellcheck="false"
+        <textarea
+          bind:value={tabularJson}
+          on:input={() => updateTabularJson()}
+          spellcheck="false"
+          wrap="off"
         ></textarea>
       </label>
       <div class="error-message">{tabularJsonError}</div>

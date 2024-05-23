@@ -449,25 +449,34 @@ Ideas:
 
 Ideas for names for the new data format:
 
-- JSON+
-- TabularJSON
-- **Tabular-JSON**
-- TJS "Tabular JSON". Is not associated with a data format
-- TJSON "Tabular JSON"
-- JSONT "JSON with tables"
-- TSON (is associated with "Typed JSON")
-- JSV
+Keywords: JSON, extended, tabular, compact.
+
+Focus: it is an extension of JSON. Main focus on JSON, not CSV or NDJSON. 
+
+- ~~JSON+~~
+  - There is no association with "JSON+" yet
+  - There is a lot of association for "jsonplus" and "json=plus" for libraries and formats
+- Tabular-JSON
+- ~~TJSON~~ "Tabular JSON"
+- ~~JSONT~~ "JSON with tables"
+- ~~TSON~~ (is associated with "Typed JSON")
+- ~~JSV~~
   - Is an existing data format: JSON Separated Values (also mixed JSON + CSV)
   - https://docs.servicestack.net/jsv-format
   - https://jsv.readthedocs.io/en/stable/
+- Extended-JSON
+  - Amazingly, there is not really a strong associated library or something for hits
+  - It is associated with "MongoDB Extended JSON" and "EJSON": https://github.com/mongodb/specifications/blob/master/source/extended-json.rst
+- ~~JSS, json superset~~
+  - JSS is associated with CSS in JS
+- Compact-JSON
+  - Associated with JSON without whitespaces, minified JSON?
+  - JSONC is associated with a JSON variant that supports comments (hence the "C")
+- ESON (extended JSON)
 
-TODO: come up with a good name, including a file extension name and a domain for a website.
+I prefer a name that clearly explains what it is about over some random abbreviation. So: something like one of the keywords followed by "JSON". Now, Extended-JSON sounds a bit too generic, it doesn't explain what it can do and can come across like a bloated version of JSON. Compact-JSON can be confused with formatted vs compacted JSON (or beautify vs minified JSON). That leaves use with Tabular-JSON, which is very descriptive as adding support for tables in JSON is the main ingredient of this new data format.
 
-What I like most so far:
-
-- name "Tabular-JSON"
-- file extension `.tjson`
-- domain https://tabular-json.org
+Conclusion: we go with the name "Tabular-JSON"
 
 ## Tests
 
