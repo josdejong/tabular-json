@@ -143,12 +143,12 @@ Remarks:
 
 ## Status
 
-There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to join the discussion.
+There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to [join the discussion](https://github.com/josdejong/tabular-json/discussions).
 
-- Support for comments (or not)
-- Support for dates (or not)
-- Support for fractions (or not), which can be written either as `1/7` or `0.(142857)`
-- Support for special numeric values (or not): `Infinity`, `NaN`
+- [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
+- [Support for dates](https://github.com/josdejong/tabular-json/discussions/2) (or not)
+- [Support for fractions](https://github.com/josdejong/tabular-json/discussions/3) (or not), which can be written either as `1/7` or `0.(142857)`
+- [Support for `Infinity` and `NaN`](https://github.com/josdejong/tabular-json/discussions/4) (or not)
 
 Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
 
