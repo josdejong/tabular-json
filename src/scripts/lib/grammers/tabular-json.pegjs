@@ -105,26 +105,33 @@ table_contents
   = header:header
     rows:(wst row_separator wst row:row { return row })+
     {
-      return rows.map(row => {
-        const record = {}
+      return rows
+        .filter(row => row.length === header.length) // ignore empty lines
+        .map(row => {
+          const record = {}
 
-        row.forEach((value, index) => setIn(record, header[index], value))
+          row.forEach((value, index) => setIn(record, header[index], value))
 
-        return record
-      })
+          return record
+        })
     }
 
 header
   = head:field tail:(wst value_separator wst field:field { return field })*
   { return [head].concat(tail) }
 
+// TODO: only allow an empty row at the end of the table?
 row
-  = head:value tail:(wst value_separator wst value:value { return value })*
+  = head:optional_value tail:(wst value_separator wst value:optional_value !"---" { return value })*
   { return [head].concat(tail) }
 
 field
   = head:string tail:(wst path_separator wst value:string { return value })*
   { return [head].concat(tail) }
+
+optional_value
+  = value
+  / nothing:"" { return undefined }
 
 // ----- 7. Numbers -----
 
