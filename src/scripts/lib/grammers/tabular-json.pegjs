@@ -122,7 +122,7 @@ header
 
 // TODO: only allow an empty row at the end of the table?
 row
-  = head:optional_value tail:(wst value_separator wst value:optional_value !"---" { return value })*
+  = head:optional_value tail:(wst value_separator wst value:optional_value { return value })* !"---"
   { return [head].concat(tail) }
 
 field
