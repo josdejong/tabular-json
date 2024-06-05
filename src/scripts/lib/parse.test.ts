@@ -193,6 +193,58 @@ test('parse tables with whitespace', () => {
   ])
 })
 
+test('parse tables with missing values (1)', () => {
+  expect(
+    parse(`---
+      id, name
+      1 , 
+      2 , sarah 
+      ---`)
+  ).toEqual([
+    { id: 1 },
+    { id: 2, name: 'sarah' }
+  ])
+})
+
+test('parse tables with missing values (2)', () => {
+  expect(
+    parse(`id, name 
+      1,joe
+      ,sarah`)
+  ).toEqual([
+    { id: 1, name: 'joe' },
+    { name: 'sarah' }
+  ])
+})
+
+test('parse tables with missing values (3)', () => {
+  expect(
+    parse(`---
+      id, name 
+      1 , joe 
+      , sarah 
+      ---`)
+  ).toEqual([
+    { id: 1, name: 'joe' },
+    { name: 'sarah' }
+  ])
+})
+
+test('parse tables with missing values (4)', () => {
+  expect(
+    parse(`---
+      id 
+      1 
+
+      3
+      ---`)
+  ).toEqual([
+    { id: 1 },
+    {},
+    { id: 3 }
+  ])
+})
+
 test('parse a nested table', () => {
   expect(
     parse(`{
