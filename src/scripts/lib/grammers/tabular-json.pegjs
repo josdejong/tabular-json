@@ -34,10 +34,16 @@ end_table       = "---"
 name_separator  = ":"
 path_separator  = "."
 value_separator = ","
-row_separator   = "\r"? "\n"
+row_separator
+  = ([ \t]* "\r"? "\n" [ \t]*)
+  / ([ \t]* comment [ \t]* "\r"? "\n" [ \t]*)+
 
-ws "whitespace" = [ \t\n\r]*
-wst "table-whitespace" = [ \t]*
+ws "whitespace" = [ \t\n\r]* (comment [ \t\n\r]*)*
+wst "table-whitespace" = [ \t]* (comment [ \t]*)*
+
+comment = comment_singleline / comment_multiline
+comment_singleline = "//" [^\n]*
+comment_multiline = "/*" (!"*/" .)* "*/"
 
 // ----- 3. Values -----
 
@@ -96,14 +102,14 @@ array
 // ----- 6. Tables -----
 
 table
-  = begin_table wst row_separator wst
+  = begin_table row_separator
     contents:table_contents
-    wst row_separator wst end_table
+    row_separator end_table
     { return contents }
 
 table_contents
   = header:header
-    rows:(wst row_separator wst row:row { return row })+
+    rows:(row_separator row:row { return row })+
     {
       return rows.map(row => {
         const record = {}
