@@ -145,19 +145,21 @@ Remarks:
 
 There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to [join the discussion](https://github.com/josdejong/tabular-json/discussions).
 
+- [Support for optional quotes](https://github.com/josdejong/tabular-json/discussions/6) (or not)
 - [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
 - [Support for dates](https://github.com/josdejong/tabular-json/discussions/2) (or not)
 - [Support for fractions](https://github.com/josdejong/tabular-json/discussions/3) (or not)
 - [Support for `Infinity` and `NaN`](https://github.com/josdejong/tabular-json/discussions/4) (or not)
+- [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)
 
 Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
 
 ## References
 
 - Standards:
-  - JSON: https://www.json.org/
-  - CSV: https://www.rfc-editor.org/rfc/rfc4180
-  - NDJSON: https://github.com/ndjson/ndjson-spec
+  - JSON: <https://www.json.org/>
+  - CSV: <https://www.rfc-editor.org/rfc/rfc4180>
+  - NDJSON: <https://github.com/ndjson/ndjson-spec>
 - Alternatives:
-  - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-data/
-  - https://jsoneditoronline.org/indepth/compare/json-alternatives-for-configuration-files/
+  - <https://jsoneditoronline.org/indepth/compare/json-alternatives-for-data/>
+  - <https://jsoneditoronline.org/indepth/compare/json-alternatives-for-configuration-files/>
