@@ -200,10 +200,7 @@ test('parse tables with missing values (1)', () => {
       1 , 
       2 , sarah 
       ---`)
-  ).toEqual([
-    { id: 1 },
-    { id: 2, name: 'sarah' }
-  ])
+  ).toEqual([{ id: 1 }, { id: 2, name: 'sarah' }])
 })
 
 test('parse tables with missing values (2)', () => {
@@ -211,10 +208,7 @@ test('parse tables with missing values (2)', () => {
     parse(`id, name 
       1,joe
       ,sarah`)
-  ).toEqual([
-    { id: 1, name: 'joe' },
-    { name: 'sarah' }
-  ])
+  ).toEqual([{ id: 1, name: 'joe' }, { name: 'sarah' }])
 })
 
 test('parse tables with missing values (3)', () => {
@@ -224,10 +218,7 @@ test('parse tables with missing values (3)', () => {
       1 , joe 
       , sarah 
       ---`)
-  ).toEqual([
-    { id: 1, name: 'joe' },
-    { name: 'sarah' }
-  ])
+  ).toEqual([{ id: 1, name: 'joe' }, { name: 'sarah' }])
 })
 
 test('parse tables with missing values (4)', () => {
@@ -238,11 +229,7 @@ test('parse tables with missing values (4)', () => {
 
       3
       ---`)
-  ).toEqual([
-    { id: 1 },
-    {},
-    { id: 3 }
-  ])
+  ).toEqual([{ id: 1 }, {}, { id: 3 }])
 })
 
 test('parse a nested table', () => {
