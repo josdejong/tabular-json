@@ -19,6 +19,8 @@ Real world JSON data often consists of an array with nested objects like a list 
 
 Tabular-JSON aims to be just as simple as JSON and CSV. It combines the best of JSON, CSV, and NDJSON, but without their drawbacks. It is human-readable, compact, and supports rich data structures and streaming. The aim of Tabular-JSON is to be a data format, not a configuration format.
 
+Read ["Tabular-JSON: Combining the best of JSON and CSV"](https://jsoneditoronline.org/indepth/specification/tabular-json/) to learn more about the background of Tabular-JSON.
+
 ## Playground
 
 Play around with Tabular-JSON in the interactive playground:
