@@ -1,8 +1,12 @@
 <script lang="ts">
-  export let title: string
-  export let data: string
+  interface Props {
+    title: string
+    data: string
+  }
 
-  let copied = false
+  const { title, data }: Props = $props()
+
+  let copied = $state(false)
   const copiedDuration = 1000
 
   function handleCopy() {
@@ -12,6 +16,6 @@
   }
 </script>
 
-<button type="button" on:click={handleCopy} {title}>
+<button type="button" onclick={handleCopy} {title}>
   {copied ? 'Copied!' : 'Copy'}
 </button>

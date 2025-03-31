@@ -451,7 +451,7 @@ Ideas for names for the new data format:
 
 Keywords: JSON, extended, tabular, compact.
 
-Focus: it is an extension of JSON. Main focus on JSON, not CSV or NDJSON. 
+Focus: it is an extension of JSON. Main focus on JSON, not CSV or NDJSON.
 
 - ~~JSON+~~
   - There is no association with "JSON+" yet

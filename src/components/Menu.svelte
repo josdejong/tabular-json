@@ -2,8 +2,12 @@
   import { faGithub } from '@fortawesome/free-brands-svg-icons'
   import Icon from 'svelte-awesome'
 
-  export let currentUrl: string
-  export let className: string | undefined
+  interface Props {
+    currentUrl: string
+    className: string | undefined
+  }
+
+  const { currentUrl, className }: Props = $props()
 
   const items = [
     { text: 'Home', url: '/' },

@@ -3,13 +3,12 @@
   import { example1, example2, example3, example4 } from './examples.ts'
 
   const indentation = 2
-  let json = ''
-  let jsonError: string | undefined
-  let tabularJson = ''
-  let tabularJsonError: string | undefined
+  let json = $state('')
+  let jsonError: string | undefined = $state(undefined)
+  let tabularJson = $state('')
+  let tabularJsonError: string | undefined = $state(undefined)
 
-  let size: { jsonSize: string; tabularJsonSize: string }
-  $: size = updateSize({ json, jsonError, tabularJson, tabularJsonError })
+  const size = $derived(updateSize({ json, jsonError, tabularJson, tabularJsonError }))
 
   initialize(example1)
 
@@ -158,10 +157,10 @@
 <div class="playground">
   <div class="sub-menu">
     Select an example:
-    <button type="button" on:click={() => initialize(example1)}>example1</button>
-    <button type="button" on:click={() => initialize(example2)}>example2</button>
-    <button type="button" on:click={() => initialize(example3)}>example3</button>
-    <button type="button" on:click={() => initialize(example4)}>example4</button>
+    <button type="button" onclick={() => initialize(example1)}>example1</button>
+    <button type="button" onclick={() => initialize(example2)}>example2</button>
+    <button type="button" onclick={() => initialize(example3)}>example3</button>
+    <button type="button" onclick={() => initialize(example4)}>example4</button>
   </div>
   <div class="columns">
     <div class="column" class:error={!!jsonError}>
@@ -169,12 +168,12 @@
         <div class="left">
           <h2>JSON</h2>
         </div>
-        <button type="button" on:click={() => beautifyJson()}>Beautify</button>
-        <button type="button" on:click={() => smartBeautifyJson()}>Smart Beautify</button>
-        <button type="button" on:click={() => minifyJson()}>Minify</button>
+        <button type="button" onclick={() => beautifyJson()}>Beautify</button>
+        <button type="button" onclick={() => smartBeautifyJson()}>Smart Beautify</button>
+        <button type="button" onclick={() => minifyJson()}>Minify</button>
       </div>
       <label class="textarea">
-        <textarea bind:value={json} on:input={() => updateJson()} spellcheck="false"></textarea>
+        <textarea bind:value={json} oninput={() => updateJson()} spellcheck="false"></textarea>
       </label>
       <div class="error-message">{jsonError}</div>
       <div>{size.jsonSize}</div>
@@ -184,13 +183,13 @@
         <div class="left">
           <h2>Tabular-JSON</h2>
         </div>
-        <button type="button" on:click={() => beautifyTabularJson()}>Beautify</button>
-        <button type="button" on:click={() => minifyTabularJson()}>Minify</button>
+        <button type="button" onclick={() => beautifyTabularJson()}>Beautify</button>
+        <button type="button" onclick={() => minifyTabularJson()}>Minify</button>
       </div>
       <label class="textarea">
         <textarea
           bind:value={tabularJson}
-          on:input={() => updateTabularJson()}
+          oninput={() => updateTabularJson()}
           spellcheck="false"
           wrap="off"
         ></textarea>

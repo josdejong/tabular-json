@@ -8,8 +8,9 @@ Tabular-JSON is:
 
 Learn more:
 
-- Website: https://tabular-json.org/
-- Playground: https://tabular-json.org/playground
+- Website: <https://tabular-json.org/>
+- Playground: <https://tabular-json.org/playground>
+- Background article: <https://jsoneditoronline.org/indepth/specification/tabular-json/>
 
 Here an example of Tabular-JSON:
 
