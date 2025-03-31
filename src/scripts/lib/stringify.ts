@@ -19,11 +19,6 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
       return JSON.stringify(value)
     }
 
-    // date
-    if (value instanceof Date) {
-      return value.toISOString()
-    }
-
     // string
     if (typeof value === 'string') {
       return stringifyStringValue(value)

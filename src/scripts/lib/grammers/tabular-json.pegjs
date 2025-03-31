@@ -48,7 +48,6 @@ value
   / object
   / array
   / table
-  / date
   / number
   / string
 
@@ -165,16 +164,7 @@ plus
 zero
   = "0"
 
-// ------ 8. Dates -----
-
-date "date"
-  = date:$(date_part "T" time_part ("." milliseconds_part)? "Z") { return new Date(date) }
-
-date_part         = $(DIGIT DIGIT DIGIT DIGIT "-" DIGIT DIGIT "-" DIGIT DIGIT)
-time_part         = $(DIGIT DIGIT ":" DIGIT DIGIT ":" DIGIT DIGIT)
-milliseconds_part = $(DIGIT DIGIT DIGIT)
-
-// ----- 9. Strings -----
+// ----- 8. Strings -----
 
 string = quoted_string / unquoted_string
 
