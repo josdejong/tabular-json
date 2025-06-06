@@ -44,8 +44,6 @@ test('stringify', function () {
   expect(stringify('-8 digits')).toEqual('"-8 digits"')
   expect(stringify('with spaces in the middle')).toEqual('with spaces in the middle')
 
-  expect(stringify(new Date('2016-02-08T14:00:00Z'))).toEqual('2016-02-08T14:00:00.000Z')
-
   expect(
     stringify([
       2,
@@ -239,10 +237,6 @@ test('stringify a nested table with nested arrays', function () {
     3,  sarah, [7.7],         true
   ---
 }`)
-})
-
-test('stringify Date', function () {
-  expect(stringify([new Date('2022-08-25T09:39:19.288Z')])).toEqual('[2022-08-25T09:39:19.288Z]')
 })
 
 test('stringify with numeric space', function () {

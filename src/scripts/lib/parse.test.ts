@@ -147,18 +147,6 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('{id: 1, message: hello world}')).toEqual({ id: 1, message: 'hello world' })
   })
 
-  test('parse dates', () => {
-    expect(parse('2024-04-05T12:15:21Z')).toEqual(new Date('2024-04-05T12:15:21Z'))
-    expect(parse('2024-04-05T12:15:21.262Z')).toEqual(new Date('2024-04-05T12:15:21.262Z'))
-    expect(parse('{ updated: 2024-04-05T12:15:21.262Z }')).toEqual({
-      updated: new Date('2024-04-05T12:15:21.262Z')
-    })
-    expect(parse('[2024-04-05T12:15:21Z, 2024-04-05T14:15:00Z]')).toEqual([
-      new Date('2024-04-05T12:15:21Z'),
-      new Date('2024-04-05T14:15:00Z')
-    ])
-  })
-
   test('parse tables with flat properties', () => {
     expect(parse('---\nid,name\n1,joe\n2,sarah\n---')).toEqual([
       { id: 1, name: 'joe' },
