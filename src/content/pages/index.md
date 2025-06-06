@@ -147,7 +147,6 @@ There are still a couple of topics of the data format that needs to be decided u
 
 - [Support for optional quotes](https://github.com/josdejong/tabular-json/discussions/6) (or not)
 - [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
-- [Support for fractions](https://github.com/josdejong/tabular-json/discussions/3) (or not)
 - [Support for `Infinity` and `NaN`](https://github.com/josdejong/tabular-json/discussions/4) (or not)
 - [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)
 
