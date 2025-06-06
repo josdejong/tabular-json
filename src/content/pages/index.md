@@ -67,7 +67,6 @@ So what are the ingredients of Tabular-JSON?
 - Take JSON.
 - Make quotes around keys and string values optional.
 - Add support for CSV-like tables wrapped in a `---` block. Tables supports nested fields.
-- Add support for ISO dates.
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
@@ -97,17 +96,16 @@ Tabular-JSON supports the following data types:
 | table     | <pre><code>---<br>id,name<br/>1018,Joe<br/>1078,Sarah<br/>---</code></pre> | Starts with `---`                                                                   |
 | boolean   | `true`                                                                     | Equals `true` or `false`                                                            |
 | null      | `null`                                                                     | Equals `null`                                                                       |
-| date      | `2024-04-05T07:49:41.501Z`                                                 | Matches the regex pattern `\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z`          |
 | number    | `-2.3e5`                                                                   | Starts with a digit or a minus followed by a digit                                  |
 | string    | `hello world`<br>`"hello world"`                                           | Not matching any of the other data types. Can be either a quoted or unquoted string |
 
 ## Differences between JSON and Tabular-JSON
 
-| Feature                               | JSON                                         | Tabular-JSON                                              |
-| ------------------------------------- | -------------------------------------------- | --------------------------------------------------------- |
-| Double quotes around keys and strings | Required                                     | Optional                                                  |
-| Table structure                       | Not supported                                | Supported                                                 |
-| Data types                            | object, array, string, number, boolean, null | object, array, table, string, number, date, boolean, null |
+| Feature                               | JSON                                         | Tabular-JSON                                        |
+| ------------------------------------- | -------------------------------------------- | --------------------------------------------------- |
+| Double quotes around keys and strings | Required                                     | Optional                                            |
+| Table structure                       | Not supported                                | Supported                                           |
+| Data types                            | object, array, string, number, boolean, null | object, array, table, string, number, boolean, null |
 
 Remarks:
 
@@ -120,17 +118,17 @@ Remarks:
 
 ## Differences between CSV and Tabular-JSON
 
-| Feature                                  | CSV                                                                        | Tabular-JSON                                              |
-| ---------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------- |
-| Table header                             | Optional                                                                   | Required                                                  |
-| Nested header fields                     | Not officially supported                                                   | Multiple names separated by a dot                         |
-| Double quotes                            | Preceed by an extra double quote `""`                                      | Escape with a backslash `\"`                              |
-| Delimiter                                | Comma (officially). In practice, it can sometimes be a semicolon or tab    | Comma                                                     |
-| White space around values                | Part of the value, not allowed when the value is enclosed in double quotes | Not part of the value                                     |
-| Data types                               | No data types                                                              | object, array, table, string, number, date, boolean, null |
-| Control character                        | No need to escape                                                          | Escape with a backslash                                   |
-| Unicode characters                       | Not officially supported (only ASCII characters are supported officially)  | Supported                                                 |
-| Escaped unicode characters like `\u263A` | Not supported                                                              | Supported                                                 |
+| Feature                                  | CSV                                                                        | Tabular-JSON                                        |
+| ---------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------- |
+| Table header                             | Optional                                                                   | Required                                            |
+| Nested header fields                     | Not officially supported                                                   | Multiple names separated by a dot                   |
+| Double quotes                            | Preceed by an extra double quote `""`                                      | Escape with a backslash `\"`                        |
+| Delimiter                                | Comma (officially). In practice, it can sometimes be a semicolon or tab    | Comma                                               |
+| White space around values                | Part of the value, not allowed when the value is enclosed in double quotes | Not part of the value                               |
+| Data types                               | No data types                                                              | object, array, table, string, number, boolean, null |
+| Control character                        | No need to escape                                                          | Escape with a backslash                             |
+| Unicode characters                       | Not officially supported (only ASCII characters are supported officially)  | Supported                                           |
+| Escaped unicode characters like `\u263A` | Not supported                                                              | Supported                                           |
 
 Remarks:
 
@@ -149,7 +147,6 @@ There are still a couple of topics of the data format that needs to be decided u
 
 - [Support for optional quotes](https://github.com/josdejong/tabular-json/discussions/6) (or not)
 - [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
-- [Support for dates](https://github.com/josdejong/tabular-json/discussions/2) (or not)
 - [Support for fractions](https://github.com/josdejong/tabular-json/discussions/3) (or not)
 - [Support for `Infinity` and `NaN`](https://github.com/josdejong/tabular-json/discussions/4) (or not)
 - [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)

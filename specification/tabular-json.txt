@@ -8,7 +8,6 @@ value
    table
    string
    number
-   date
    "true"
    "false"
    "null"
@@ -151,19 +150,6 @@ sign
     ""
     '+'
     '-'
-
-date
-    date 'T' time 'Z'
-    date 'T' time '.' milliseconds 'Z'
-
-date
-    digit digit digit digit '-' digit digit '-' digit digit
-
-time
-    digit digit '-' digit digit '-' digit digit
-
-milliseconds
-    digit digit digit
 
 ws
     ""
