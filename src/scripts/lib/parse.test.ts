@@ -80,16 +80,15 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
     expect(JSON.parse('"\\u260E"')).toEqual('\u260E')
     expect(parse('"\\u260E"')).toEqual('\u260E')
-    expect(parse('∛')).toEqual('∛')
+    expect(parse('"∛"')).toEqual('∛')
     expect(parse('"a \\" character"')).toEqual('a " character')
     expect(parse('"a \\n character"')).toEqual('a \n character')
-    expect(parse('a \\ character')).toEqual('a \\ character')
     expect(parse('" start space"')).toEqual(' start space')
     expect(parse('"\\tstart space"')).toEqual('\tstart space')
-    expect(parse(' ignore start space')).toEqual('ignore start space')
+    expect(parse(' "ignore start space"')).toEqual('ignore start space')
     expect(parse('"end space "')).toEqual('end space ')
     expect(parse('"end space\\t"')).toEqual('end space\t')
-    expect(parse('ignore end space ')).toEqual('ignore end space')
+    expect(parse('"ignore end space" ')).toEqual('ignore end space')
   })
 
   test('keywords', function () {
@@ -134,21 +133,8 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('[\n  1,\n  2,\n  3\n]')).toEqual([1, 2, 3])
   })
 
-  test('parse unquoted strings', () => {
-    expect(parse('hello')).toEqual('hello')
-    expect(parse('[ hello, world]')).toEqual(['hello', 'world'])
-    expect(parse('[ hello, world ]')).toEqual(['hello', 'world'])
-    expect(parse('[ hello world ]')).toEqual(['hello world'])
-
-    // FIXME: test all special characters and test error throwing
-  })
-
-  test('parse unquoted keys', () => {
-    expect(parse('{id: 1, message: hello world}')).toEqual({ id: 1, message: 'hello world' })
-  })
-
   test('parse tables with flat properties', () => {
-    expect(parse('---\nid,name\n1,joe\n2,sarah\n---')).toEqual([
+    expect(parse('---\n"id","name"\n1,"joe"\n2,"sarah"\n---')).toEqual([
       { id: 1, name: 'joe' },
       { id: 2, name: 'sarah' }
     ])
@@ -157,9 +143,9 @@ describe('compile and use the Tabular-JSON grammer', () => {
   test('parse tables with nested properties', () => {
     expect(
       parse(`---
-      id,name,address.city,address.street
-      1,Joe,New York,"1st Ave"
-      2,Sarah,Washington,"18th Street NW"
+      "id","name","address"."city","address"."street"
+      1,"Joe","New York","1st Ave"
+      2,"Sarah","Washington","18th Street NW"
       ---`)
     ).toEqual([
       { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
@@ -171,9 +157,9 @@ describe('compile and use the Tabular-JSON grammer', () => {
 test('parse tables with whitespace', () => {
   expect(
     parse(`---
-      id , details . name 
-      1 , joe 
-      2 , sarah 
+      "id" , "details" . "name" 
+      1 , "joe" 
+      2 , "sarah" 
       ---`)
   ).toEqual([
     { id: 1, details: { name: 'joe' } },
@@ -184,27 +170,27 @@ test('parse tables with whitespace', () => {
 test('parse tables with missing values (1)', () => {
   expect(
     parse(`---
-      id, name
+      "id", "name"
       1 , 
-      2 , sarah 
+      2 , "sarah" 
       ---`)
   ).toEqual([{ id: 1 }, { id: 2, name: 'sarah' }])
 })
 
 test('parse tables with missing values (2)', () => {
   expect(
-    parse(`id, name 
-      1,joe
-      ,sarah`)
+    parse(`"id", "name" 
+      1,"joe"
+      ,"sarah"`)
   ).toEqual([{ id: 1, name: 'joe' }, { name: 'sarah' }])
 })
 
 test('parse tables with missing values (3)', () => {
   expect(
     parse(`---
-      id, name 
-      1 , joe 
-      , sarah 
+      "id", "name" 
+      1 , "joe" 
+      , "sarah" 
       ---`)
   ).toEqual([{ id: 1, name: 'joe' }, { name: 'sarah' }])
 })
@@ -212,7 +198,7 @@ test('parse tables with missing values (3)', () => {
 test('parse tables with missing values (4)', () => {
   expect(
     parse(`---
-      id 
+      "id" 
       1 
 
       3
@@ -223,10 +209,10 @@ test('parse tables with missing values (4)', () => {
 test('parse a nested table', () => {
   expect(
     parse(`{
-    data: ---
-    id,name
-    1,Joe
-    2,Sarah
+    "data": ---
+    "id","name"
+    1,"Joe"
+    2,"Sarah"
     ---
   }`)
   ).toEqual({
@@ -239,9 +225,9 @@ test('parse a nested table', () => {
 
 test('parse a root table', () => {
   expect(
-    parse(`id,name
-    1,Joe
-    2,Sarah
+    parse(`"id","name"
+    1,"Joe"
+    2,"Sarah"
     `)
   ).toEqual([
     { id: 1, name: 'Joe' },
@@ -251,9 +237,9 @@ test('parse a root table', () => {
 
 test('parse a root table without newline at the end', () => {
   expect(
-    parse(`id,name
-    1,Joe
-    2,Sarah`)
+    parse(`"id","name"
+    1,"Joe"
+    2,"Sarah"`)
   ).toEqual([
     { id: 1, name: 'Joe' },
     { id: 2, name: 'Sarah' }
@@ -263,9 +249,9 @@ test('parse a root table without newline at the end', () => {
 test('parse tables containing nested arrays', () => {
   expect(
     parse(`---
-      id, name, score
-      1, joe, [5, 7]
-      2, sarah, [7, 7, 8]
+      "id", "name", "score"
+      1, "joe", [5, 7]
+      2, "sarah", [7, 7, 8]
       ---`)
   ).toEqual([
     { id: 1, name: 'joe', score: [5, 7] },
@@ -276,9 +262,9 @@ test('parse tables containing nested arrays', () => {
 test('parse tables containing nested objects', () => {
   expect(
     parse(`---
-      id, name, address
-      1, Joe, { city: "New York", street: "1st Ave" }
-      2, Sarah, { city: "Washington", street: "18th Street NW" }
+      "id", "name", "address"
+      1, "Joe", { "city": "New York", "street": "1st Ave" }
+      2, "Sarah", { "city": "Washington", "street": "18th Street NW" }
       ---`)
   ).toEqual([
     { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
@@ -287,9 +273,9 @@ test('parse tables containing nested objects', () => {
 })
 
 test('parse a table with field names that are escaped', function () {
-  const text = `id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
-2, joe, New York, "1st Ave", true
-3, sarah, Washington, "18th Street NW", false
+  const text = `"id", "first.name", "address"."current.city", "address"."main,street", "address"."with\\nreturn"
+2, "joe", "New York", "1st Ave", true
+3, "sarah", "Washington", "18th Street NW", false
 `
 
   expect(parse(text)).toEqual([
