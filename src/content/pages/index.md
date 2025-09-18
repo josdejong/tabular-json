@@ -13,7 +13,7 @@ Tabular-JSON is a data format. It is a superset of JSON, adding CSV-like tables.
 
 - A replacement for CSV without its ambiguities and limitation of tabular data structures
 - A replacement for JSON without its verbosity with tabular data
-- A replacement for NDJSON without its verbosity
+- A replacement for NDJSON
 
 Real world JSON data often consists of an array with nested objects like a list of products, a list of messages, or a list of clients. This is verbose to write in JSON because all field names are repeated for every item in the array. This common data structure can be written much more compact in a tabular way, like CSV. Adding support for tables in a superset of JSON gives the best of both worlds.
 
@@ -88,15 +88,16 @@ The grammer of `Tabular-JSON` can be found on the [`Specification`](/specificati
 
 Tabular-JSON supports the following data types:
 
-| Data type | Example                                                                    | Detection                                                                           |
-| --------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| object    | `{ "name": "Joe", "age": 24 }`                                             | Starts with `{`                                                                     |
-| array     | `[7.4, 5.2, 8.1]`                                                          | Starts with `[`                                                                     |
-| table     | <pre><code>---<br>id,name<br/>1018,Joe<br/>1078,Sarah<br/>---</code></pre> | Starts with `---`                                                                   |
-| boolean   | `true`                                                                     | Equals `true` or `false`                                                            |
-| null      | `null`                                                                     | Equals `null`                                                                       |
-| number    | `-2.3e5`                                                                   | Starts with a digit or a minus followed by a digit                                  |
-| string    | `"hello world"`                                                            | Not matching any of the other data types. Can be either a quoted or unquoted string |
+| Data type  | Example                                                                            | Detection                                                                                                        |
+| ---------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| object     | `{ "name": "Joe", "age": 24 }`                                                     | Starts with `{`                                                                                                  |
+| array      | `[7.4, 5.2, 8.1]`                                                                  | Starts with `[`                                                                                                  |
+| table      | <pre><code>---<br>"id","name"<br/>1018,"Joe"<br/>1078,"Sarah"<br/>---</code></pre> | Starts with `---`                                                                                                |
+| root table | <pre><code>"id","name"<br/>1018,"Joe"<br/>1078,"Sarah"</code></pre>                | Starts with a string followed by a comma and another string, or a string followed by a newline and another value |
+| boolean    | `true`                                                                             | Equals `true` or `false`                                                                                         |
+| null       | `null`                                                                             | Equals `null`                                                                                                    |
+| number     | `-2.3e5`                                                                           | Starts with a digit or a minus                                                                                   |
+| string     | `"hello world"`                                                                    | Starts with `"`                                                                                                  |
 
 ## Differences between JSON and Tabular-JSON
 
