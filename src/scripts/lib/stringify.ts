@@ -211,7 +211,7 @@ function createGetValue<T>(path: Path): ValueGetter<T> {
 }
 
 function stringifyStringValue(value: string): string {
-  return NEEDS_QUOTES_REGEX.test(value) ? JSON.stringify(value) : value
+  return JSON.stringify(value)
 }
 
 function stringifyField(path: Path): string {
@@ -230,13 +230,3 @@ function calculateColumnWidths(header: string[], rows: string[][]): number[] {
   // Note: we add 1 space to account for the comma,
   // and another to ensure there is at least 1 space between the columns
 }
-
-/**
- * We need quotes around a string when:
- * - contains characters outside the range \u0020 - \u10FFFF
- * - it contains a delimiter
- * - starts with whitespace (we would lose the whitespace when parsing)
- * - ends with whitespace (we would lose the whitespace when parsing)
- * - when it starts with a digit (else it would be parsed as a number)
- */
-const NEEDS_QUOTES_REGEX = /[\x00-\x1F",.:\-[\]{}\n]|^\s|\s$|^\d/

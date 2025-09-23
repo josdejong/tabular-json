@@ -37,8 +37,8 @@ const { title, description, url, className } = Astro.props
     --color: #4d4d4d;
     --font-family: system-ui, sans-serif;
     --font-size: 12pt;
-    --mono-font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono,
-      monospace;
+    --mono-font-family:
+      ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     --mono-font-size: 14px;
     --mono-line-height: 16px;
 
@@ -55,7 +55,7 @@ const { title, description, url, className } = Astro.props
   }
 
   html {
-    font-family: var(--font-family);
+    font-family: var(--font-family), sans-serif;
     font-size: var(--font-size);
     line-height: 1.5em;
     color: var(--color);
@@ -188,7 +188,7 @@ const { title, description, url, className } = Astro.props
   }
 
   :global(pre) {
-    font-family: var(--mono-font-family);
+    font-family: var(--mono-font-family), monospace;
     font-size: var(--mono-font-size);
     line-height: var(--mono-line-height);
     background: var(--code-background);
@@ -201,7 +201,7 @@ const { title, description, url, className } = Astro.props
   }
 
   :global(code) {
-    font-family: var(--mono-font-family);
+    font-family: var(--mono-font-family), monospace;
     font-size: var(--mono-font-size);
     line-height: var(--mono-line-height);
     background: var(--code-background);

@@ -16,16 +16,16 @@ test('stringify', function () {
   expect(stringify(Infinity)).toEqual('null')
   expect(stringify(NaN)).toEqual('null')
 
-  expect(stringify('str')).toEqual('str')
+  expect(stringify('str')).toEqual('"str"')
   expect(stringify('"')).toEqual('"\\""')
-  expect(stringify('\\')).toEqual('\\')
+  expect(stringify('\\')).toEqual('"\\\\"')
   expect(stringify('\b')).toEqual('"\\b"')
   expect(stringify('\f')).toEqual('"\\f"')
   expect(stringify('\n')).toEqual('"\\n"')
   expect(stringify('\r')).toEqual('"\\r"')
   expect(stringify('\t')).toEqual('"\\t"')
   expect(stringify('"\\/\b\f\n\r\t')).toEqual('"\\"\\\\/\\b\\f\\n\\r\\t"')
-  expect(stringify('∛')).toEqual('∛')
+  expect(stringify('∛')).toEqual('"∛"')
   expect(stringify('a " character')).toEqual('"a \\" character"')
   expect(stringify('a , character')).toEqual('"a , character"')
   expect(stringify('a . character')).toEqual('"a . character"')
@@ -42,7 +42,7 @@ test('stringify', function () {
   expect(stringify('end space\t')).toEqual('"end space\\t"')
   expect(stringify('8 digits')).toEqual('"8 digits"')
   expect(stringify('-8 digits')).toEqual('"-8 digits"')
-  expect(stringify('with spaces in the middle')).toEqual('with spaces in the middle')
+  expect(stringify('with spaces in the middle')).toEqual('"with spaces in the middle"')
 
   expect(
     stringify([
@@ -55,7 +55,7 @@ test('stringify', function () {
         console.log('test')
       }
     ])
-  ).toEqual('[2,str,null,null,true,null]')
+  ).toEqual('[2,"str",null,null,true,null]')
 
   expect(
     stringify({
@@ -67,9 +67,9 @@ test('stringify', function () {
         console.log('test')
       }
     })
-  ).toEqual('{a:2,b:str,c:null}')
+  ).toEqual('{"a":2,"b":"str","c":null}')
 
-  expect(stringify({ '\\\\d': 1 })).toEqual('{\\\\d:1}')
+  expect(stringify({ '\\\\d': 1 })).toEqual('{"\\\\\\\\d":1}')
 
   expect(
     stringify({
@@ -78,14 +78,14 @@ test('stringify', function () {
         return 'foo'
       }
     })
-  ).toEqual('foo')
+  ).toEqual('"foo"')
 
   // TODO: Symbol
   // TODO: ignore non-enumerable properties
 })
 
 test('stringify a full JSON object', function () {
-  const expected = '{a:123,b:str,c:null,d:false,e:[1,2,3]}'
+  const expected = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
   const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
 
   const stringified = stringify(json)
@@ -99,7 +99,7 @@ test('stringify a table without indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json)).toEqual('id,name\n2,joe\n3,sarah\n')
+  expect(stringify(json)).toEqual('"id","name"\n2,"joe"\n3,"sarah"\n')
 })
 
 test('stringify a nested table without indentation', function () {
@@ -110,7 +110,7 @@ test('stringify a nested table without indentation', function () {
     ]
   }
 
-  expect(stringify(json)).toEqual('{data:---\nid,name\n2,joe\n3,sarah\n---}')
+  expect(stringify(json)).toEqual('{"data":---\n"id","name"\n2,"joe"\n3,"sarah"\n---}')
 })
 
 test('stringify a table with indentation', function () {
@@ -119,7 +119,7 @@ test('stringify a table with indentation', function () {
     { id: 3, name: 'sarah' }
   ]
 
-  expect(stringify(json, { indentation: 2 })).toEqual('id, name\n2,  joe\n3,  sarah\n')
+  expect(stringify(json, { indentation: 2 })).toEqual('"id", "name"\n2,    "joe"\n3,    "sarah"\n')
 })
 
 test('stringify a nested table', function () {
@@ -134,17 +134,17 @@ test('stringify a nested table', function () {
   }
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
-  name: rob,
-  hobbies: [
-    swimming,
-    biking
+  "name": "rob",
+  "hobbies": [
+    "swimming",
+    "biking"
   ],
-  friends: ---
-    id, name
-    2,  joe
-    3,  sarah
+  "friends": ---
+    "id", "name"
+    2,    "joe"
+    3,    "sarah"
   ---,
-  id: 4
+  "id": 4
 }`)
 })
 
@@ -159,15 +159,15 @@ test('stringify a nested table with nested objects', function () {
   }
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
-  name: rob,
-  hobbies: [
-    swimming,
-    biking
+  "name": "rob",
+  "hobbies": [
+    "swimming",
+    "biking"
   ],
-  friends: ---
-    id, name,  address.city, address.street
-    2,  joe,   New York,     "1st Ave"
-    3,  sarah, Washington,   "18th Street NW"
+  "friends": ---
+    "id", "name",  "address"."city", "address"."street"
+    2,    "joe",   "New York",       "1st Ave"
+    3,    "sarah", "Washington",     "18th Street NW"
   ---
 }`)
 })
@@ -195,9 +195,9 @@ test('stringify a table with field names that need escaping', function () {
   ]
 
   expect(stringify(json, { indentation: 2 }))
-    .toEqual(`id, "first.name", address."current.city", address."main,street", address."with\\nreturn"
-2,  joe,          New York,               "1st Ave",             true
-3,  sarah,        Washington,             "18th Street NW",      false
+    .toEqual(`"id", "first.name", "address"."current.city", "address"."main,street", "address"."with\\nreturn"
+2,    "joe",        "New York",               "1st Ave",               true
+3,    "sarah",      "Washington",             "18th Street NW",        false
 `)
 })
 
@@ -211,11 +211,11 @@ test('stringify a nested table with non-homogeneous content', function () {
   }
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
-  name: rob,
-  friends: ---
-    id, name,  details.city, age
-    2,  joe,   New York,     
-    3,  sarah, ,             32
+  "name": "rob",
+  "friends": ---
+    "id", "name",  "details"."city", "age"
+    2,    "joe",   "New York",       
+    3,    "sarah", ,                 32
   ---
 }`)
 })
@@ -230,11 +230,11 @@ test('stringify a nested table with nested arrays', function () {
   }
 
   expect(stringify(json, { indentation: 2 })).toEqual(`{
-  name: rob,
-  friends: ---
-    id, name,  scores,        done
-    2,  joe,   [7.2,6.1,8.1], false
-    3,  sarah, [7.7],         true
+  "name": "rob",
+  "friends": ---
+    "id", "name",  "scores",      "done"
+    2,    "joe",   [7.2,6.1,8.1], false
+    3,    "sarah", [7.7],         true
   ---
 }`)
 })
@@ -244,17 +244,17 @@ test('stringify with numeric space', function () {
 
   const expected =
     '{\n' +
-    '  a: 1,\n' +
-    '  b: [\n' +
+    '  "a": 1,\n' +
+    '  "b": [\n' +
     '    1,\n' +
     '    2,\n' +
     '    null,\n' +
     '    null,\n' +
     '    {\n' +
-    '      c: 3\n' +
+    '      "c": 3\n' +
     '    }\n' +
     '  ],\n' +
-    '  d: null\n' +
+    '  "d": null\n' +
     '}'
 
   expect(stringify(json, { indentation: 2 })).toEqual(expected)
@@ -265,17 +265,17 @@ test('stringify with string space', function () {
 
   const expected =
     '{\n' +
-    '~a: 1,\n' +
-    '~b: [\n' +
+    '~"a": 1,\n' +
+    '~"b": [\n' +
     '~~1,\n' +
     '~~2,\n' +
     '~~null,\n' +
     '~~null,\n' +
     '~~{\n' +
-    '~~~c: 3\n' +
+    '~~~"c": 3\n' +
     '~~}\n' +
     '~],\n' +
-    '~d: null\n' +
+    '~"d": null\n' +
     '}'
 
   expect(stringify(json, { indentation: '~' })).toEqual(expected)
