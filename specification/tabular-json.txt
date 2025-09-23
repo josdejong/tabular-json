@@ -84,6 +84,9 @@ hex
     'a' . 'f'
 
 number
+    "Infinity"
+    "-Infinity"
+    "NaN"
     integer fraction exponent
 
 integer

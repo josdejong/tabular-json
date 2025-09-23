@@ -135,7 +135,10 @@ optional_value
 // ----- 7. Numbers -----
 
 number "number"
-  = minus? int frac? exp? { return parseFloat(text()) }
+  = "NaN" { return NaN }
+  / "Infinity" { return Infinity }
+  / "-Infinity" { return -Infinity }
+  / minus? int frac? exp? { return parseFloat(text()) }
 
 decimal_point
   = "."
