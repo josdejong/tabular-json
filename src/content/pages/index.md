@@ -88,16 +88,16 @@ The grammer of `Tabular-JSON` can be found on the [`Specification`](/specificati
 
 Tabular-JSON supports the following data types:
 
-| Data type  | Example                                                               | Detection                                                                                                        |
-| ---------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| object     | `{ "name": "Joe", "age": 24 }`                                        | Starts with `{`                                                                                                  |
-| array      | `[7.4, 5.2, 8.1]`                                                     | Starts with `[`                                                                                                  |
-| table      | `---`<br/>`"id","name"`<br/>`1018,"Joe"`<br/>`1078,"Sarah"`<br/>`---` | Starts with `---`                                                                                                |
-| root table | `"id","name"`<br/>`1018,"Joe"`<br/>`1078,"Sarah"`                     | Starts with a string followed by a comma and another string, or a string followed by a newline and another value |
-| boolean    | `true`                                                                | Equals `true` or `false`                                                                                         |
-| null       | `null`                                                                | Equals `null`                                                                                                    |
-| number     | `-2.3e5`                                                              | Starts with a digit or a minus                                                                                   |
-| string     | `"hello world"`                                                       | Starts with `"`                                                                                                  |
+| Data type  | Example                                                                     | Detection                                                                                                        |
+| ---------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| object     | `{ "name": "Joe", "age": 24 }`                                              | Starts with `{`                                                                                                  |
+| array      | `[7.4, 5.2, 8.1]`                                                           | Starts with `[`                                                                                                  |
+| table      | <pre>---<br>`"id","name"`<br/>`1018,"Joe"`<br/>`1078,"Sarah"`<br/>---</pre> | Starts with `---`                                                                                                |
+| root table | <pre>`"id","name"`<br/>`1018,"Joe"`<br/>`1078,"Sarah"`</pre>                | Starts with a string followed by a comma and another string, or a string followed by a newline and another value |
+| boolean    | `true`                                                                      | Equals `true` or `false`                                                                                         |
+| null       | `null`                                                                      | Equals `null`                                                                                                    |
+| number     | `-2.3e5`                                                                    | Starts with a digit or a minus                                                                                   |
+| string     | `"hello world"`                                                             | Starts with `"`                                                                                                  |
 
 ## Differences between JSON and Tabular-JSON
 
