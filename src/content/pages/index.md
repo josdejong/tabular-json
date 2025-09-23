@@ -66,6 +66,7 @@ So what are the ingredients of Tabular-JSON?
 
 - Take JSON.
 - Add support for CSV-like tables wrapped in a `---` block. Tables supports nested fields.
+- Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
@@ -101,10 +102,8 @@ Tabular-JSON supports the following data types:
 
 ## Differences between JSON and Tabular-JSON
 
-| Feature         | JSON                                         | Tabular-JSON                                            |
-| --------------- | -------------------------------------------- | ------------------------------------------------------- |
-| Table structure | Not supported                                | Supported                                               |
-| Data types      | object, array, string, number, boolean, null | object, array, **table**, string, number, boolean, null |
+- JSON supports the following data types: object, array, string, number, boolean, null. Tabular-JSON supports an addition data type: table.
+- Unlike JSON, Tabular-JSON supports the numeric values positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 
 Remarks:
 
