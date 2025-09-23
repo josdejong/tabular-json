@@ -72,9 +72,9 @@ describe('compile and use the Tabular-JSON grammer', () => {
     expect(parse('-2')).toEqual(-2)
     expect(parse('2e-3')).toEqual(2e-3)
     expect(parse('2.3e-3')).toEqual(2.3e-3)
-    expect(parse('Infinity')).toEqual(Infinity)
-    expect(parse('-Infinity')).toEqual(-Infinity)
-    expect(parse('NaN')).toBeNaN()
+    expect(parse('inf')).toEqual(Infinity)
+    expect(parse('-inf')).toEqual(-Infinity)
+    expect(parse('nan')).toBeNaN()
   })
 
   test('string', function () {

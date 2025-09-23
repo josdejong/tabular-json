@@ -135,9 +135,9 @@ optional_value
 // ----- 7. Numbers -----
 
 number "number"
-  = "NaN" { return NaN }
-  / "Infinity" { return Infinity }
-  / "-Infinity" { return -Infinity }
+  = "nan" { return NaN }
+  / "inf" { return Infinity }
+  / "-inf" { return -Infinity }
   / minus? int frac? exp? { return parseFloat(text()) }
 
 decimal_point

@@ -16,9 +16,16 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
   function stringifyValue(value: unknown, indent: string, indentation: string | undefined): string {
     // number
     if (typeof value === 'number') {
-      // NaN, Infinity, -Infinity
-      if (isNaN(value) || value === Infinity || value === -Infinity) {
-        return String(value)
+      if (isNaN(value)) {
+        return 'nan'
+      }
+
+      if (value === Infinity) {
+        return 'inf'
+      }
+
+      if (value === -Infinity) {
+        return '-inf'
       }
 
       return JSON.stringify(value)

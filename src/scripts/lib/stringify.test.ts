@@ -13,9 +13,9 @@ test('stringify', function () {
 
   expect(stringify(2.3)).toEqual('2.3')
   expect(stringify(-2.3)).toEqual('-2.3')
-  expect(stringify(Infinity)).toEqual('Infinity')
-  expect(stringify(-Infinity)).toEqual('-Infinity')
-  expect(stringify(NaN)).toEqual('NaN')
+  expect(stringify(Infinity)).toEqual('inf')
+  expect(stringify(-Infinity)).toEqual('-inf')
+  expect(stringify(NaN)).toEqual('nan')
 
   expect(stringify('str')).toEqual('"str"')
   expect(stringify('"')).toEqual('"\\""')
