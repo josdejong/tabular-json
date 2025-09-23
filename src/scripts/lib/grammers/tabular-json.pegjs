@@ -72,7 +72,7 @@ object
         return result
       }
     )?
-    ws end_object
+    ws (value_separator ws)? ws end_object
     { return members !== null ? members: {} }
 
 member
@@ -89,7 +89,7 @@ array
       tail:(ws value_separator ws v:value { return v })*
       { return [head].concat(tail) }
     )?
-    ws end_array
+    ws (value_separator ws)? end_array
     { return values ?? [] }
 
 // ----- 6. Tables -----

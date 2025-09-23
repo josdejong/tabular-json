@@ -307,6 +307,16 @@ test('parse a table with field names that are escaped', function () {
   ])
 })
 
+test('parse trailing comma in an object', function () {
+  expect(parse('{"a": 2,"b":3,}')).toEqual({ a: 2, b: 3 })
+  expect(parse('{"a": 2,"b":3 , }')).toEqual({ a: 2, b: 3 })
+})
+
+test('parse trailing comma in an array', function () {
+  expect(parse('[1,2,3,]')).toEqual([1, 2, 3])
+  expect(parse('[1,2,3 , ]')).toEqual([1, 2, 3])
+})
+
 test('parse an empty array', () => {
   expect(parse('[]')).toEqual([])
 })

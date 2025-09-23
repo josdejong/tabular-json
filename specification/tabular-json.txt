@@ -15,6 +15,7 @@ value
 object
     '{' ws '}'
     '{' members '}'
+    '{' members ',' ws '}'
 
 members
     member
@@ -26,6 +27,7 @@ member
 array
     '[' ws ']'
     '[' elements ']'
+    '[' elements ',' ws ']'
 
 elements
     element
