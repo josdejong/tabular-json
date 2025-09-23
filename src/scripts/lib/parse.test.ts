@@ -140,6 +140,13 @@ describe('compile and use the Tabular-JSON grammer', () => {
     ])
   })
 
+  test('parse tables with \\r\\n newlines', () => {
+    expect(parse('---\r\n"id","name"\r\n1,"joe"\r\n2,"sarah"\r\n---')).toEqual([
+      { id: 1, name: 'joe' },
+      { id: 2, name: 'sarah' }
+    ])
+  })
+
   test('parse tables with nested properties', () => {
     expect(
       parse(`---
