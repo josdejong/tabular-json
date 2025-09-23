@@ -126,9 +126,9 @@ ws
 
 wst
     ""
-    space ws
-    tab ws
-    carriagereturn ws
+    space wst
+    tab wst
+    carriagereturn wst
 
 space
     '0020'
