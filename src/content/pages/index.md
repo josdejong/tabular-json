@@ -65,8 +65,9 @@ And here a table at root level (the rows are streamable):
 So what are the ingredients of Tabular-JSON?
 
 - Take JSON.
-- Add support for CSV-like tables wrapped in a `---` block. Tables supports nested fields.
+- Add support for CSV-like tables. Nested tables are wrapped in a `---` block. Tables supports nested fields.
 - Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
+- Add support for comments (`// ...` and `/* ... */`).
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
@@ -140,7 +141,6 @@ Remarks:
 
 There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to [join the discussion](https://github.com/josdejong/tabular-json/discussions).
 
-- [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
 - [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)
 
 Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
