@@ -57,20 +57,26 @@ NUMBER
     ;
 
 fragment INT
-    // integer part forbids leading 0s (e.g. `01`)
     : '0'
     | [1-9] [0-9]*
     ;
 
 fragment EXP
-    // exponent number permits leading 0s (e.g. `1e01`)
     : [Ee] [+-]? [0-9]+
     ;
 
 ws
-    : WS*
+    : (SPACE_OR_TAB | CARRIAGE_RETURN | NEWLINE)*
     ;
 
-WS
-    : [ \t\n\r]+
+SPACE_OR_TAB
+    : ' ' | '\t'
+    ;
+
+CARRIAGE_RETURN
+    : '\r'
+    ;
+
+NEWLINE
+    : '\n'
     ;

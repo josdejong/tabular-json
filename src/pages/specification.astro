@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs'
 import gitDiff from 'git-diff'
 import CopyButton from '../components/CopyButton.svelte'
 
-const jsonGrammer = String(readFileSync('./specification/json.txt'))
-const tabularJsonGrammer = String(readFileSync('./specification/tabular-json.txt'))
+const jsonGrammer = String(readFileSync('./specification/JSON.g4'))
+const tabularJsonGrammer = String(readFileSync('./specification/TabularJSON.g4'))
 
 const diff = gitDiff(jsonGrammer, tabularJsonGrammer, {
   forceFake: true,
@@ -65,9 +65,9 @@ for (let line of diff) {
     compared with JSON. The JSON grammer comes from the official website <a
       href="https://www.json.org/"
       target="_blank">https://www.json.org/</a
-    >. The grammers use <a href="https://www.crockford.com/mckeeman.html" target="_blank"
-      >McKeeman Form</a
-    >.
+    >. The data formats are described using <a href="https://www.antlr.org/" target="_blank"
+      >ANTLR v4</a
+    > grammer.
   </p>
 
   <div class="diff side-by-side">
