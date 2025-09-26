@@ -57,10 +57,6 @@ row
     wst value wst ',' row
 
 string
-    quoted_string
-    unquoted_string
-
-quoted_string
     '"' characters '"'
 
 characters
@@ -82,42 +78,15 @@ escape
     't'
     'u' hex hex hex hex
 
-unquoted_string
-    unquoted_start
-    unquoted_start unquoted_end
-    unquoted_start unquoted_chars unquoted_end
-
-unquoted_start
-    unquoted_char - wst - digit
-
-unquoted_end
-    unquoted_char - wst
-
-unquoted_chars
-    unquoted_char
-    unquoted_char unquoted_chars
-
-unquoted_char
-    '0020' . '10FFFF' - delimiter
-
-delimiter
-    '"'
-    ','
-    '.'
-    ':'
-    '-'
-    '['
-    ']'
-    '{'
-    '}'
-    newline
-
 hex
     digit
     'A' . 'F'
     'a' . 'f'
 
 number
+    "inf"
+    "-inf"
+    "nan"
     integer fraction exponent
 
 integer
@@ -160,8 +129,9 @@ ws
 
 wst
     ""
-    space ws
-    tab ws
+    space wst
+    tab wst
+    carriagereturn wst
 
 space
     '0020'

@@ -1,7 +1,7 @@
 {
   "name": "tabular-json",
   "version": "1.0.0",
-  "description": "Tabular-JSON: a superset of JSON with tables and optional quotes",
+  "description": "Tabular-JSON: a superset of JSON with tables",
   "keywords": [
     "Tabular-JSON",
     "JSON",

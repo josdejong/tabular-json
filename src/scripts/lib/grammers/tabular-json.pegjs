@@ -141,7 +141,10 @@ optional_value
 // ----- 7. Numbers -----
 
 number "number"
-  = minus? int frac? exp? { return parseFloat(text()) }
+  = "nan" { return NaN }
+  / "inf" { return Infinity }
+  / "-inf" { return -Infinity }
+  / minus? int frac? exp? { return parseFloat(text()) }
 
 decimal_point
   = "."
@@ -172,13 +175,7 @@ zero
 
 // ----- 8. Strings -----
 
-string = quoted_string / unquoted_string
-
-unquoted_string "unquoted string"
-  = chars:unquoted+ { return chars.join("").trim() }
-
-quoted_string "quoted string"
-  = quotation_mark chars:char* quotation_mark { return chars.join("") }
+string = quotation_mark chars:char* quotation_mark { return chars.join("") }
 
 char
   = unescaped
@@ -206,9 +203,6 @@ quotation_mark
 
 unescaped
   = [^\0-\x1F\x22\x5C]
-
-unquoted
-  = [^\0-\x1F",.:\-[\]{}\n\r\b\f\t]
 
 // ----- Core ABNF Rules -----
 

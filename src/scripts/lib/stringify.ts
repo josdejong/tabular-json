@@ -14,8 +14,25 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
   return stringifyValue(json, '', globalIndentation)
 
   function stringifyValue(value: unknown, indent: string, indentation: string | undefined): string {
-    // boolean, null, number
-    if (typeof value === 'boolean' || typeof value === 'number' || value === null) {
+    // number
+    if (typeof value === 'number') {
+      if (isNaN(value)) {
+        return 'nan'
+      }
+
+      if (value === Infinity) {
+        return 'inf'
+      }
+
+      if (value === -Infinity) {
+        return '-inf'
+      }
+
+      return JSON.stringify(value)
+    }
+
+    // boolean, null
+    if (value === true || value === false || value === null) {
       return JSON.stringify(value)
     }
 
@@ -211,7 +228,7 @@ function createGetValue<T>(path: Path): ValueGetter<T> {
 }
 
 function stringifyStringValue(value: string): string {
-  return NEEDS_QUOTES_REGEX.test(value) ? JSON.stringify(value) : value
+  return JSON.stringify(value)
 }
 
 function stringifyField(path: Path): string {
@@ -230,13 +247,3 @@ function calculateColumnWidths(header: string[], rows: string[][]): number[] {
   // Note: we add 1 space to account for the comma,
   // and another to ensure there is at least 1 space between the columns
 }
-
-/**
- * We need quotes around a string when:
- * - contains characters outside the range \u0020 - \u10FFFF
- * - it contains a delimiter
- * - starts with whitespace (we would lose the whitespace when parsing)
- * - ends with whitespace (we would lose the whitespace when parsing)
- * - when it starts with a digit (else it would be parsed as a number)
- */
-const NEEDS_QUOTES_REGEX = /[\x00-\x1F",.:\-[\]{}\n]|^\s|\s$|^\d/
