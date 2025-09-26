@@ -14,8 +14,25 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
   return stringifyValue(json, '', globalIndentation)
 
   function stringifyValue(value: unknown, indent: string, indentation: string | undefined): string {
-    // boolean, null, number
-    if (typeof value === 'boolean' || typeof value === 'number' || value === null) {
+    // number
+    if (typeof value === 'number') {
+      if (isNaN(value)) {
+        return 'nan'
+      }
+
+      if (value === Infinity) {
+        return 'inf'
+      }
+
+      if (value === -Infinity) {
+        return '-inf'
+      }
+
+      return JSON.stringify(value)
+    }
+
+    // boolean, null
+    if (value === true || value === false || value === null) {
       return JSON.stringify(value)
     }
 

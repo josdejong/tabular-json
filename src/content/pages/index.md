@@ -66,6 +66,7 @@ So what are the ingredients of Tabular-JSON?
 
 - Take JSON.
 - Add support for CSV-like tables wrapped in a `---` block. Tables supports nested fields.
+- Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
@@ -101,10 +102,8 @@ Tabular-JSON supports the following data types:
 
 ## Differences between JSON and Tabular-JSON
 
-| Feature         | JSON                                         | Tabular-JSON                                            |
-| --------------- | -------------------------------------------- | ------------------------------------------------------- |
-| Table structure | Not supported                                | Supported                                               |
-| Data types      | object, array, string, number, boolean, null | object, array, **table**, string, number, boolean, null |
+- JSON supports the following data types: object, array, string, number, boolean, null. Tabular-JSON supports an addition data type: table.
+- Unlike JSON, Tabular-JSON supports the numeric values positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 
 Remarks:
 
@@ -142,7 +141,6 @@ Remarks:
 There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to [join the discussion](https://github.com/josdejong/tabular-json/discussions).
 
 - [Support for comments](https://github.com/josdejong/tabular-json/discussions/1) (or not)
-- [Support for `Infinity` and `NaN`](https://github.com/josdejong/tabular-json/discussions/4) (or not)
 - [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)
 
 Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
