@@ -33,13 +33,13 @@ Play around with Tabular-JSON in the interactive playground:
 
 ## Example
 
-Here an example of Tabular-JSON data:
+Here is an example of Tabular-JSON data:
 
 <pre><code>{
   "name": "rob",
   "hobbies": [
     "swimming",
-    "biking"
+    "biking",
   ],
   "friends": ---
     "id", "name",  "address"."city", "address"."street"
@@ -48,7 +48,7 @@ Here an example of Tabular-JSON data:
   ---,
   "address": {
     "city": "New York",
-    "street": "1st Ave"
+    "street": "1st Ave",
   }
 }
 </code></pre>

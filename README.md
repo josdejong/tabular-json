@@ -12,14 +12,14 @@ Learn more:
 - Playground: <https://tabular-json.org/playground>
 - Background article: <https://jsoneditoronline.org/indepth/specification/tabular-json/>
 
-Here an example of Tabular-JSON:
+Here is an example of Tabular-JSON:
 
 ```
 {
   "name": "rob",
   "hobbies": [
     "swimming",
-    "biking"
+    "biking",
   ],
   "friends": ---
     "id", "name",  "address"."city", "address"."street"
@@ -28,7 +28,7 @@ Here an example of Tabular-JSON:
   ---,
   "address": {
     "city": "New York",
-    "street": "1st Ave"
+    "street": "1st Ave",
   }
 }
 ```
