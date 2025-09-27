@@ -78,7 +78,7 @@ object
         return result
       }
     )?
-    ws (value_separator ws)? ws end_object
+    ws (value_separator ws)? end_object
     { return members !== null ? members: {} }
 
 member

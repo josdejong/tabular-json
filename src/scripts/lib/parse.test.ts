@@ -310,102 +310,136 @@ test('parse a table with field names that are escaped', function () {
   ])
 })
 
-test('parse a singleline comment', () => {
+test('parse a line comment', () => {
   const expected = { key: 'value' }
 
-  expect(parse(`{
+  expect(
+    parse(`{
     // comment
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 
-  expect(parse(`{
+  expect(
+    parse(`{
     key: value
     // comment
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 
-  expect(parse(`// comment
+  expect(
+    parse(`// comment
   {
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 
-  expect(parse(`// comment 1
+  expect(
+    parse(`// comment 1
   // comment 2
   {
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 })
 
-test('parse a singleline comment inside a table', () => {
-  const expected = [{ id: 2, name: 'joe' }, { id: 3, name: 'sarah' }]
+test('parse a line comment inside a table', () => {
+  const expected = [
+    { id: 2, name: 'joe' },
+    { id: 3, name: 'sarah' }
+  ]
 
-  expect(parse(`id,name
+  expect(
+    parse(`id,name
   // comment
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 
-  expect(parse(`id,name
+  expect(
+    parse(`id,name
   // comment 1
   // comment 2
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 
-  expect(parse(`id,name // comment 1
+  expect(
+    parse(`id,name // comment 1
   2,joe // comment 2
-  3,sarah  // comment 3`)).toEqual(expected)
+  3,sarah  // comment 3`)
+  ).toEqual(expected)
 })
 
-test('parse a multiline comment', () => {
+test('parse a block comment', () => {
   const expected = { key: 'value' }
 
-  expect(parse(`{
+  expect(
+    parse(`{
     /* multi
        line
        comment */ 
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 
-  expect(parse(`/* multi
+  expect(
+    parse(`/* multi
     line
     comment */ 
   {
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 
-  expect(parse(`/* multiline comment 1 */
+  expect(
+    parse(`/* multiline comment 1 */
   /* multiline comment 2 */
   {
     key: value
-  }`)).toEqual(expected)
+  }`)
+  ).toEqual(expected)
 })
 
-test('parse a multiline comment inside a table', () => {
-  const expected = [{ id: 2, name: 'joe' }, { id: 3, name: 'sarah' }]
+test('parse a block comment inside a table', () => {
+  const expected = [
+    { id: 2, name: 'joe' },
+    { id: 3, name: 'sarah' }
+  ]
 
-  expect(parse(`id,name
+  expect(
+    parse(`id,name
   /* multi
      line
      comment */
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 
-  expect(parse(`id,name  /* multi
+  expect(
+    parse(`id,name  /* multi
      line
      comment */
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 
-  expect(parse(`/* multi
+  expect(
+    parse(`/* multi
   line
   comment */
   id,name
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 
-  expect(parse(`/* multiline comment 1 */
+  expect(
+    parse(`/* multiline comment 1 */
   /* multiline comment 2 */
   id,name
   2,joe
-  3,sarah`)).toEqual(expected)
+  3,sarah`)
+  ).toEqual(expected)
 })
 
 test('parse trailing comma in an object', function () {
