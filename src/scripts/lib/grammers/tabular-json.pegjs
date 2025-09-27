@@ -41,9 +41,9 @@ row_separator
 ws "whitespace" = [ \t\n\r]* (comment [ \t\n\r]*)*
 wst "table-whitespace" = [ \t]* (comment [ \t]*)*
 
-comment = comment_singleline / comment_multiline
-comment_singleline = "//" [^\n]*
-comment_multiline = "/*" (!"*/" .)* "*/"
+comment = line_comment / block_comment
+line_comment = "//" [^\n]*
+block_comment = "/*" (!"*/" .)* "*/"
 
 // ----- 3. Values -----
 

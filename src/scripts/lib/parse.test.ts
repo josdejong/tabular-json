@@ -316,13 +316,13 @@ test('parse a line comment', () => {
   expect(
     parse(`{
     // comment
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 
   expect(
     parse(`{
-    key: value
+    "key": "value"
     // comment
   }`)
   ).toEqual(expected)
@@ -330,7 +330,7 @@ test('parse a line comment', () => {
   expect(
     parse(`// comment
   {
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 
@@ -338,7 +338,7 @@ test('parse a line comment', () => {
     parse(`// comment 1
   // comment 2
   {
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 })
@@ -350,24 +350,24 @@ test('parse a line comment inside a table', () => {
   ]
 
   expect(
-    parse(`id,name
+    parse(`"id","name"
   // comment
-  2,joe
-  3,sarah`)
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 
   expect(
-    parse(`id,name
+    parse(`"id","name"
   // comment 1
   // comment 2
-  2,joe
-  3,sarah`)
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 
   expect(
-    parse(`id,name // comment 1
-  2,joe // comment 2
-  3,sarah  // comment 3`)
+    parse(`"id","name" // comment 1
+  2,"joe" // comment 2
+  3,"sarah"  // comment 3`)
   ).toEqual(expected)
 })
 
@@ -379,7 +379,7 @@ test('parse a block comment', () => {
     /* multi
        line
        comment */ 
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 
@@ -388,15 +388,15 @@ test('parse a block comment', () => {
     line
     comment */ 
   {
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 
   expect(
-    parse(`/* multiline comment 1 */
-  /* multiline comment 2 */
+    parse(`/* block comment 1 */
+  /* block comment 2 */
   {
-    key: value
+    "key": "value"
   }`)
   ).toEqual(expected)
 })
@@ -408,37 +408,37 @@ test('parse a block comment inside a table', () => {
   ]
 
   expect(
-    parse(`id,name
+    parse(`"id","name"
   /* multi
      line
      comment */
-  2,joe
-  3,sarah`)
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 
   expect(
-    parse(`id,name  /* multi
+    parse(`"id","name"  /* multi
      line
      comment */
-  2,joe
-  3,sarah`)
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 
   expect(
     parse(`/* multi
   line
   comment */
-  id,name
-  2,joe
-  3,sarah`)
+  "id","name"
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 
   expect(
-    parse(`/* multiline comment 1 */
-  /* multiline comment 2 */
-  id,name
-  2,joe
-  3,sarah`)
+    parse(`/* block comment 1 */
+  /* block comment 2 */
+  "id","name"
+  2,"joe"
+  3,"sarah"`)
   ).toEqual(expected)
 })
 
