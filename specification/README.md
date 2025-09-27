@@ -1,5 +1,3 @@
 ## Tabular-JSON and JSON grammer
 
-The grammers use ([McKeeman Form](https://www.crockford.com/mckeeman.html)).
-
-JSON grammer source: https://www.json.org/
+The data formats are described using [ANTLR v4](https://www.antlr.org/) grammer.
