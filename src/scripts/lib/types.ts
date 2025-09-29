@@ -6,3 +6,5 @@ export interface Field<T> {
   name: string
   getValue: ValueGetter<T>
 }
+
+export type SetValue = (record: Record<string, unknown>, value: unknown) => void

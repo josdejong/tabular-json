@@ -223,6 +223,19 @@ test('parse a root table', () => {
   ])
 })
 
+test('parse a root table starting with a blank line', () => {
+  expect(
+    parse(`
+    "id","name"
+    1,"Joe"
+    2,"Sarah"
+    `)
+  ).toEqual([
+    { id: 1, name: 'Joe' },
+    { id: 2, name: 'Sarah' }
+  ])
+})
+
 test('parse a root table without newline at the end', () => {
   expect(
     parse(`"id","name"
@@ -346,6 +359,13 @@ test('parse a line comment inside a table', () => {
     parse(`"id","name" // comment 1
   2,"joe" // comment 2
   3,"sarah"  // comment 3`)
+  ).toEqual(expected)
+
+  expect(
+    parse(`// comment 1
+      "id","name"
+      2,"joe"
+      3,"sarah"`)
   ).toEqual(expected)
 })
 
