@@ -1,8 +1,13 @@
 <script lang="ts">
   import { stringify, parse } from '../scripts/lib'
   import { example1, example2, example3, example4 } from './examples.ts'
+  import { loadLocalStorage, saveLocalStorage } from '../runes/localStorageState.svelte.ts'
+
+  const playgroundTrailingCommas = 'playground-trailing-commas'
 
   const indentation = 2
+  let trailingCommas = $state(loadLocalStorage(playgroundTrailingCommas, true))
+  let tabularJsonBeautified = $state(true)
   let json = $state('')
   let jsonError: string | undefined = $state(undefined)
   let tabularJson = $state('')
@@ -10,11 +15,14 @@
 
   const size = $derived(updateSize({ json, jsonError, tabularJson, tabularJsonError }))
 
+  $effect(() => saveLocalStorage(playgroundTrailingCommas, trailingCommas))
+
   initialize(example1)
 
   function initialize(newJson: unknown) {
     json = JSON.stringify(newJson, null, indentation)
-    tabularJson = stringify(newJson, { indentation })
+    tabularJson = stringify(newJson, { indentation, trailingCommas })
+    tabularJsonBeautified = true
   }
 
   function percentage(a: number, b: number) {
@@ -28,7 +36,8 @@
     try {
       if (json.trim() !== '') {
         const parsed = JSON.parse(json)
-        tabularJson = stringify(parsed, { indentation })
+        tabularJson = stringify(parsed, { indentation, trailingCommas })
+        tabularJsonBeautified = true
       } else {
         tabularJson = ''
       }
@@ -138,7 +147,8 @@
   function beautifyTabularJson() {
     try {
       const json = parse(tabularJson)
-      tabularJson = stringify(json, { indentation })
+      tabularJson = stringify(json, { indentation, trailingCommas })
+      tabularJsonBeautified = true
     } catch (err) {
       alert(err.toString())
     }
@@ -147,9 +157,18 @@
   function minifyTabularJson() {
     try {
       const json = parse(tabularJson)
-      tabularJson = stringify(json)
+      tabularJson = stringify(json, { trailingCommas })
+      tabularJsonBeautified = false
     } catch (err) {
       alert(err.toString())
+    }
+  }
+
+  function toggleTrailingCommas() {
+    if (tabularJsonBeautified) {
+      beautifyTabularJson()
+    } else {
+      minifyTabularJson()
     }
   }
 </script>
@@ -183,6 +202,13 @@
         <div class="left">
           <h2>Tabular-JSON</h2>
         </div>
+        <label
+          ><input
+            type="checkbox"
+            bind:checked={trailingCommas}
+            onchange={() => toggleTrailingCommas()}
+          /> Trailing commas</label
+        >
         <button type="button" onclick={() => beautifyTabularJson()}>Beautify</button>
         <button type="button" onclick={() => minifyTabularJson()}>Minify</button>
       </div>
