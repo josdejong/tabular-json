@@ -13,11 +13,10 @@ Tabular-JSON is a data format. It is a superset of JSON, adding CSV-like tables.
 
 - A replacement for CSV without its ambiguities and limitation of tabular data structures
 - A replacement for JSON without its verbosity with tabular data
-- A replacement for NDJSON
 
 Real world JSON data often consists of an array with nested objects like a list of products, a list of messages, or a list of clients. This is verbose to write in JSON because all field names are repeated for every item in the array. This common data structure can be written much more compact in a tabular way, like CSV. Adding support for tables in a superset of JSON gives the best of both worlds.
 
-Tabular-JSON aims to be just as simple as JSON and CSV. It combines the best of JSON, CSV, and NDJSON, but without their drawbacks. It is human-readable, compact, and supports rich data structures and streaming. The aim of Tabular-JSON is to be a data format, not a configuration format.
+Tabular-JSON aims to be just as simple as JSON and CSV. It combines the best of JSON and CSV, but without their drawbacks. It is human-readable, compact, and supports rich data structures and streaming. The aim of Tabular-JSON is to be a data format, not a configuration format.
 
 Read ["Tabular-JSON: Combining the best of JSON and CSV"](https://jsoneditoronline.org/indepth/specification/tabular-json/) to learn more about the background of Tabular-JSON.
 
@@ -66,9 +65,9 @@ So what are the ingredients of Tabular-JSON?
 
 - Take JSON.
 - Add support for CSV-like tables. Nested tables are wrapped in a `---` block. Tables supports nested fields.
-- Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 - Add support for trailing commas to make it more streaming-friendly.
-- Add support for comments (`// ...` and `/* ... */`).
+- Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
+- Add support for line comments (`// ...`) and block comments (`/* ... */`).
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
 
@@ -132,7 +131,11 @@ Remarks:
 
 - There are quite some different CSV variants, and these variants can be incompatible with each other. All these ambiguities are the main reason making it difficult to work with CSV: it is simple but not well standardized.
 - The control characters are: `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`.
-- It can a Tabular-JSON file containing tabular data may look the same as a CSV file with the same data. Still, they are _not_ compatible because of the differences in escaping.
+- It can a Tabular-JSON file containing tabular data may look the same as a CSV file with the same data. Still, they are _not_ compatible because of the differences in escaping.[friends_100k.csv](../../../../../data/friends_100k.csv)
+
+## Differences between NDJSON and Tabular-JSON
+
+Tabular-JSON can be used to stream data, but in general it isn't a suitable replacement for NDJSON. NDJSON is often used to write log files. The reason NDJSON is popular is that allows to write structured data line by line, without the need to maintain a fixed data structure or write header data or whatever. Each line is a standalone JSON document. This makes it very robust and flexible. Writing Tabular-JSON in a streaming way requires a fixed data structure and requires writing a header line on top of the file. Using Tabular-JSON will result in smaller files, since the field names are not repeated every line. So if the data size is important and you have a fixed data structure, Tabular-JSON can be a good alternative to NDJSON.
 
 ## Best practices
 

@@ -4,7 +4,6 @@ Tabular-JSON is:
 
 - a replacement for CSV without its ambiguities and limitation to tabular data structures
 - a replacement for JSON without its verbosity with tabular data
-- a replacement for NDJSON without its verbosity
 
 Learn more:
 
