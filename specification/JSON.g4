@@ -16,9 +16,8 @@ object
     : '{' pair (',' pair)* '}'
     | '{' ws '}' ;
 
-pair : key ':' value ;
-
-key  : ws STRING ws ;
+pair     : key ':' value ;
+key      : ws STRING ws ;
 
 array
     : '[' value (',' value)* ']'

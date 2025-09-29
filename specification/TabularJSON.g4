@@ -18,9 +18,9 @@ object
     : '{' pair (',' pair)* trailing? '}'
     | '{' ws '}' ;
 
-pair : key ':' value ;
-
-key  : ws STRING ws ;
+pair     : key ':' value ;
+key      : ws STRING ws ;
+trailing : ',' ws ;
 
 array
     : '[' value (',' value)* trailing? ']'
@@ -55,9 +55,8 @@ fragment EXP  : [Ee] [+-]? [0-9]+ ;
 BOOLEAN       : 'true' | 'false' ;
 NULL          : 'null' ;
 
-trailing      : ',' ws ;
 ws            : (WHITESPACE | NEWLINE)* ;
-wst           : WHITESPACE* ;
+wst           : (WHITESPACE)* ;
 
 WHITESPACE    : [ \t\r] -> skip;
 NEWLINE       : '\n' ;

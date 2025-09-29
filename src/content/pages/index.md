@@ -48,7 +48,7 @@ Here is an example of Tabular-JSON data:
 }
 </code></pre>
 
-And here a table at root level (the rows are streamable):
+And here a table at root level, with streamable the rows:
 
 <pre><code>"id", "name",  "address"."city", "address"."street"
 2,    "joe",   "New York",       "1st Ave"
@@ -65,7 +65,7 @@ So what are the ingredients of Tabular-JSON?
 - Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
 - Add support for line comments (`// ...`) and block comments (`/* ... */`).
 
-And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
+And that's it!
 
 The grammer of `Tabular-JSON` can be found on the [`Specification`](/specification) page, alongside the grammer of JSON for comparison.
 
