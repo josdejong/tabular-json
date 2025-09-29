@@ -141,11 +141,7 @@ Remarks:
 
 ## Status
 
-There are still a couple of topics of the data format that needs to be decided upon. Please feel welcome to [join the discussion](https://github.com/josdejong/tabular-json/discussions).
-
-- [Support for trailing commas](https://github.com/josdejong/tabular-json/discussions/5) (or not)
-
-Then, the data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
+The data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
 
 ## References
 
