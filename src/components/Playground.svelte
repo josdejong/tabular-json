@@ -36,8 +36,8 @@
     try {
       if (json.trim() !== '') {
         const parsed = JSON.parse(json)
-        tabularJson = stringify(parsed, { indentation, trailingCommas })
-        tabularJsonBeautified = true
+        const options = tabularJsonBeautified ? { indentation, trailingCommas } : { trailingCommas }
+        tabularJson = stringify(parsed, options)
       } else {
         tabularJson = ''
       }
