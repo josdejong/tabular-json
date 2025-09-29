@@ -1,167 +1,145 @@
-import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { describe, test, expect } from 'vitest'
-import peggy from 'peggy'
+import { expect, test } from 'vitest'
+import { parse } from './parse'
 
-const tabularJsonGrammer = String(
-  readFileSync(getAbsolutePath(import.meta.url, './grammers/tabular-json.pegjs'))
-)
+test('full JSON object', function () {
+  const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'
+  const expected = {
+    a: 2.3e100,
+    b: 'str',
+    c: null,
+    d: false,
+    e: [1, 2, 3]
+  }
 
-const { parse } = peggy.generate(tabularJsonGrammer)
-
-test('compile and use the JSON grammer', () => {
-  // This test is just to verify that the JSON grammer and Peggy work as expected
-  const jsonGrammer = String(
-    readFileSync(getAbsolutePath(import.meta.url, './grammers/json.pegjs'))
-  )
-  const { parse } = peggy.generate(jsonGrammer)
-
-  const jsonStr = '{"a":123,"b":"str","c":null,"d":false,"e":[1,2,3]}'
-  const json = { a: 123, b: 'str', c: null, d: false, e: [1, 2, 3] }
-
-  expect(parse(jsonStr)).toEqual(json)
+  expect(parse(text)).toEqual(expected)
 })
 
-describe('compile and use the Tabular-JSON grammer', () => {
-  test('full JSON object', function () {
-    const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'
-    const expected = {
-      a: 2.3e100,
-      b: 'str',
-      c: null,
-      d: false,
-      e: [1, 2, 3]
-    }
+test('object', function () {
+  expect(parse('{}')).toEqual({})
+  expect(parse('  { \n } \t ')).toEqual({})
+  expect(parse('{"a": {}}')).toEqual({ a: {} })
+  expect(parse('{"a": "b"}')).toEqual({ a: 'b' })
+  expect(parse('{"a": 2}')).toEqual({ a: 2 })
+})
 
-    expect(parse(text)).toEqual(expected)
-  })
+test('array', function () {
+  expect(parse('[]')).toEqual([])
+  expect(parse('[{}]')).toEqual([{}])
+  expect(parse('{"a":[]}')).toEqual({ a: [] })
+  expect(parse('[1, "hi", true, false, null, {}, []]')).toEqual([
+    1,
+    'hi',
+    true,
+    false,
+    null,
+    {},
+    []
+  ])
+})
 
-  test('object', function () {
-    expect(parse('{}')).toEqual({})
-    expect(parse('  { \n } \t ')).toEqual({})
-    expect(parse('{"a": {}}')).toEqual({ a: {} })
-    expect(parse('{"a": "b"}')).toEqual({ a: 'b' })
-    expect(parse('{"a": 2}')).toEqual({ a: 2 })
-  })
+test('number', function () {
+  expect(parse('23')).toEqual(23)
+  expect(parse('0')).toEqual(0)
+  expect(parse('0e+2')).toEqual(0)
+  expect(parse('0.0')).toEqual(0)
+  expect(parse('-0')).toEqual(-0)
+  expect(parse('2.3')).toEqual(2.3)
+  expect(parse('2300e3')).toEqual(2300e3)
+  expect(parse('2300e+3')).toEqual(2300e3)
+  expect(parse('-2')).toEqual(-2)
+  expect(parse('2e-3')).toEqual(2e-3)
+  expect(parse('2.3e-3')).toEqual(2.3e-3)
+  expect(parse('inf')).toEqual(Infinity)
+  expect(parse('-inf')).toEqual(-Infinity)
+  expect(parse('nan')).toBeNaN()
+})
 
-  test('array', function () {
-    expect(parse('[]')).toEqual([])
-    expect(parse('[{}]')).toEqual([{}])
-    expect(parse('{"a":[]}')).toEqual({ a: [] })
-    expect(parse('[1, "hi", true, false, null, {}, []]')).toEqual([
-      1,
-      'hi',
-      true,
-      false,
-      null,
-      {},
-      []
-    ])
-  })
+test('string', function () {
+  expect(parse('"str"')).toEqual('str')
+  expect(JSON.parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
+  expect(parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
+  expect(JSON.parse('"\\u260E"')).toEqual('\u260E')
+  expect(parse('"\\u260E"')).toEqual('\u260E')
+  expect(parse('"∛"')).toEqual('∛')
+  expect(parse('"a \\" character"')).toEqual('a " character')
+  expect(parse('"a \\n character"')).toEqual('a \n character')
+  expect(parse('" start space"')).toEqual(' start space')
+  expect(parse('"\\tstart space"')).toEqual('\tstart space')
+  expect(parse(' "ignore start space"')).toEqual('ignore start space')
+  expect(parse('"end space "')).toEqual('end space ')
+  expect(parse('"end space\\t"')).toEqual('end space\t')
+  expect(parse('"ignore end space" ')).toEqual('ignore end space')
+})
 
-  test('number', function () {
-    expect(parse('23')).toEqual(23)
-    expect(parse('0')).toEqual(0)
-    expect(parse('0e+2')).toEqual(0)
-    expect(parse('0.0')).toEqual(0)
-    expect(parse('-0')).toEqual(-0)
-    expect(parse('2.3')).toEqual(2.3)
-    expect(parse('2300e3')).toEqual(2300e3)
-    expect(parse('2300e+3')).toEqual(2300e3)
-    expect(parse('-2')).toEqual(-2)
-    expect(parse('2e-3')).toEqual(2e-3)
-    expect(parse('2.3e-3')).toEqual(2.3e-3)
-    expect(parse('inf')).toEqual(Infinity)
-    expect(parse('-inf')).toEqual(-Infinity)
-    expect(parse('nan')).toBeNaN()
-  })
+test('keywords', function () {
+  expect(parse('true')).toEqual(true)
+  expect(parse('false')).toEqual(false)
+  expect(parse('null')).toEqual(null)
+})
 
-  test('string', function () {
-    expect(parse('"str"')).toEqual('str')
-    expect(JSON.parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
-    expect(parse('"\\"\\\\\\/\\b\\f\\n\\r\\t"')).toEqual('"\\/\b\f\n\r\t')
-    expect(JSON.parse('"\\u260E"')).toEqual('\u260E')
-    expect(parse('"\\u260E"')).toEqual('\u260E')
-    expect(parse('"∛"')).toEqual('∛')
-    expect(parse('"a \\" character"')).toEqual('a " character')
-    expect(parse('"a \\n character"')).toEqual('a \n character')
-    expect(parse('" start space"')).toEqual(' start space')
-    expect(parse('"\\tstart space"')).toEqual('\tstart space')
-    expect(parse(' "ignore start space"')).toEqual('ignore start space')
-    expect(parse('"end space "')).toEqual('end space ')
-    expect(parse('"end space\\t"')).toEqual('end space\t')
-    expect(parse('"ignore end space" ')).toEqual('ignore end space')
-  })
+test('correctly handle strings equaling a JSON delimiter', function () {
+  expect(parse('""')).toEqual('')
+  expect(parse('"["')).toEqual('[')
+  expect(parse('"]"')).toEqual(']')
+  expect(parse('"{"')).toEqual('{')
+  expect(parse('"}"')).toEqual('}')
+  expect(parse('":"')).toEqual(':')
+  expect(parse('","')).toEqual(',')
+})
 
-  test('keywords', function () {
-    expect(parse('true')).toEqual(true)
-    expect(parse('false')).toEqual(false)
-    expect(parse('null')).toEqual(null)
-  })
+test('supports unicode characters in a string', () => {
+  expect(parse('"★"')).toBe('★')
+  expect(parse('"😀"')).toBe('😀')
+  expect(parse('"\ud83d\ude00"')).toBe('\ud83d\ude00')
+  expect(parse('"йнформация"')).toBe('йнформация')
+})
 
-  test('correctly handle strings equaling a JSON delimiter', function () {
-    expect(parse('""')).toEqual('')
-    expect(parse('"["')).toEqual('[')
-    expect(parse('"]"')).toEqual(']')
-    expect(parse('"{"')).toEqual('{')
-    expect(parse('"}"')).toEqual('}')
-    expect(parse('":"')).toEqual(':')
-    expect(parse('","')).toEqual(',')
-  })
+test('supports escaped unicode characters in a string', () => {
+  expect(parse('"\\u2605"')).toBe('\u2605')
+  expect(parse('"\\ud83d\\ude00"')).toBe('\ud83d\ude00')
+  expect(parse('"\\u0439\\u043d\\u0444\\u043e\\u0440\\u043c\\u0430\\u0446\\u0438\\u044f"')).toBe(
+    '\u0439\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f'
+  )
+})
 
-  test('supports unicode characters in a string', () => {
-    expect(parse('"★"')).toBe('★')
-    expect(parse('"😀"')).toBe('😀')
-    expect(parse('"\ud83d\ude00"')).toBe('\ud83d\ude00')
-    expect(parse('"йнформация"')).toBe('йнформация')
-  })
+test('supports unicode characters in a key', () => {
+  expect(parse('{"★":true}')).toStrictEqual({ '★': true })
+  expect(parse('{"\u2605":true}')).toStrictEqual({ '\u2605': true })
+  expect(parse('{"😀":true}')).toStrictEqual({ '😀': true })
+  expect(parse('{"\ud83d\ude00":true}')).toStrictEqual({ '\ud83d\ude00': true })
+})
 
-  test('supports escaped unicode characters in a string', () => {
-    expect(parse('"\\u2605"')).toBe('\u2605')
-    expect(parse('"\\ud83d\\ude00"')).toBe('\ud83d\ude00')
-    expect(parse('"\\u0439\\u043d\\u0444\\u043e\\u0440\\u043c\\u0430\\u0446\\u0438\\u044f"')).toBe(
-      '\u0439\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f'
-    )
-  })
+test('parse a formatted array', () => {
+  expect(parse('[\n  1,\n  2,\n  3\n]')).toEqual([1, 2, 3])
+})
 
-  test('supports unicode characters in a key', () => {
-    expect(parse('{"★":true}')).toStrictEqual({ '★': true })
-    expect(parse('{"\u2605":true}')).toStrictEqual({ '\u2605': true })
-    expect(parse('{"😀":true}')).toStrictEqual({ '😀': true })
-    expect(parse('{"\ud83d\ude00":true}')).toStrictEqual({ '\ud83d\ude00': true })
-  })
+test('parse tables with flat properties', () => {
+  expect(parse('---\n"id","name"\n1,"joe"\n2,"sarah"\n---')).toEqual([
+    { id: 1, name: 'joe' },
+    { id: 2, name: 'sarah' }
+  ])
+})
 
-  test('parse a formatted array', () => {
-    expect(parse('[\n  1,\n  2,\n  3\n]')).toEqual([1, 2, 3])
-  })
+test('parse tables with \\r\\n newlines', () => {
+  expect(parse('---\r\n"id","name"\r\n1,"joe"\r\n2,"sarah"\r\n---')).toEqual([
+    { id: 1, name: 'joe' },
+    { id: 2, name: 'sarah' }
+  ])
+})
 
-  test('parse tables with flat properties', () => {
-    expect(parse('---\n"id","name"\n1,"joe"\n2,"sarah"\n---')).toEqual([
-      { id: 1, name: 'joe' },
-      { id: 2, name: 'sarah' }
-    ])
-  })
-
-  test('parse tables with \\r\\n newlines', () => {
-    expect(parse('---\r\n"id","name"\r\n1,"joe"\r\n2,"sarah"\r\n---')).toEqual([
-      { id: 1, name: 'joe' },
-      { id: 2, name: 'sarah' }
-    ])
-  })
-
-  test('parse tables with nested properties', () => {
-    expect(
-      parse(`---
-      "id","name","address"."city","address"."street"
-      1,"Joe","New York","1st Ave"
-      2,"Sarah","Washington","18th Street NW"
-      ---`)
-    ).toEqual([
-      { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
-      { id: 2, name: 'Sarah', address: { city: 'Washington', street: '18th Street NW' } }
-    ])
-  })
+test('parse tables with nested properties', () => {
+  expect(
+    parse(`---
+    "id","name","address"."city","address"."street"
+    1,"Joe","New York","1st Ave"
+    2,"Sarah","Washington","18th Street NW"
+    ---`)
+  ).toEqual([
+    { id: 1, name: 'Joe', address: { city: 'New York', street: '1st Ave' } },
+    { id: 2, name: 'Sarah', address: { city: 'Washington', street: '18th Street NW' } }
+  ])
 })
 
 test('parse tables with whitespace', () => {
@@ -456,8 +434,16 @@ test('parse an empty array', () => {
   expect(parse('[]')).toEqual([])
 })
 
+test('throw an error in case of a trailing comma in an empty array', () => {
+  expect(() => parse('[,]')).toThrow("Array item expected but got ','")
+})
+
 test('parse an empty object', () => {
   expect(parse('{}')).toEqual({})
+})
+
+test('throw an error in case of a trailing comma in an empty object', () => {
+  expect(() => parse('{,}')).toThrow("Quoted object key expected but got ','")
 })
 
 /**
