@@ -8,3 +8,8 @@ export interface Field<T> {
 }
 
 export type SetValue = (record: Record<string, unknown>, value: unknown) => void
+
+export type TableField = {
+  keys: string[]
+  setValue: SetValue
+}

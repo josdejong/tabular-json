@@ -1,10 +1,10 @@
 import { setIn } from 'csv42'
-import type { SetValue } from './types.ts'
+import type { SetValue, TableField } from './types.ts'
 
 /**
  * Parse a string containing Tabular-JSON.
  *
- * The parser is based on the lossless-json parser https://github.com/josdejong/lossless-json
+ * The parser is based on the parser from [lossless-json](https://github.com/josdejong/lossless-json)
  *
  * @param text
  * The string to parse as JSON. See the JSON object for a description of JSON syntax.
@@ -15,26 +15,15 @@ import type { SetValue } from './types.ts'
  */
 export function parse(text: string): unknown {
   let i = 0
-  const value = parseValue()
 
-  if (typeof value === 'string' && text.charCodeAt(i) === codeComma) {
-    // root table
-    i = 0
-    skipWhitespace()
-    const rows = parseTableContents()
-
-    expectEndOfInput()
-
-    return rows
-  } else {
-    if (value === undefined) {
-      throwValueExpected()
-    }
-
-    expectEndOfInput()
-
-    return value
+  const value = parseRootTable()
+  if (value === undefined) {
+    throwValueExpected()
   }
+
+  expectEndOfInput()
+
+  return value
 
   function parseObject(): Record<string, unknown> | undefined {
     if (text.charCodeAt(i) === codeOpeningBrace) {
@@ -121,16 +110,49 @@ export function parse(text: string): unknown {
     }
   }
 
-  function parseTable(): Array<unknown> | unknown {
+  function parseRootTable(): Record<string, unknown>[] | unknown {
+    const value = parseValue()
+
+    if (typeof value === 'string' && text.charCodeAt(i) === codeComma) {
+      i = 0
+
+      skipWhitespace()
+
+      const fields = parseTableFields()
+      eatTableRowSeparator()
+
+      const rows = []
+      while (i < text.length) {
+        rows.push(parseTableRow(fields))
+
+        if (i < text.length) {
+          eatTableRowSeparator()
+        }
+      }
+
+      return rows
+    }
+
+    return value
+  }
+
+  function parseTable(): Record<string, unknown>[] | unknown {
     if (text.charCodeAt(i) === codeMinus && text.substring(i, i + 3) === '---') {
       i += 3
       skipTableWhitespace()
-      eatNewline()
+      eatTableRowSeparator()
 
-      const rows = parseTableContents()
+      const fields = parseTableFields()
+      eatTableRowSeparator()
+
+      const rows = []
+      while (i < text.length && text.substring(i, i + 3) !== '---') {
+        rows.push(parseTableRow(fields))
+        eatTableRowSeparator()
+      }
 
       if (text.substring(i, i + 3) !== '---') {
-        throwArrayItemOrEndExpected()
+        throwTableRowOrEndExpected()
       }
       i += 3
 
@@ -138,11 +160,8 @@ export function parse(text: string): unknown {
     }
   }
 
-  function parseTableContents(): Array<unknown> | unknown {
-    skipTableWhitespace()
-
-    // parse fields
-    const fields: Array<{ keys: string[]; setValue: SetValue }> = []
+  function parseTableFields(): TableField[] {
+    const fields: TableField[] = []
     let initialField = true
     while (i < text.length && text.charCodeAt(i) !== codeNewline) {
       if (!initialField) {
@@ -158,53 +177,41 @@ export function parse(text: string): unknown {
       while (i < text.length && text.charCodeAt(i) === codeDot) {
         i++
         skipTableWhitespace()
+
         keys.push(parseStringOr(throwTableFieldExpected))
         skipTableWhitespace()
       }
 
       const first = keys[0]
-      fields.push({
-        keys,
-        setValue:
-          keys.length === 1
-            ? (record, value) => (record[first] = value)
-            : (record, value) => setIn(record, keys, value)
-      })
+      const setValue: SetValue =
+        keys.length === 1
+          ? (record, value) => (record[first] = value)
+          : (record, value) => setIn(record, keys, value)
+
+      fields.push({ keys, setValue })
     }
 
-    eatNewline()
-    skipTableWhitespace()
+    return fields
+  }
 
-    console.log('FIELDS', fields)
+  function parseTableRow(fields: TableField[]): Record<string, unknown> {
+    const row: Record<string, unknown> = {}
 
-    // parse rows
-    const rows = []
-    while (i < text.length && text.substring(i, i + 3) !== '---') {
-      const row = {}
+    fields.forEach(({ setValue }, index) => {
+      const value = parseElement()
+      skipTableWhitespace()
 
-      fields.forEach(({ keys, setValue }, index) => {
-        const value = parseElement()
-        if (value !== undefined) {
-          setValue(row, value)
-        }
+      if (value !== undefined) {
+        setValue(row, value)
+      }
 
+      if (index < fields.length - 1) {
+        eatComma()
         skipTableWhitespace()
-        if (index !== fields.length - 1) {
-          eatComma()
-        } else {
-          // if (!isRootTable) {
-          eatNewline()
-          // }
-        }
-        skipTableWhitespace()
+      }
+    })
 
-        console.log('row', keys, row)
-      })
-
-      rows.push(row)
-    }
-
-    return rows
+    return row
   }
 
   function parseValue(): unknown {
@@ -291,10 +298,9 @@ export function parse(text: string): unknown {
     if (text.charCodeAt(i) === codeSlash && text.charCodeAt(i + 1) === codeSlash) {
       i += 2
 
-      while (text.charCodeAt(i) !== codeNewline) {
+      while (i < text.length && text.charCodeAt(i) !== codeNewline) {
         i++
       }
-      i++
 
       return true
     }
@@ -307,7 +313,10 @@ export function parse(text: string): unknown {
     if (text.charCodeAt(i) === codeSlash && text.charCodeAt(i + 1) === codeAsterisk) {
       i += 2
 
-      while (text.charCodeAt(i) !== codeAsterisk || text.charCodeAt(i + 1) !== codeSlash) {
+      while (
+        (i < text.length && text.charCodeAt(i) !== codeAsterisk) ||
+        text.charCodeAt(i + 1) !== codeSlash
+      ) {
         i++
       }
       i += 2
@@ -364,8 +373,6 @@ export function parse(text: string): unknown {
     if (string === undefined) {
       throwError()
     }
-
-    console.log('STRING', string)
 
     return string
   }
@@ -431,11 +438,14 @@ export function parse(text: string): unknown {
     i++
   }
 
-  function eatNewline() {
+  function eatTableRowSeparator() {
+    // must start with a newline
     if (text.charCodeAt(i) !== codeNewline) {
       throw new SyntaxError(`Newline '\n' expected after table row ${gotAt()}`)
     }
-    i++
+
+    // can optionally be followed by more newlines and whitespace and comments
+    skipWhitespace()
   }
 
   function expectEndOfInput() {
@@ -475,6 +485,10 @@ export function parse(text: string): unknown {
 
   function throwArrayItemOrEndExpected() {
     throw new SyntaxError(`Array item or end of array ']' expected ${gotAt()}`)
+  }
+
+  function throwTableRowOrEndExpected() {
+    throw new SyntaxError(`Table row or end of table '---' expected ${gotAt()}`)
   }
 
   function throwArrayItemExpected() {

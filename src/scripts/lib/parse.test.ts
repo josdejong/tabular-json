@@ -191,7 +191,7 @@ test('parse tables with missing values (4)', () => {
 
       3
       ---`)
-  ).toEqual([{ id: 1 }, {}, { id: 3 }])
+  ).toEqual([{ id: 1 }, { id: 3 }])
 })
 
 test('parse a nested table', () => {
@@ -229,6 +229,19 @@ test('parse a root table starting with a blank line', () => {
     "id","name"
     1,"Joe"
     2,"Sarah"
+    `)
+  ).toEqual([
+    { id: 1, name: 'Joe' },
+    { id: 2, name: 'Sarah' }
+  ])
+})
+
+test('parse a root table ending with multiple blank lines', () => {
+  expect(
+    parse(`"id","name"
+    1,"Joe"
+    2,"Sarah"
+    
     `)
   ).toEqual([
     { id: 1, name: 'Joe' },
