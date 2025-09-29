@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { stringify } from './stringify'
+import { stringify } from './stringify.ts'
 
 test('stringify', function () {
   expect(stringify(undefined)).toEqual('')

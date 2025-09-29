@@ -1,7 +1,7 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, test } from 'vitest'
-import { parse } from './parse'
+import { parse } from './parse.ts'
 
 test('full JSON object', function () {
   const text = '{"a":2.3e100,"b":"str","c":null,"d":false,"e":[1,2,3]}'

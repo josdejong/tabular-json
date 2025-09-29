@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { stringify, parse } from '../scripts/lib'
+  import { stringify, parse } from '../lib'
   import { example1, example2, example3, example4 } from './examples.ts'
   import { loadLocalStorage, saveLocalStorage } from '../runes/localStorageState.svelte.ts'
 
