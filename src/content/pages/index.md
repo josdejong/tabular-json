@@ -3,10 +3,6 @@ title: 'Tabular-JSON: JSON with tables'
 description: 'The data format Tabular-JSON is a superset of JSON, adding CSV-like tables'
 ---
 
-<p class="warning">
-  Tabular-JSON is a <a href="#status">work in progress</a>. The details of the specification may change.
-</p>
-
 ## What is Tabular-JSON?
 
 Tabular-JSON is a data format. It is a superset of JSON, adding CSV-like tables. It is:
@@ -131,7 +127,7 @@ Remarks:
 
 - There are quite some different CSV variants, and these variants can be incompatible with each other. All these ambiguities are the main reason making it difficult to work with CSV: it is simple but not well standardized.
 - The control characters are: `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`.
-- It can a Tabular-JSON file containing tabular data may look the same as a CSV file with the same data. Still, they are _not_ compatible because of the differences in escaping.[friends_100k.csv](../../../../../data/friends_100k.csv)
+- It can a Tabular-JSON file containing tabular data may look the same as a CSV file with the same data. Still, they are _not_ compatible because of the differences in escaping.
 
 ## Differences between NDJSON and Tabular-JSON
 
@@ -144,7 +140,7 @@ Tabular-JSON can be used to stream data, but in general it isn't a suitable repl
 
 ## Status
 
-The data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format.
+The data format has to be implemented in a couple of languages (like JavaScript, Python, and Kotlin) and published so people can actually use the format. Plugins has to be written for IDE's like VS Code and Intellij to get syntax highlighting.
 
 ## References
 
