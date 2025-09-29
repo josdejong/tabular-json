@@ -1,26 +1,24 @@
 grammar JSON;
 
 json
-    : value EOF ;
+    : ws value ws EOF ;
 
-value : ws
-    ( object
+value
+    : object
     | array
     | STRING
     | NUMBER
     | BOOLEAN
-    | NULL
-    ) ws ;
+    | NULL ;
 
 object
     : '{' pair (',' pair)* '}'
     | '{' ws '}' ;
 
-pair     : key ':' value ;
-key      : ws STRING ws ;
+pair : ws STRING ws ':' ws value ws ;
 
 array
-    : '[' value (',' value)* ']'
+    : '[' ws value ws (',' ws value ws)* ']'
     | '[' ws ']' ;
 
 STRING        : '"' (ESC | CHAR)* '"' ;
