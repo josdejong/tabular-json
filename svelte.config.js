@@ -3,7 +3,7 @@ import { vitePreprocess } from '@astrojs/svelte'
 export default {
   preprocess: vitePreprocess(),
 
-  vitePlugin: {
+  compilerOptions: {
     experimental: {
       async: true
     }
