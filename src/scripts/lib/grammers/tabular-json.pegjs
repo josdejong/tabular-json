@@ -41,9 +41,9 @@ row_separator
 ws "whitespace" = [ \t\n\r]* (comment [ \t\n\r]*)*
 wst "table-whitespace" = [ \t]* (comment [ \t]*)*
 
-comment = comment_singleline / comment_multiline
-comment_singleline = "//" [^\n]*
-comment_multiline = "/*" (!"*/" .)* "*/"
+comment = line_comment / block_comment
+line_comment = "//" [^\n]*
+block_comment = "/*" (!"*/" .)* "*/"
 
 // ----- 3. Values -----
 
@@ -78,7 +78,7 @@ object
         return result
       }
     )?
-    ws end_object
+    ws (value_separator ws)? end_object
     { return members !== null ? members: {} }
 
 member
@@ -95,7 +95,7 @@ array
       tail:(ws value_separator ws v:value { return v })*
       { return [head].concat(tail) }
     )?
-    ws end_array
+    ws (value_separator ws)? end_array
     { return values ?? [] }
 
 // ----- 6. Tables -----

@@ -6,6 +6,7 @@ import { collectNestedPaths, getIn, type Path } from 'csv42'
 
 export interface StringifyOptions {
   indentation?: number | string
+  trailingCommas?: boolean
 }
 
 export function stringify(json: unknown, options?: StringifyOptions): string {
@@ -91,6 +92,8 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
 
       if (i < array.length - 1) {
         str += indentation ? ',\n' : ','
+      } else if (options?.trailingCommas) {
+        str += ','
       }
     }
 
@@ -148,30 +151,25 @@ export function stringify(json: unknown, options?: StringifyOptions): string {
       return stringify(object.toJSON(), options)
     }
 
-    const keys: string[] = Object.keys(object)
+    const entries = Object.entries(object).filter(([_key, value]) => includeProperty(value))
 
-    if (keys.length === 0) {
+    if (entries.length === 0) {
       return '{}'
     }
 
     const childIndent = indentation ? indent + indentation : indent
-    let first = true
     let str = indentation ? '{\n' : '{'
 
-    keys.forEach((key) => {
-      const value = object[key]
+    entries.forEach(([key, value], index) => {
+      const keyStr = stringifyStringValue(key)
+      str += indentation ? childIndent + keyStr + ': ' : keyStr + ':'
 
-      if (includeProperty(value)) {
-        if (first) {
-          first = false
-        } else {
-          str += indentation ? ',\n' : ','
-        }
+      str += stringifyValue(value, childIndent, indentation)
 
-        const keyStr = stringifyStringValue(key)
-        str += indentation ? childIndent + keyStr + ': ' : keyStr + ':'
-
-        str += stringifyValue(value, childIndent, indentation)
+      if (index < entries.length - 1) {
+        str += indentation ? ',\n' : ','
+      } else if (options?.trailingCommas) {
+        str += ','
       }
     })
 

@@ -33,13 +33,13 @@ Play around with Tabular-JSON in the interactive playground:
 
 ## Example
 
-Here an example of Tabular-JSON data:
+Here is an example of Tabular-JSON data:
 
 <pre><code>{
   "name": "rob",
   "hobbies": [
     "swimming",
-    "biking"
+    "biking",
   ],
   "friends": ---
     "id", "name",  "address"."city", "address"."street"
@@ -48,7 +48,7 @@ Here an example of Tabular-JSON data:
   ---,
   "address": {
     "city": "New York",
-    "street": "1st Ave"
+    "street": "1st Ave",
   }
 }
 </code></pre>
@@ -67,6 +67,7 @@ So what are the ingredients of Tabular-JSON?
 - Take JSON.
 - Add support for CSV-like tables. Nested tables are wrapped in a `---` block. Tables supports nested fields.
 - Add support for positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
+- Add support for trailing commas to make it more streaming-friendly.
 - Add support for comments (`// ...` and `/* ... */`).
 
 And that's it. The complexity of the Tabular-JSON data format is equal to that of JSON plus CSV.
@@ -105,6 +106,7 @@ Tabular-JSON supports the following data types:
 
 - JSON supports the following data types: object, array, string, number, boolean, null. Tabular-JSON supports an addition data type: table.
 - Unlike JSON, Tabular-JSON supports the numeric values positive infinity (`inf`), negative infinity (`-inf`), and `nan`.
+- Unlike JSON, Tabular-JSON supports trailing commas in objects and arrays.
 
 Remarks:
 

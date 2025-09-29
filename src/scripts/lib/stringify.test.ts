@@ -240,6 +240,24 @@ test('stringify a nested table with nested arrays', function () {
 }`)
 })
 
+test('stringify an object with trailing spaces', function () {
+  expect(stringify({ id: 2, name: 'joe' }, { trailingCommas: true })).toEqual(
+    '{"id":2,"name":"joe",}'
+  )
+  expect(stringify({ id: 2, name: 'joe' }, { trailingCommas: true, indentation: 2 })).toEqual(
+    '{\n  "id": 2,\n  "name": "joe",\n}'
+  )
+  expect(stringify({}, { trailingCommas: true })).toEqual('{}')
+})
+
+test('stringify an array with trailing spaces', function () {
+  expect(stringify([1, 2, 3], { trailingCommas: true })).toEqual('[1,2,3,]')
+  expect(stringify([1, 2, 3], { trailingCommas: true, indentation: 2 })).toEqual(
+    '[\n  1,\n  2,\n  3,\n]'
+  )
+  expect(stringify([], { trailingCommas: true })).toEqual('[]')
+})
+
 test('stringify with numeric space', function () {
   const json: unknown = { a: 1, b: [1, 2, null, undefined, { c: 3 }], d: null }
 
@@ -290,4 +308,5 @@ test('stringify an empty array', function () {
 test('stringify an empty object', function () {
   expect(stringify({}, { indentation: 2 })).toEqual('{}')
   expect(stringify({}, { indentation: '    ' })).toEqual('{}')
+  expect(stringify({ fn: () => {} }, { indentation: 2 })).toEqual('{}')
 })
