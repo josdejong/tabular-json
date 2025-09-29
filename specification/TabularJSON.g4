@@ -1,40 +1,38 @@
 grammar TabularJSON;
 
 tabularjson
-    : value EOF
-    | contents EOF ;
+    : ws value ws EOF
+    | ws contents ws EOF ;
 
-value : ws
-    ( object
+value
+    : object
     | array
     | table
     | STRING
     | NUMBER
     | BOOLEAN
-    | NULL
-    ) ws ;
+    | NULL ;
 
 object
     : '{' pair (',' pair)* trailing? '}'
     | '{' ws '}' ;
 
-pair     : key ':' value ;
-key      : ws STRING ws ;
+pair : ws STRING ws ':' ws value ws ;
 trailing : ',' ws ;
 
 array
-    : '[' value (',' value)* trailing? ']'
+    : '[' ws value ws (',' ws value ws)* trailing? ']'
     | '[' ws ']' ;
 
 table : '---' wst '\n'
-    contents wst '\n'
+    contents '\n'
     wst '---' ;
 
-contents : header '\n' rows ;
+contents : header '\n' ws rows ;
 header   : field (',' field)* ;
-field    : key ('.' key)* ;
-rows     : row ('\n' row)* ;
-row      : value (',' value)* ;
+field    : wst STRING wst ('.' wst STRING wst)* ;
+rows     : row ('\n' ws row)* ;
+row      : wst value wst (',' wst value wst)* ;
 
 STRING        : '"' (ESC | CHAR)* '"' ;
 
