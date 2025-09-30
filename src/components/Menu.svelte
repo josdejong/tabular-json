@@ -35,7 +35,7 @@
   <div class="space"></div>
   <a
     class="github"
-    href="https://github.com/josdejong/tabular-json/"
+    href="https://github.com/tabular-json/tabular-json/"
     target="_blank"
     title="Source code on Github"
   >
