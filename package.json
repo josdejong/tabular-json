@@ -1,6 +1,6 @@
 {
   "name": "@tabular-json/tabular-json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tabular-JSON: a superset of JSON with CSV-like tables",
   "homepage": "https://tabular-json.org",
   "repository": {
