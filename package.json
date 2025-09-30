@@ -1,13 +1,14 @@
 {
-  "name": "tabular-json",
+  "name": "@josdejong/tabular-json",
   "version": "1.0.0",
-  "description": "Tabular-JSON: a superset of JSON with tables",
+  "description": "Tabular-JSON: a superset of JSON with CSV-like tables",
   "keywords": [
     "Tabular-JSON",
     "JSON",
     "CSV",
     "NDJSON",
     "Table",
+    "tjson",
     "Extended",
     "Compact",
     "data format"
@@ -15,29 +16,36 @@
   "author": "Jos de Jong",
   "license": "ISC",
   "type": "module",
-  "main": "lib/esm/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/esm/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./lib/esm/index.js",
-      "types": "./lib/esm/index.d.ts"
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
     }
   },
+  "files": [
+    "lib",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "dev": "astro dev",
     "preview": "astro preview",
     "build": "npm-run-all build:**",
-    "_build:clean": "del-cli lib",
+    "build:clean": "del-cli lib",
     "build:astro:check": "astro check",
     "build:astro:build": "astro build",
-    "_build:lib": "tsc",
+    "build:lib": "tsc --project tsconfig.lib.json --skipLibCheck --declaration",
     "test": "vitest",
     "test:ci": "vitest run",
     "lint": "prettier --check .",
     "format": "prettier --write .",
-    "benchmark": "node benchmark/index.js"
+    "benchmark": "node benchmark/index.js",
+    "prepublishOnly": "npm run test:ci && npm run lint && npm run build:lib"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.4",
@@ -50,7 +58,6 @@
     "@types/node": "24.6.0",
     "adm-zip": "0.5.16",
     "astro": "5.14.1",
-    "csv42": "5.0.3",
     "del-cli": "7.0.0",
     "fracturedjsonjs": "4.1.1",
     "git-diff": "2.0.6",

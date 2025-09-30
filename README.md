@@ -31,3 +31,58 @@ Here is an example of Tabular-JSON:
   }
 }
 ```
+
+## JavaScript API
+
+Install using npm:
+
+```
+npm install @josdejong/tabular-json
+```
+
+Usage:
+
+```js
+import { parse, stringify } from '@josdejong/tabular-json'
+
+const text = `{
+  "id": 1,
+  "name": "Brandon",
+  "friends": ---
+    "id", "name"
+    2,    "Joe"
+    3,    "Sarah"
+  ---
+}`
+
+const data = parse(text)
+const updatedData = data.friends.push({ id: 4, name: 'Alan' })
+
+const updatedText = stringify(updatedData, {
+  indentation: 2,
+  trailingCommas: false
+})
+// {
+//   "id": 1,
+//   "name": "Brandon",
+//   "friends": ---
+//     "id", "name"
+//     2,    "Joe"
+//     3,    "Sarah"
+//     4,    "Alan"
+//   ---
+// }
+```
+
+API:
+
+```ts
+type parse = (text: string) => unknown
+
+type stringify = (json: unknown, options?: StringifyOptions) => string
+
+interface StringifyOptions {
+  indentation?: number | string
+  trailingCommas?: boolean
+}
+```
