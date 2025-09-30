@@ -205,7 +205,7 @@ function resolveIndentation(indentation: number | string | undefined): string | 
 }
 
 function collectFields(records: Array<unknown>): Field<unknown>[] {
-  return collectNestedPaths(records, isObject).map((path) => ({
+  return collectNestedPaths(records).map((path) => ({
     name: stringifyField(path),
     getValue: createGetValue(path)
   }))
