@@ -13,3 +13,7 @@ export type TableField = {
   keys: string[]
   setValue: SetValue
 }
+
+export type NestedObject = { [key: string]: NestedObject | unknown }
+
+export type Path = (string | number)[]

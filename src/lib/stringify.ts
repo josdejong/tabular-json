@@ -1,8 +1,11 @@
+import type { Field, GenericObject, Path, ValueGetter } from './types.js'
+import { isObject, isTabular } from './is.js'
+import { getIn } from './objects.js'
+import { collectNestedPaths } from './fields.js'
+
 // The code of stringify is largely copied from:
 // - https://github.com/josdejong/lossless-json
 // - https://github.com/josdejong/csv42
-import type { Field, GenericObject, ValueGetter } from './types.ts'
-import { collectNestedPaths, getIn, type Path } from 'csv42'
 
 export interface StringifyOptions {
   indentation?: number | string
@@ -199,14 +202,6 @@ function resolveIndentation(indentation: number | string | undefined): string | 
   }
 
   return undefined
-}
-
-function isTabular(value: unknown): value is Array<GenericObject<unknown>> {
-  return Array.isArray(value) && value.length > 0 && value.every(isObject)
-}
-
-function isObject(value: unknown): value is GenericObject<unknown> {
-  return typeof value === 'object' && value !== null && value.constructor === Object // do not match on classes or Array
 }
 
 function collectFields(records: Array<unknown>): Field<unknown>[] {

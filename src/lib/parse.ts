@@ -1,5 +1,5 @@
-import { setIn } from 'csv42'
-import type { SetValue, TableField } from './types.ts'
+import type { SetValue, TableField } from './types.js'
+import { setIn } from './objects.js'
 
 /**
  * Parse a string containing Tabular-JSON.
