@@ -37,7 +37,7 @@ Here is an example of Tabular-JSON:
 Install using npm:
 
 ```
-npm install @josdejong/tabular-json
+npm install @tabular-json/tabular-json
 ```
 
 Usage:
