@@ -3,8 +3,8 @@
  */
 
 import { readFileSync } from 'node:fs'
-import { json2csv } from 'csv42'
 import AdmZip from 'adm-zip'
+import { stringify } from '../lib/index.js'
 
 const indentation = 2
 
@@ -37,8 +37,8 @@ index(example2)
 function index(data) {
   const jsonFormatted = JSON.stringify(data, null, indentation)
   const jsonCompact = JSON.stringify(data)
-  const csvQuotes = json2csv(data, { formatValue: (value) => `"${value}"` })
-  const csvNoQuotes = json2csv(data)
+  const tabularFormatted = stringify(data, { indentation: 2 })
+  const tabularCompact = stringify(data)
 
   console.table([
     {
@@ -56,18 +56,18 @@ function index(data) {
       'zipped (%)': percentage(gzip(jsonCompact).length, jsonCompact.length)
     },
     {
-      description: 'CSV quotes',
-      size: csvQuotes.length,
-      'size (%)': percentage(csvQuotes.length, jsonFormatted.length),
-      zipped: gzip(csvQuotes).length,
-      'zipped (%)': percentage(gzip(csvQuotes).length, csvQuotes.length)
+      description: 'Tabular-JSON formatted',
+      size: tabularFormatted.length,
+      'size (%)': percentage(tabularFormatted.length, jsonFormatted.length),
+      zipped: gzip(tabularFormatted).length,
+      'zipped (%)': percentage(gzip(tabularFormatted).length, tabularFormatted.length)
     },
     {
-      description: 'CSV no quotes',
-      size: csvNoQuotes.length,
-      'size (%)': percentage(csvNoQuotes.length, jsonFormatted.length),
-      zipped: gzip(csvNoQuotes).length,
-      'zipped (%)': percentage(gzip(csvNoQuotes).length, csvNoQuotes.length)
+      description: 'Tabular-JSON compacted',
+      size: tabularCompact.length,
+      'size (%)': percentage(tabularCompact.length, jsonFormatted.length),
+      zipped: gzip(tabularCompact).length,
+      'zipped (%)': percentage(gzip(tabularCompact).length, tabularCompact.length)
     }
   ])
 }
