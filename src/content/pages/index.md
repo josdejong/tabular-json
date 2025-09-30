@@ -82,6 +82,14 @@ The grammer of `Tabular-JSON` can be found on the [`Specification`](/specificati
 - A superset of JSON
 - Beautifiable
 
+## File extension
+
+Tabular-JSON files have a `*.tjson` extension, for example:
+
+```
+data.tjson
+```
+
 ## Data types
 
 Tabular-JSON supports the following data types:
