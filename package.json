@@ -1,5 +1,5 @@
 {
-  "name": "@josdejong/tabular-json",
+  "name": "@tabular-json/tabular-json",
   "version": "1.0.0",
   "description": "Tabular-JSON: a superset of JSON with CSV-like tables",
   "keywords": [
@@ -39,7 +39,7 @@
     "build:clean": "del-cli lib",
     "build:astro:check": "astro check",
     "build:astro:build": "astro build",
-    "build:lib": "tsc --project tsconfig.lib.json --skipLibCheck --declaration",
+    "build:lib": "tsc --project tsconfig.lib.json",
     "test": "vitest",
     "test:ci": "vitest run",
     "lint": "prettier --check .",
