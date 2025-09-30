@@ -43,7 +43,7 @@ npm install @josdejong/tabular-json
 Usage:
 
 ```js
-import { parse, stringify } from '@josdejong/tabular-json'
+import { parse, stringify } from '@tabular-json/tabular-json'
 
 const text = `{
   "id": 1,
@@ -56,9 +56,10 @@ const text = `{
 }`
 
 const data = parse(text)
-const updatedData = data.friends.push({ id: 4, name: 'Alan' })
 
-const updatedText = stringify(updatedData, {
+data.friends.push({ id: 4, name: 'Alan' })
+
+const updatedText = stringify(data, {
   indentation: 2,
   trailingCommas: false
 })
