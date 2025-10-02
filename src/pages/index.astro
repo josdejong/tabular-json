@@ -6,10 +6,6 @@ const entry = await getEntry('pages', 'index')
 const { Content } = await entry.render()
 ---
 
-<Layout
-  title={entry.data.title}
-  description="Tabular-JSON introduction and getting started"
-  url="/"
->
+<Layout title={entry.data.title} description={entry.data.description} url="/">
   <Content />
 </Layout>

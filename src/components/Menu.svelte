@@ -12,7 +12,8 @@
   const items = [
     { text: 'Home', url: '/' },
     { text: 'Playground', url: '/playground' },
-    { text: 'Specification', url: '/specification' }
+    { text: 'Specification', url: '/specification' },
+    { text: 'Implementations', url: '/implementations' }
   ]
 </script>
 

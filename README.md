@@ -34,13 +34,15 @@ Here is an example of Tabular-JSON:
 
 ## JavaScript API
 
+### Install
+
 Install using npm:
 
 ```
 npm install @tabular-json/tabular-json
 ```
 
-Usage:
+### Use
 
 ```js
 import { parse, stringify } from '@tabular-json/tabular-json'
@@ -75,7 +77,7 @@ const updatedText = stringify(data, {
 // }
 ```
 
-API:
+### API
 
 ```ts
 type parse = (text: string) => unknown

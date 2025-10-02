@@ -191,12 +191,13 @@ const { title, description, url, className } = Astro.props
     font-family: var(--mono-font-family), monospace;
     font-size: var(--mono-font-size);
     line-height: var(--mono-line-height);
-    background: var(--code-background);
+    background: var(--code-background) !important;
     padding: 5px;
     overflow: auto;
 
     code {
       padding: 0;
+      background: none;
     }
   }
 
