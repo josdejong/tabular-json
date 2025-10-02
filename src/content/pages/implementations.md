@@ -36,10 +36,7 @@ const data = parse(text)
 
 data.friends.push({ id: 4, name: 'Alan' })
 
-const updatedText = stringify(data, {
-  indentation: 2,
-  trailingCommas: false
-})
+const updatedText = stringify(data, { indentation: 2, trailingCommas: false })
 // {
 //   "id": 1,
 //   "name": "Brandon",
